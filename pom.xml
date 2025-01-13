@@ -43,6 +43,11 @@
 
     </dependencies>
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <!-- Specify the maven code generator plugin -->
@@ -73,7 +78,21 @@
                 </executions>
 
                 <configuration>
-
+                    <jdbc>
+                        <driver>org.sqlite.JDBC</driver>
+                        <url>jdbc:sqlite:rezeptverwaltungsdb.db</url>
+                    </jdbc>
+                    <generator>
+                        <name>org.jooq.codegen.JavaGenerator</name>
+                        <database>
+                            <name>org.jooq.meta.sqlite.SQLiteDatabase</name>
+                            <includes>.*</includes>
+                        </database>
+                        <target>
+                            <packageName>jooq</packageName>
+                            <directory>${project.build.outputDirectory}</directory>
+                        </target>
+                    </generator>
                 </configuration>
             </plugin>
         </plugins>
