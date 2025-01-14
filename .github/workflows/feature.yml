@@ -56,7 +56,3 @@ jobs:
       # Step 9: Install the project to local repository
       - name: Install
         run: mvn install
-
-      # Step 10: Deploy to local directory (no network access required)
-      - name: Deploy locally
-        run: mvn deploy:deploy-file -Dfile=target/your-artifact.jar -DgroupId=com.example -DartifactId=my-project -Dversion=1.0-SNAPSHOT -Dpackaging=jar -DgeneratePom=true -DlocalRepositoryPath=~/.m2/repository
