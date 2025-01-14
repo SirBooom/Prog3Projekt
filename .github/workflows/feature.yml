@@ -7,24 +7,56 @@ on:
   pull_request:
     branches:
       - feature
-      
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      # Step 1: Checkout code from the repository
+      - name: Checkout code
         uses: actions/checkout@v3
-        
+
+      # Step 2: Set up JDK
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: '23'
-          distribution: 'temurin' 
+          java-version: 17
+          distribution: temurin
 
-      - name: Build with Maven
-        run: mvn clean install
-        
-      - name: Run Tests
+      # Step 3: Cache Maven dependencies
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      # Step 4: Validate the project
+      - name: Validate
+        run: mvn validate
+
+      # Step 5: Compile the project
+      - name: Compile
+        run: mvn compile
+
+      # Step 6: Test the project
+      - name: Test
         run: mvn test
+
+      # Step 7: Package the project
+      - name: Package
+        run: mvn package
+
+      # Step 8: Verify the project
+      - name: Verify
+        run: mvn verify
+
+      # Step 9: Install the project to local repository
+      - name: Install
+        run: mvn install
+
+      # Step 10: Deploy to local directory (no network access required)
+      - name: Deploy locally
+        run: mvn deploy:deploy-file -Dfile=target/your-artifact.jar -DgroupId=com.example -DartifactId=my-project -Dversion=1.0-SNAPSHOT -Dpackaging=jar -DgeneratePom=true -DlocalRepositoryPath=~/.m2/repository
