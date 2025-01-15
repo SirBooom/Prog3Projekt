@@ -1,12 +1,14 @@
 import org.jooq.DSLContext;
 import org.jooq.Result;
 import org.jooq.SQLDialect;
+import org.jooq.Table;
 import org.jooq.impl.DSL;
-import static jooq.Tables.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import static com.example.generated.Tables.*;
 
 import static com.sun.source.doctree.DocTree.Kind.AUTHOR;
+import static org.jooq.impl.DSL.table;
 
 public class Skelleton {
     public static void main(String[] args) {

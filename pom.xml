@@ -120,8 +120,8 @@
                             <includes>.*</includes>
                         </database>
                         <target>
-                            <packageName>jooq</packageName>
-                            <directory>${project.build.outputDirectory}</directory>
+                            <packageName>com.example.generated</packageName>
+                            <directory>target/generated-sources/jooq</directory>
                         </target>
                     </generator>
                 </configuration>

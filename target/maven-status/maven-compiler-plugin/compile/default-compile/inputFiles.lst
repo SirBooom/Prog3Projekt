@@ -1,7 +1,10 @@
-/home/tiny_yhorm/Documents/Prog3/Projekt/Prog3Projekt/target/classes/jooq/tables/Recipe.java
-/home/tiny_yhorm/Documents/Prog3/Projekt/Prog3Projekt/target/classes/jooq/Tables.java
-/home/tiny_yhorm/Documents/Prog3/Projekt/Prog3Projekt/target/classes/jooq/DefaultSchema.java
-/home/tiny_yhorm/Documents/Prog3/Projekt/Prog3Projekt/target/classes/jooq/tables/records/RecipeRecord.java
-/home/tiny_yhorm/Documents/Prog3/Projekt/Prog3Projekt/src/main/java/Skelleton.java
-/home/tiny_yhorm/Documents/Prog3/Projekt/Prog3Projekt/src/main/java/JooqTestDrive.java
-/home/tiny_yhorm/Documents/Prog3/Projekt/Prog3Projekt/target/classes/jooq/DefaultCatalog.java
+C:\Users\emirk\Desktop\Prog3Projekt\src\main\java\JooqTestDrive.java
+C:\Users\emirk\Desktop\Prog3Projekt\src\main\java\Skelleton.java
+C:\Users\emirk\Desktop\Prog3Projekt\target\generated-sources\jooq\com\example\generated\DefaultCatalog.java
+C:\Users\emirk\Desktop\Prog3Projekt\target\generated-sources\jooq\com\example\generated\DefaultSchema.java
+C:\Users\emirk\Desktop\Prog3Projekt\target\generated-sources\jooq\com\example\generated\Keys.java
+C:\Users\emirk\Desktop\Prog3Projekt\target\generated-sources\jooq\com\example\generated\Tables.java
+C:\Users\emirk\Desktop\Prog3Projekt\target\generated-sources\jooq\com\example\generated\tables\Example.java
+C:\Users\emirk\Desktop\Prog3Projekt\target\generated-sources\jooq\com\example\generated\tables\Recipe.java
+C:\Users\emirk\Desktop\Prog3Projekt\target\generated-sources\jooq\com\example\generated\tables\records\ExampleRecord.java
+C:\Users\emirk\Desktop\Prog3Projekt\target\generated-sources\jooq\com\example\generated\tables\records\RecipeRecord.java
