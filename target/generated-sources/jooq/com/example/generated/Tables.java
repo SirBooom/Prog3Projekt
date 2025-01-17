@@ -4,7 +4,6 @@
 package com.example.generated;
 
 
-import com.example.generated.tables.Example;
 import com.example.generated.tables.Recipe;
 
 
@@ -13,11 +12,6 @@ import com.example.generated.tables.Recipe;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class Tables {
-
-    /**
-     * The table <code>example</code>.
-     */
-    public static final Example EXAMPLE = Example.EXAMPLE;
 
     /**
      * The table <code>recipe</code>.
