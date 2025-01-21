@@ -136,7 +136,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>Skelleton</mainClass>
+                            <mainClass>Skeleton</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

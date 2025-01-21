@@ -22,10 +22,17 @@ public class Skelleton {
         // Connection is the only JDBC resource that we need
         // PreparedStatement and ResultSet are handled by jOOQ, internally
         try {
+            /*
+            for(int i = 1; i <= 10; i++ ) {
+                Database.insertRecipe(i, "pasta", "Italian", "dessert", "Cook then eat", 100,
+                        "15 Mins", "noodles");
+            }
+
+            Database.deleteAllRecipes()
+            */
             Connection connection = DriverManager.getConnection(url);
             DSLContext create = DSL.using(connection, SQLDialect.SQLITE);
-            Result<org.jooq.Record> result;
-            result = create.select().from(RECIPE).fetch();
+            Result<org.jooq.Record> result = create.select().from(RECIPE).fetch();
             System.out.println(result);
         }
 
