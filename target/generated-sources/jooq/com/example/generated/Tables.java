@@ -4,6 +4,7 @@
 package com.example.generated;
 
 
+import com.example.generated.tables.Ingredient;
 import com.example.generated.tables.Recipe;
 
 
@@ -14,7 +15,12 @@ import com.example.generated.tables.Recipe;
 public class Tables {
 
     /**
-     * The table <code>recipe</code>.
+     * The table <code>Ingredient</code>.
+     */
+    public static final Ingredient INGREDIENT = Ingredient.INGREDIENT;
+
+    /**
+     * The table <code>Recipe</code>.
      */
     public static final Recipe RECIPE = Recipe.RECIPE;
 }

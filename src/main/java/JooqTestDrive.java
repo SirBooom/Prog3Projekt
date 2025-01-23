@@ -1,15 +1,11 @@
-import com.example.generated.Tables;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.impl.DSL;
-import org.jooq.impl.TableImpl;
 
-import java.math.BigInteger;
+
 import java.sql.*;
-import java.util.Optional;
 
 import static org.jooq.impl.DSL.table;
-import static org.jooq.impl.SQLDataType.BIGINT;
 import static org.jooq.impl.SQLDataType.VARCHAR;
 import static com.example.generated.Tables.*;
 

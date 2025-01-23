@@ -5,15 +5,22 @@ package com.example.generated.tables;
 
 
 import com.example.generated.DefaultSchema;
+import com.example.generated.Keys;
+import com.example.generated.tables.Ingredient.IngredientPath;
 import com.example.generated.tables.records.RecipeRecord;
 
 import java.util.Collection;
 
 import org.jooq.Condition;
 import org.jooq.Field;
+import org.jooq.ForeignKey;
+import org.jooq.Identity;
+import org.jooq.InverseForeignKey;
 import org.jooq.Name;
+import org.jooq.Path;
 import org.jooq.PlainSQL;
 import org.jooq.QueryPart;
+import org.jooq.Record;
 import org.jooq.SQL;
 import org.jooq.Schema;
 import org.jooq.Select;
@@ -21,6 +28,7 @@ import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
+import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -35,7 +43,7 @@ public class Recipe extends TableImpl<RecipeRecord> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>recipe</code>
+     * The reference instance of <code>Recipe</code>
      */
     public static final Recipe RECIPE = new Recipe();
 
@@ -48,14 +56,44 @@ public class Recipe extends TableImpl<RecipeRecord> {
     }
 
     /**
-     * The column <code>recipe.id</code>.
+     * The column <code>Recipe.ID</code>.
      */
-    public final TableField<RecipeRecord, Integer> ID = createField(DSL.name("id"), SQLDataType.INTEGER, this, "");
+    public final TableField<RecipeRecord, Integer> ID = createField(DSL.name("ID"), SQLDataType.INTEGER.identity(true), this, "");
 
     /**
-     * The column <code>recipe.name</code>.
+     * The column <code>Recipe.name</code>.
      */
     public final TableField<RecipeRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(25), this, "");
+
+    /**
+     * The column <code>Recipe.cuisine</code>.
+     */
+    public final TableField<RecipeRecord, String> CUISINE = createField(DSL.name("cuisine"), SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>Recipe.category</code>.
+     */
+    public final TableField<RecipeRecord, String> CATEGORY = createField(DSL.name("category"), SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>Recipe.instructions</code>.
+     */
+    public final TableField<RecipeRecord, String> INSTRUCTIONS = createField(DSL.name("instructions"), SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>Recipe.nutrition</code>.
+     */
+    public final TableField<RecipeRecord, Integer> NUTRITION = createField(DSL.name("nutrition"), SQLDataType.INTEGER, this, "");
+
+    /**
+     * The column <code>Recipe.cookingTime</code>.
+     */
+    public final TableField<RecipeRecord, String> COOKINGTIME = createField(DSL.name("cookingTime"), SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>Recipe.ingredient</code>.
+     */
+    public final TableField<RecipeRecord, String> INGREDIENT = createField(DSL.name("ingredient"), SQLDataType.CLOB, this, "");
 
     private Recipe(Name alias, Table<RecipeRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
@@ -66,29 +104,84 @@ public class Recipe extends TableImpl<RecipeRecord> {
     }
 
     /**
-     * Create an aliased <code>recipe</code> table reference
+     * Create an aliased <code>Recipe</code> table reference
      */
     public Recipe(String alias) {
         this(DSL.name(alias), RECIPE);
     }
 
     /**
-     * Create an aliased <code>recipe</code> table reference
+     * Create an aliased <code>Recipe</code> table reference
      */
     public Recipe(Name alias) {
         this(alias, RECIPE);
     }
 
     /**
-     * Create a <code>recipe</code> table reference
+     * Create a <code>Recipe</code> table reference
      */
     public Recipe() {
-        this(DSL.name("recipe"), null);
+        this(DSL.name("Recipe"), null);
+    }
+
+    public <O extends Record> Recipe(Table<O> path, ForeignKey<O, RecipeRecord> childPath, InverseForeignKey<O, RecipeRecord> parentPath) {
+        super(path, childPath, parentPath, RECIPE);
+    }
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    public static class RecipePath extends Recipe implements Path<RecipeRecord> {
+
+        private static final long serialVersionUID = 1L;
+        public <O extends Record> RecipePath(Table<O> path, ForeignKey<O, RecipeRecord> childPath, InverseForeignKey<O, RecipeRecord> parentPath) {
+            super(path, childPath, parentPath);
+        }
+        private RecipePath(Name alias, Table<RecipeRecord> aliased) {
+            super(alias, aliased);
+        }
+
+        @Override
+        public RecipePath as(String alias) {
+            return new RecipePath(DSL.name(alias), this);
+        }
+
+        @Override
+        public RecipePath as(Name alias) {
+            return new RecipePath(alias, this);
+        }
+
+        @Override
+        public RecipePath as(Table<?> alias) {
+            return new RecipePath(alias.getQualifiedName(), this);
+        }
     }
 
     @Override
     public Schema getSchema() {
         return aliased() ? null : DefaultSchema.DEFAULT_SCHEMA;
+    }
+
+    @Override
+    public Identity<RecipeRecord, Integer> getIdentity() {
+        return (Identity<RecipeRecord, Integer>) super.getIdentity();
+    }
+
+    @Override
+    public UniqueKey<RecipeRecord> getPrimaryKey() {
+        return Keys.RECIPE__PK_RECIPE;
+    }
+
+    private transient IngredientPath _ingredient;
+
+    /**
+     * Get the implicit to-many join path to the <code>Ingredient</code> table
+     */
+    public IngredientPath ingredient() {
+        if (_ingredient == null)
+            _ingredient = new IngredientPath(this, null, Keys.INGREDIENT__FK_INGREDIENT_PK_RECIPE.getInverseKey());
+
+        return _ingredient;
     }
 
     @Override

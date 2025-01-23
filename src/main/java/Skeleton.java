@@ -2,6 +2,8 @@ import org.jooq.DSLContext;
 import org.jooq.Result;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
+
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import static com.example.generated.Tables.*;
@@ -27,6 +29,7 @@ public class Skeleton {
             }
             */
             //Database.deleteAllRecipes();
+
             Connection connection = DriverManager.getConnection(url);
             DSLContext create = DSL.using(connection, SQLDialect.SQLITE);
             Result<org.jooq.Record> result = create.select().from(RECIPE).fetch();

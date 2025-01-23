@@ -4,6 +4,7 @@
 package com.example.generated;
 
 
+import com.example.generated.tables.Ingredient;
 import com.example.generated.tables.Recipe;
 
 import java.util.Arrays;
@@ -28,7 +29,12 @@ public class DefaultSchema extends SchemaImpl {
     public static final DefaultSchema DEFAULT_SCHEMA = new DefaultSchema();
 
     /**
-     * The table <code>recipe</code>.
+     * The table <code>Ingredient</code>.
+     */
+    public final Ingredient INGREDIENT = Ingredient.INGREDIENT;
+
+    /**
+     * The table <code>Recipe</code>.
      */
     public final Recipe RECIPE = Recipe.RECIPE;
 
@@ -48,6 +54,7 @@ public class DefaultSchema extends SchemaImpl {
     @Override
     public final List<Table<?>> getTables() {
         return Arrays.asList(
+            Ingredient.INGREDIENT,
             Recipe.RECIPE
         );
     }

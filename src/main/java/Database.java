@@ -1,16 +1,13 @@
 import com.example.generated.tables.records.RecipeRecord;
 import org.jooq.DSLContext;
 import org.jooq.UpdateSetFirstStep;
-import org.jooq.UpdateSetMoreStep;
 import org.jooq.impl.DSL;
-import org.jooq.Record;
-import org.jooq.Result;
+import org.jooq.impl.SQLDataType;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import static com.example.generated.Tables.RECIPE;
-import static com.example.generated.Tables.INGREDIENT;
 
 public class Database {
 
@@ -26,6 +23,26 @@ public class Database {
             context = DSL.using(connection);
         }
         return context;
+    }
+    // creates a table called Recipe if Table does not exist
+    public static void createRecipeTable(){
+        try {
+            getConnection()
+                    .createTableIfNotExists("Recipe")
+                    .column("ID" , SQLDataType.INTEGER.identity(true))
+                    .column("name" , SQLDataType.VARCHAR(25))
+                    .column("cuisine" , SQLDataType.CLOB)
+                    .column("category" , SQLDataType.CLOB)
+                    .column("instructions" , SQLDataType.CLOB)
+                    .column("nutrition", SQLDataType.INTEGER)
+                    .column("cookingTime", SQLDataType.CLOB)
+                    .column("ingredient", SQLDataType.CLOB)
+                    .constraint(DSL.primaryKey("ID"))
+                    .execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     // insert a new recipe
@@ -106,6 +123,10 @@ public class Database {
             e.printStackTrace();
 
         }
+    }
+    // Possibility, to change the DSLContext for testing with a h2 memory database
+    public static void setContext(DSLContext newContext) {
+        context = newContext;
     }
 }
 
