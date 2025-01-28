@@ -2,6 +2,7 @@ import com.example.generated.tables.records.RecipeRecord;
 import org.h2.jdbcx.JdbcDataSource;
 import org.jooq.DSLContext;
 import org.jooq.Record;
+import org.jooq.Result;
 import org.jooq.impl.DSL;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -68,6 +69,38 @@ public class DatabaseTest {
         int rowCount = Database.getConnection().fetchCount(RECIPE);
         assertEquals(0, rowCount);
 
+    }
+
+    @Test
+    public void testDeleteRecipe() throws SQLException{
+        Database.insertRecipe(1,"Name", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
+        Database.insertRecipe(2,"NameSecond", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
+
+        int rowCount = Database.getConnection().fetchCount(RECIPE);
+        assertEquals(2,rowCount);
+
+        Database.deleteRecipe(1);
+        int rowCountAfterDelete = Database.getConnection().fetchCount(RECIPE);
+        assertEquals(1,rowCountAfterDelete);
+        var recipeRecord = Database.getConnection().select().from(RECIPE).fetchOne();
+
+        assert recipeRecord != null;
+        assertEquals(recipeRecord.getValue(RECIPE.NAME), "NameSecond");
+    }
+
+    @Test
+    public void testFilterRecipes() throws SQLException {
+        Database.insertRecipe(1,"Name", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
+        Database.insertRecipe(2,"NameSecond", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
+        Database.insertRecipe(3,"NameThird", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
+
+        var result = Database.filterRecipes("NameThird",null,null,null,0,null,null);
+
+        assertEquals(1,result.size());
+
+        for(Record record : result){
+            assertEquals("NameThird",record.get(RECIPE.NAME));
+        }
     }
 
     @AfterEach

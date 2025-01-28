@@ -185,7 +185,7 @@ public class RecipeManager extends JFrame {
         try {
             updated = Database.updateRecipe(
                     Integer.parseInt(idField.getText()),
-                    nameField.getText().trim().isEmpty() ? null : cuisineField.getText(),
+                    nameField.getText().trim().isEmpty() ? null : nameField.getText(),
                     cuisineField.getText().trim().isEmpty() ? null : cuisineField.getText(),
                     categoryField.getText().trim().isEmpty() ? null : categoryField.getText(),
                     instructionsField.getText().trim().isEmpty() ? null : instructionsField.getText(),

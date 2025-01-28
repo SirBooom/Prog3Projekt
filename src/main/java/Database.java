@@ -2,6 +2,7 @@ import com.example.generated.tables.Recipe;
 import com.example.generated.tables.records.RecipeRecord;
 import javax.swing.table.DefaultTableModel;
 import org.jooq.DSLContext;
+import org.jooq.Record;
 import org.jooq.Result;
 import org.jooq.UpdateSetFirstStep;
 import org.jooq.impl.DSL;
@@ -148,10 +149,11 @@ public class Database {
     }
 
     // filter recipes by at least 1 attribute
-    public static void filterRecipes(String name, String cuisine, String category,
-            String instructions, int nutrition, String cookingTime, String ingredient) {
+    public static Result<Record> filterRecipes(String name, String cuisine, String category,
+                                               String instructions, int nutrition, String cookingTime, String ingredient) {
+        Result<Record> result = null;
         try {
-            var result = getConnection()
+            result = getConnection()
                     .select()
                     .from(RECIPE)
                     .where((name == null || name.isEmpty() ? DSL.trueCondition()
@@ -167,11 +169,13 @@ public class Database {
                             : RECIPE.COOKINGTIME.eq(cookingTime)))
                     .and((ingredient == null || ingredient.isEmpty() ? DSL.trueCondition()
                             : RECIPE.INGREDIENT.eq(ingredient)))
-                    .execute();
+                    .fetch();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
         //System.out.println(context.select().from(RECIPE).fetch());
+        return result;
     }
 
 
