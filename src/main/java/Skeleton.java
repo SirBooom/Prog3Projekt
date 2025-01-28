@@ -1,3 +1,4 @@
+import javax.xml.crypto.Data;
 import org.jooq.DSLContext;
 import org.jooq.Result;
 import org.jooq.SQLDialect;
@@ -15,7 +16,7 @@ public class Skeleton {
         String userName = "root";
         String password = "";
         String url = "jdbc:SQLite:rezeptverwaltungsdb.db";
-
+        new MenuManager();
         System.setProperty("org.jooq.no-logo", "true");
         System.setProperty("org.jooq.no-tips", "true");
 
@@ -23,12 +24,13 @@ public class Skeleton {
         // PreparedStatement and ResultSet are handled by jOOQ, internally
         try {
             /*
-            for(int i = 1; i <= 10; i++ ) {
-                Database.insertRecipe(i, "pasta"+ i, "Italian", "dessert", "Cook then eat", 100,
+            for(int i = 11; i <= 15; i++ ) {
+                Database.insertRecipe(i, "pasta1", "Italian", "dessert", "Cook then eat", 100,
                         "15 Mins", "noodles");
             }
             */
             //Database.deleteAllRecipes();
+            //Database.filterRecipes(null,null,null,null,0,"15 mins", null);
 
             Connection connection = DriverManager.getConnection(url);
             DSLContext create = DSL.using(connection, SQLDialect.SQLITE);
