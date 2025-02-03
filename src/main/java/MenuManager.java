@@ -1,18 +1,15 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 public class MenuManager extends JFrame {
@@ -120,11 +117,9 @@ public class MenuManager extends JFrame {
     private void pressRecipeButton(JButton rb) {
         rb.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Close the main frame immediately
                 dispose();
 
-                // Open the Recipes JFrame on the EDT (Event Dispatch Thread) to ensure responsiveness
-                SwingUtilities.invokeLater(RecipeManager::new);
+                SwingUtilities.invokeLater(RecipeView::new);
             }
         });
     }

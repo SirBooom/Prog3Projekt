@@ -50,6 +50,11 @@ public class Database {
         }
     }
 
+    // Possibility, to change the DSLContext for testing with a h2 memory database
+    public static void setContext(DSLContext newContext) {
+        context = newContext;
+    }
+
     // insert a new recipe
     public static boolean insertRecipe(int id, String name, String cuisine, String category,
             String instructions, int nutrition, String cookingTime, String ingredient) {
@@ -143,12 +148,7 @@ public class Database {
         }
     }
 
-    // Possibility, to change the DSLContext for testing with a h2 memory database
-    public static void setContext(DSLContext newContext) {
-        context = newContext;
-    }
-
-    // filter recipes by at least 1 attribute
+    // filter recipes by at least 1 attribute (delete this method)
     public static Result<Record> filterRecipes(String name, String cuisine, String category,
                                                String instructions, int nutrition, String cookingTime, String ingredient) {
         Result<Record> result = null;
@@ -210,28 +210,6 @@ public class Database {
         }
     }
 }
-
-    /*
-
-    public static String getAllRecipes() {
-        StringBuilder result = new StringBuilder();
-        try {
-            Result<Record> records = getConnection()
-                    .select()
-                    .from(RECIPE)
-                    .fetch();
-
-            for (Record record : records) {
-                Integer id = record.getValue(RECIPE.ID);
-                String name = record.getValue(RECIPE.NAME);
-                result.append("ID: ").append(id).append(", Name: ").append(name).append("\n");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return result.toString();
-    }
-*/
     /*
     public static void closeConnection() {
         try {
