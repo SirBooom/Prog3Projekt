@@ -1,9 +1,9 @@
 import static com.example.generated.Tables.RECIPE;
+import java.awt.event.ActionListener;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.table.DefaultTableModel;
 
 /**
  * The RecipeManager class provides a graphical user interface for managing recipes.
@@ -12,83 +12,25 @@ import java.awt.event.ActionListener;
  * updating, and loading recipes through the provided interface components.
  * This class extends JFrame to create a GUI application window.
  */
-public class RecipeManager extends JFrame {
+public class RecipeModel{
 
-    private JTable recipeTable;
-    private DefaultTableModel tableModel;
-
-    private JTextField idField, nameField, cuisineField, categoryField, instructionsField,
+    private static DefaultTableModel tableModel;
+    //private DefaultTableModel tableModel;
+    private static RecipeView  recipeView;
+    private static JTextField idField, nameField, cuisineField, categoryField, instructionsField,
             nutritionField, cookingTimeField, ingredientField, balanceField;
 
-    public RecipeManager() {
-        setTitle("Recipe Manager");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1440, 880);
-        setLayout(new BorderLayout());
-
-        // db table
-        tableModel = new DefaultTableModel(new Object[]{"ID", "Name", "Cuisine", "Category",
-                "Instructions", "Nutrition", "Cooking Time", "Ingredient"}, 0);
-        recipeTable = new JTable(tableModel);
-        add(new JScrollPane(recipeTable), BorderLayout.CENTER);
-
-        //create backButton
-        JPanel backButton = new JPanel();
-        backButton.setLayout(new BoxLayout(backButton, BoxLayout.X_AXIS));
-        addButton(backButton, "Back", this::backToMenu);
-        backButton.add(Box.createVerticalStrut(40));
-        add(backButton, BorderLayout.NORTH);
-
-        generateInputFields();
-
-        // shows the balance (mainly for visual reasons (not functional))
-        JLabel balanceLabel = new JLabel("Balance:\t" + 1000.5 + " EUR");
-        balanceLabel.setFont(new Font("Camibri", Font.BOLD, 15));
-        backButton.add(balanceLabel);
-        setVisible(true);
-        //balanceLabel.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
-
-        visualButtons();
-        //add(buttonPanel, BorderLayout.EAST);
-        setVisible(true);
-    }
-
-    // fields to modify the table (incl. loading, adding, deleting, updating, etc...)
-    private void generateInputFields(){
-        // panel for inputs (texfields at bottom)
-        JPanel inputPanel = new JPanel(new GridLayout(8, 2)); // Changed GridLayout to 9 rows
-        idField = createInputField(inputPanel, "ID:");
-        nameField = createInputField(inputPanel, "Name:");
-        cuisineField = createInputField(inputPanel, "Cuisine:");
-        categoryField = createInputField(inputPanel, "Category:");
-        instructionsField = createInputField(inputPanel, "Instructions:");
-        nutritionField = createInputField(inputPanel, "Nutrition:");
-        cookingTimeField = createInputField(inputPanel, "Cooking Time:");
-        ingredientField = createInputField(inputPanel, "Ingredient:");
-        add(inputPanel, BorderLayout.SOUTH);
-    }
-
-    // Show buttons for user to interact with
-    private void visualButtons(){
-
-        // The functional buttons aside from back button we want to add
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
-        //addButton(buttonPanel, "back", this::backToMenu);
-        buttonPanel.add(Box.createVerticalStrut(100));
-        addButton(buttonPanel, "Load Recipes", this::loadRecipes);
-        buttonPanel.add(Box.createVerticalStrut(50));
-        addButton(buttonPanel, "Add Recipe", this::addRecipe);
-        buttonPanel.add(Box.createVerticalStrut(50));
-        addButton(buttonPanel, "Delete Recipe", this::deleteRecipe);
-        buttonPanel.add(Box.createVerticalStrut(50));
-        addButton(buttonPanel, "Update Recipe", this::updateRecipe);
-        buttonPanel.add(Box.createVerticalStrut(50));
-        addButton(buttonPanel, "Filter Recipes", this::filterRecipes);
-        buttonPanel.add(Box.createVerticalStrut(50));
-        addButton(buttonPanel, "Delete all Recipes", this::deleteAllRecipes);
-        buttonPanel.add(Box.createVerticalStrut(100));
-        add(buttonPanel, BorderLayout.EAST);
+    public RecipeModel(RecipeView rv) {
+        recipeView = rv;
+        tableModel = rv.getTableModel();
+        idField = rv.getIdField();
+        nameField = rv.getNameField();
+        cuisineField = rv.getCuisineField();
+        categoryField = rv.getCategoryField();
+        instructionsField = rv.getInstructionsField();
+        nutritionField = rv.getNutritionField();
+        cookingTimeField = rv.getCookingTimeField();
+        ingredientField = rv.getIngredientField();
 
     }
 
@@ -99,17 +41,11 @@ public class RecipeManager extends JFrame {
         panel.add(label);
         panel.add(textField);
         return textField;
-    }
 
-    // generate a button in the a JPanel
-    private void addButton(JPanel panel, String buttonText, ActionListener action) {
-        JButton button = new JButton(buttonText);
-        button.addActionListener(action);
-        panel.add(button);
     }
 
     // load recipes from the db (useful when relaunching or after filtering)
-    private void loadRecipes(ActionEvent e) {
+    public static void loadRecipes(ActionEvent e) {
         try {
             tableModel.setRowCount(0); // Clear existing rows
             Database.getConnection()
@@ -128,12 +64,12 @@ public class RecipeManager extends JFrame {
                     }));
         } catch (Exception ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error loading recipes.");
+            JOptionPane.showMessageDialog(recipeView, "Error loading recipes.");
         }
     }
 
     // add a recipe to the db
-    private void addRecipe(ActionEvent e) {
+    public static void addRecipe(ActionEvent e) {
         try {
             Database.insertRecipe(
                     Integer.parseInt(idField.getText()),
@@ -141,46 +77,45 @@ public class RecipeManager extends JFrame {
                     cuisineField.getText().isEmpty() ? null : cuisineField.getText(),
                     categoryField.getText().isEmpty() ? null : categoryField.getText(),
                     instructionsField.getText().isEmpty() ? null : instructionsField.getText(),
-                    nutritionField.getText().isEmpty() ? 0
-                            : Integer.parseInt(nutritionField.getText()),
+                    nutritionField.getText().isEmpty() ? 0 : Integer.parseInt(nutritionField.getText()),
                     cookingTimeField.getText().isEmpty() ? null : cookingTimeField.getText(),
                     ingredientField.getText().isEmpty() ? null : ingredientField.getText()
             );
             loadRecipes(null); // Refresh table
-            JOptionPane.showMessageDialog(this, "Recipe added successfully.");
+            JOptionPane.showMessageDialog(recipeView, "Recipe added successfully.");
         } catch (Exception ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error adding recipe.");
+            JOptionPane.showMessageDialog(recipeView, "Error adding recipe.");
         }
     }
 
     // delete a recipe by ID
-    private void deleteRecipe(ActionEvent e) {
+    public static void deleteRecipe(ActionEvent e) {
         int id = Integer.parseInt(idField.getText());
         try {
             Database.deleteRecipe(id);
             loadRecipes(null); // Refresh table
-            JOptionPane.showMessageDialog(this, "Recipe deleted successfully.");
+            JOptionPane.showMessageDialog(recipeView, "Recipe deleted successfully.");
         } catch (Exception ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error deleting recipe.");
+            JOptionPane.showMessageDialog(recipeView, "Error deleting recipe.");
         }
     }
 
     // delete all recipes in the db
-    private void deleteAllRecipes(ActionEvent e) {
+    public static void deleteAllRecipes(ActionEvent e) {
         try {
             Database.deleteAllRecipes();
             loadRecipes(null); // Refresh table
-            JOptionPane.showMessageDialog(this, "Recipe list has been cleared successfully.");
+            JOptionPane.showMessageDialog(recipeView, "Recipe list has been cleared");
         } catch (Exception ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error deleting recipes.");
+            JOptionPane.showMessageDialog(recipeView, "Error deleting recipes.");
         }
     }
 
     // update at least 1 value of a recipe
-    private void updateRecipe(ActionEvent e) {
+    public static void updateRecipe(ActionEvent e) {
         boolean updated = false;
         try {
             updated = Database.updateRecipe(
@@ -195,19 +130,19 @@ public class RecipeManager extends JFrame {
             );
             if(updated) {
                 loadRecipes(null); // Refresh table
-                JOptionPane.showMessageDialog(this, "Recipe updated successfully.");
+                JOptionPane.showMessageDialog(recipeView, "Recipe updated successfully.");
             } else {
-                JOptionPane.showMessageDialog(this, "Nothing has been updated.");
+                JOptionPane.showMessageDialog(recipeView, "Nothing has been updated.");
             }
         } catch (Exception ex) {
             if(!updated)
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error updating recipe.");
+            JOptionPane.showMessageDialog(recipeView, "Error updating recipe.");
         }
     }
 
     // filter recipes by 1 or multiple attributes
-    private void filterRecipes(ActionEvent e) {
+    public static void filterRecipes(ActionEvent e) {
             // Create a new JFrame for filtering
             JFrame filterFrame = new JFrame("Filter Recipes");
             filterFrame.setSize(300, 300);
@@ -279,8 +214,8 @@ public class RecipeManager extends JFrame {
         }
 
     // go back to main menu
-    private void backToMenu(ActionEvent e) {
-        dispose();
+    public static void backToMenu(ActionEvent e) {
+        recipeView.dispose();
         new MenuManager();
     }
 
