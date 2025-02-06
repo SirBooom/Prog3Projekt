@@ -216,7 +216,8 @@ public class RecipeModel{
     // go back to main menu
     public static void backToMenu(ActionEvent e) {
         recipeView.dispose();
-        new MenuManager();
+        new MenuController(new MenuView());
+
     }
 
 }

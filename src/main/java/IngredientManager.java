@@ -1,8 +1,6 @@
 import static com.example.generated.Tables.INGREDIENT;
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
@@ -10,12 +8,10 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 public class IngredientManager extends JFrame {
@@ -73,7 +69,7 @@ public class IngredientManager extends JFrame {
 
     private void backToMenu(ActionEvent e) {
         dispose();
-        new MenuManager();
+        new MenuController(new MenuView() );
     }
 
     private void loadIngredients (ActionEvent e){

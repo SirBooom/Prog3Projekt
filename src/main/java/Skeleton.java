@@ -1,4 +1,3 @@
-import javax.xml.crypto.Data;
 import org.jooq.DSLContext;
 import org.jooq.Result;
 import org.jooq.SQLDialect;
@@ -16,7 +15,7 @@ public class Skeleton {
         String userName = "root";
         String password = "";
         String url = "jdbc:SQLite:rezeptverwaltungsdb.db";
-        new MenuManager();
+        new MenuController(new MenuView());
         System.setProperty("org.jooq.no-logo", "true");
         System.setProperty("org.jooq.no-tips", "true");
 
