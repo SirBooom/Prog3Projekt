@@ -69,5 +69,8 @@ public class MenuView extends JFrame {
         return balanceButton;
     }
 
+    public void closeView(){
+        this.dispose();
+    }
 }
 

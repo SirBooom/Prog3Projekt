@@ -185,36 +185,6 @@ public class RecipeView extends JFrame {
         return backButton;
     }
 
-    ///////////////////////////////////// --- Filter Frame --- /////////////////////////////////////
-
-    public JTextField getFilterNameField() {
-        return filterNameField;
-    }
-
-    public JTextField getFilterCuisineField() {
-        return filterCuisineField;
-    }
-
-    public JTextField getFilterCategoryField() {
-        return filterCategoryField;
-    }
-
-    public JTextField getFilterInstructionsField() {
-        return filterInstructionsField;
-    }
-
-    public JTextField getFilterNutritionField() {
-        return filterNutritionField;
-    }
-
-    public JTextField getFilterCookingTimeField() {
-        return filterCookingTimeField;
-    }
-
-    public JTextField getFilterIngredientField() {
-        return filterIngredientField;
-    }
-
     ///////////////////////////////////// --- View Methods --- /////////////////////////////////////
 
     public void loadTable(Result<Record> result) {
@@ -248,63 +218,7 @@ public class RecipeView extends JFrame {
         JOptionPane.showMessageDialog(this, message);
     }
 
-    /*
-    public void filterButtonJFrame(){
-        JFrame filterFrame = new JFrame("Filter Recipes");
-        filterFrame.setSize(300, 300);
-        filterFrame.setLayout(new GridLayout(8, 2)); // 7 fields + Filter button
 
-        filterNameField = createFilterInputField(filterFrame, "Name:");
-        filterCuisineField = createFilterInputField(filterFrame, "Cuisine:");
-        filterCategoryField = createFilterInputField(filterFrame, "Category:");
-        filterInstructionsField = createFilterInputField(filterFrame, "Instructions:");
-        filterNutritionField = createFilterInputField(filterFrame, "Nutrition:");
-        filterCookingTimeField = createFilterInputField(filterFrame, "Cooking Time:");
-        filterIngredientField = createFilterInputField(filterFrame, "Ingredient:");
-
-        JButton filterButton = new JButton("Filter");
-
-        filterFrame.add(new JLabel()); // Empty space to align button layout
-        filterFrame.add(filterButton);
-        filterFrame.setVisible(true);
-    }
-
-    private JTextField createFilterInputField(JFrame frame, String labelText) {
-        frame.add(new JLabel(labelText));
-        JTextField textField = new JTextField();
-        frame.add(textField);
-        return textField;
-    }
-    */
 
 }
 
-
-
-/*
-
-// Set listeners for Controller actions
-    public void setLoadListener(ActionListener loadListener) {
-        this.loadListener = loadListener;
-    }
-
-    public void setAddListener(ActionListener addListener) {
-        this.addListener = addListener;
-    }
-
-    public void setDeleteListener(ActionListener deleteListener) {
-        this.deleteListener = deleteListener;
-    }
-
-    public void setUpdateListener(ActionListener updateListener) {
-        this.updateListener = updateListener;
-    }
-
-    public void setFilterListener(ActionListener filterListener) {
-        this.filterListener = filterListener;
-    }
-
-    public void setBackListener(ActionListener backListener) {
-        this.backListener = backListener;
-    }
- */

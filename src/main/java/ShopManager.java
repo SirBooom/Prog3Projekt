@@ -86,6 +86,7 @@ public class ShopManager extends JFrame {
         new MenuController(new MenuView());
     }
 
+
     private void loadIngredients (ActionEvent e){
         try {
             tableModel.setRowCount(0);

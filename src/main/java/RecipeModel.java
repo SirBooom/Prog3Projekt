@@ -13,22 +13,9 @@ import javax.swing.table.DefaultTableModel;
 public class RecipeModel {
 
     private DefaultTableModel tableModel;
-    private final RecipeView recipeView;
-
-    private final JTextField idField, nameField, cuisineField, categoryField, instructionsField,
-            nutritionField, cookingTimeField, ingredientField;
 
     public RecipeModel() {
         this.tableModel = null;
-        this.recipeView = null;
-        this.idField = null;
-        this.nameField =null;
-        this.cuisineField = null;
-        this.categoryField = null;
-        this.instructionsField = null;
-        this.nutritionField = null;
-        this.cookingTimeField = null;
-        this.ingredientField = null;
     }
 
     private String getTrimmedTextOrNull(JTextField field) {
@@ -42,7 +29,6 @@ public class RecipeModel {
             return Database.fetchAllRecipes();
         } catch (Exception ex) {
             return null;
-            //showErrorDialog(ERROR_LOADING_RECIPES);
         }
     }
 
@@ -72,22 +58,17 @@ public class RecipeModel {
         try {
             int parsedId = Integer.parseInt(idToDelete.getText());
             return Database.deleteRecipe(parsedId);
-            //reloadRecipes(null);
-            //JOptionPane.showMessageDialog(recipeView, SUCCESS_RECIPE_DELETED);
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
-            //showErrorDialog(ERROR_DELETING_RECIPE);
         }
     }
 
     public Result<Record> deleteAllRecipes(ActionEvent e) {
         try {
             return Database.deleteAllRecipes();
-            //JOptionPane.showMessageDialog(recipeView, SUCCESS_ALL_RECIPES_DELETED);
         } catch (Exception ex) {
             ex.printStackTrace();
-            //showErrorDialog(ERROR_DELETING_RECIPE);
         }
         return reloadRecipes(null);
     }
@@ -106,24 +87,15 @@ public class RecipeModel {
                     getTrimmedTextOrNull(cookingTimeField),
                     getTrimmedTextOrNull(ingredientField)
             );
-            //reloadRecipes(null);
-            //String message = updated ? SUCCESS_RECIPE_UPDATED : NOTHING_UPDATED;
-            //JOptionPane.showMessageDialog(recipeView, message);
         } catch (Exception ex) {
-            /*
-            if (!updated) {
-                ex.printStackTrace();
-            }
-            */
+
             return null;
-            //showErrorDialog(ERROR_UPDATING_RECIPE);
         }
 
     }
 
     public Result<Record> filterRecipes(ActionEvent e, JTextField idField, JTextField nameField, JTextField cuisineField, JTextField categoryField, JTextField instructionsField, JTextField nutritionField, JTextField cookingTimeField, JTextField ingredientField) {
         try {
-            //tableModel.setRowCount(0); // Clear the table before filtering
             return Database.filterRecipes(
                     idField.getText().isEmpty() ? 0
                             : Integer.parseInt(idField.getText()),
@@ -136,18 +108,10 @@ public class RecipeModel {
                     getTrimmedTextOrNull(cookingTimeField),
                     getTrimmedTextOrNull(ingredientField)
             );
-            //JOptionPane.showMessageDialog(filterFrame, "Recipes filtered successfully!");
-            //filterFrame.dispose(); // Close the frame
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
-            //showErrorDialog("Error filtering recipes.");
         }
-    }
-
-    public boolean backToMenu(ActionEvent e) {
-        new MenuController(new MenuView());
-        return true;
     }
 
     public void setTableModel(DefaultTableModel tableModel) {

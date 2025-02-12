@@ -3,6 +3,7 @@ import javax.swing.*;
 public class MenuController {
     private final MenuView menuView;
 
+
     public MenuController(MenuView menuView){
         this.menuView = menuView;
 
@@ -12,20 +13,27 @@ public class MenuController {
 
     }
 
-    private void openRecipeView(){
-        menuView.dispose();
-        new RecipeController();
+    private void openRecipeView() {
+        menuView.closeView();
+        ControllerFactory.getInstance().getRecipeController().show();
     }
 
-    private void openShopView(){
-        menuView.dispose();
+    private void openShopView() {
+        menuView.closeView();
+        //ControllerFactory.getInstance().getShopController().show();
         new ShopManager();
-        /* todo */
     }
 
-    private void openBalanceView(){
-        menuView.dispose();
-        new BalanceController(new BalanceView(), new BalanceModel());
+
+    private void openBalanceView() {
+        menuView.closeView();
+        ControllerFactory.getInstance().getBalanceController().show();
     }
+
+
+    public void show(){
+        menuView.setVisible(true);
+    }
+
 }
 

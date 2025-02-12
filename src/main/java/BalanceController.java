@@ -40,4 +40,8 @@ public class BalanceController {
     private void startBonusCooldownIfNeeded(long cooldownEnd) {
         balanceView.startBonusCooldown(cooldownEnd, () -> balanceModel.setCooldownTime(0));
     }
+
+    public void show() {
+        balanceView.setVisible(true);
+    }
 }
