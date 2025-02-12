@@ -37,6 +37,10 @@ jobs:
       - name: Validate
         run: mvn validate
 
+      # Step 4.1: Generate sources 
+      - name: Generate Sources
+        run: mvn generate-sources
+
       # Step 5: Compile the project
       - name: Compile
         run: mvn compile
