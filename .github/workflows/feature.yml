@@ -56,3 +56,7 @@ jobs:
       # Step 9: Install the project to local repository
       - name: Install
         run: mvn install
+       
+      # Step 10: Generate sources automatically
+      - name: Generate Sources
+        run: mvn generate-sources
