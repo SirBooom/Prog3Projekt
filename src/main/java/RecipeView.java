@@ -1,9 +1,7 @@
 import static com.example.generated.Tables.RECIPE;
-import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import org.jooq.Record;
 import org.jooq.Result;
 

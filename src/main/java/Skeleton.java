@@ -16,8 +16,8 @@ public class Skeleton {
         String userName = "root";
         String password = "";
         String url = "jdbc:SQLite:rezeptverwaltungsdb.db";
-        //new MenuManager();
         new MenuController(new MenuView());
+        //new MenuController(new MenuView());
         System.setProperty("org.jooq.no-logo", "true");
         System.setProperty("org.jooq.no-tips", "true");
 

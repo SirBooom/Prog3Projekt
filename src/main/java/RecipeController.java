@@ -1,11 +1,7 @@
-import java.awt.event.ActionListener;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
 
-
-import javax.swing.*;
-import java.awt.event.ActionEvent;
 import org.jooq.Result;
 import org.jooq.Record;
 
@@ -157,6 +153,11 @@ public class RecipeController {
 
 
 
+    }
+
+    public boolean backToMenu(ActionEvent e) {
+        new MenuController(new MenuView());
+        return true;
     }
 
 

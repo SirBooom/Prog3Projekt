@@ -1,33 +1,31 @@
-import com.example.generated.tables.Recipe;
 import javax.swing.*;
 
 public class MenuController {
-    private MenuView menuView;
+    private final MenuView menuView;
+
     public MenuController(MenuView menuView){
         this.menuView = menuView;
 
-        menuView.addButtonListener(menuView.getRecipeButton(), e->openView(new RecipeView()));
-       // menuView.addButtonListener(menuView.getIngredientsButton(), e->openView(new IngredientManager()));
-        menuView.addButtonListener(menuView.getBalanceButton(), e->openBalanceView());
+        menuView.addButtonListener(menuView.getRecipeButton(), e-> openRecipeView());
+        menuView.addButtonListener(menuView.getIngredientsButton(), e-> openShopView());
+        menuView.addButtonListener(menuView.getBalanceButton(), e-> openBalanceView());
 
     }
 
     private void openRecipeView(){
-        /* todo */
+        menuView.dispose();
+        new RecipeController();
     }
 
-    private void openIngredientsView(){
+    private void openShopView(){
+        menuView.dispose();
+        new ShopManager();
         /* todo */
     }
 
     private void openBalanceView(){
         menuView.dispose();
         new BalanceController(new BalanceView(), new BalanceModel());
-    }
-
-
-    private void openView(JFrame frame){
-        menuView.dispose();
     }
 }
 

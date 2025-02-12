@@ -145,10 +145,10 @@ public class Database {
             String category,
             String instructions, Integer nutrition, String cookingTime, String ingredient) {
         try {
-            getConnection()
+            return getConnection()
                     .select()
                     .from(RECIPE)
-                    .where(id <= 0 ? DSL.trueCondition() : RECIPE.ID.eq(id))
+                    .where((id == null || id <= 0) ? DSL.trueCondition() : RECIPE.ID.eq(id))
                     .and((name == null || name.isEmpty() ? DSL.trueCondition()
                             : RECIPE.NAME.eq(name)))
                     .and((cuisine == null || cuisine.isEmpty() ? DSL.trueCondition()
@@ -157,13 +157,12 @@ public class Database {
                             : RECIPE.CATEGORY.eq(category)))
                     .and((instructions == null || instructions.isEmpty() ? DSL.trueCondition()
                             : RECIPE.INSTRUCTIONS.eq(instructions)))
-                    .and((nutrition <= 0 ? DSL.trueCondition() : RECIPE.NUTRITION.eq(nutrition)))
+                    .and(((nutrition == null || nutrition <= 0) ? DSL.trueCondition() : RECIPE.NUTRITION.eq(nutrition)))
                     .and((cookingTime == null || cookingTime.isEmpty() ? DSL.trueCondition()
                             : RECIPE.COOKINGTIME.eq(cookingTime)))
                     .and((ingredient == null || ingredient.isEmpty() ? DSL.trueCondition()
                             : RECIPE.INGREDIENT.eq(ingredient)))
                     .fetch();
-            return fetchAllRecipes();
         } catch (SQLException e) {
             e.printStackTrace();
             return null;

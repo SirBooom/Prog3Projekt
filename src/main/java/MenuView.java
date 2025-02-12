@@ -25,7 +25,7 @@ public class MenuView extends JFrame {
 
         // create buttons
         recipeButton = addButton("Recipes", buttonPanel);
-        ingredientsButton = addButton("Ingredients", buttonPanel);
+        ingredientsButton = addButton("Shop", buttonPanel);
         balanceButton = addButton("Balance", buttonPanel);
 
         // insert/add the buttons into the button section

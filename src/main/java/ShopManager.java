@@ -83,7 +83,7 @@ public class ShopManager extends JFrame {
 
     private void backToMenu(ActionEvent e) {
         dispose();
-        //new MenuManager();
+        new MenuController(new MenuView());
     }
 
     private void loadIngredients (ActionEvent e){
@@ -107,7 +107,7 @@ public class ShopManager extends JFrame {
     }
 
     public void addBalanceLabel(){
-        JLabel balanceLabel = new JLabel("<html>Your Current Balance: " + balance + "   EUR </html>",
+        JLabel balanceLabel = new JLabel("<html>Your Current Balance: " + FileHandler.loadBalance() + "   EUR </html>",
                 SwingUtilities.RIGHT);
         balanceLabel.setBorder(BorderFactory.createEmptyBorder(400, 0, 20, 0));
         balanceLabel.setFont(new Font("Cambria", Font.BOLD, 20));
