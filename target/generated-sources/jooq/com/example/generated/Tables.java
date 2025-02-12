@@ -4,8 +4,9 @@
 package com.example.generated;
 
 
-import com.example.generated.tables.Ingredient;
+import com.example.generated.tables.IngredientDgTmp;
 import com.example.generated.tables.Recipe;
+import com.example.generated.tables.Shop;
 
 
 /**
@@ -15,12 +16,17 @@ import com.example.generated.tables.Recipe;
 public class Tables {
 
     /**
-     * The table <code>Ingredient</code>.
+     * The table <code>Ingredient_dg_tmp</code>.
      */
-    public static final Ingredient INGREDIENT = Ingredient.INGREDIENT;
+    public static final IngredientDgTmp INGREDIENT_DG_TMP = IngredientDgTmp.INGREDIENT_DG_TMP;
 
     /**
      * The table <code>Recipe</code>.
      */
     public static final Recipe RECIPE = Recipe.RECIPE;
+
+    /**
+     * The table <code>Shop</code>.
+     */
+    public static final Shop SHOP = Shop.SHOP;
 }

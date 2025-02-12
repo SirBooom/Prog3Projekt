@@ -4,11 +4,13 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import org.jooq.Record;
+import org.jooq.Result;
 
 /**
- The RecipeView class is responsible for the (GUI) of recipes.
- It provides an interface where users can perform various operations on a recipes such as adding, deleting, etc...
- The class displays recipes in a table and includes input fields and buttons for managing recipes.
+ * The RecipeView class represents the graphical user interface (GUI) for managing recipes.
+ * It is built as an extension of the JFrame class and provides various components for
+ * performing actions such as loading, adding, updating, deleting, filtering, and displaying recipe data.
  */
 public class RecipeView extends JFrame {
 
@@ -17,9 +19,12 @@ public class RecipeView extends JFrame {
 
     private JTextField idField, nameField, cuisineField, categoryField, instructionsField,
             nutritionField, cookingTimeField, ingredientField;
+    private JTextField filterNameField, filterCuisineField, filterCategoryField, filterInstructionsField,
+            filterNutritionField, filterCookingTimeField, filterIngredientField;
 
     private JButton loadButton;
     private JButton addRecipeButton;
+
     private JButton deleteRecipeButton;
     private JButton updateRecipeButton;
     private JButton filterRecipeButton;
@@ -42,7 +47,7 @@ public class RecipeView extends JFrame {
         add(new JScrollPane(recipeTable), BorderLayout.CENTER);
 
         displayInputFields();
-        JPanel buttons = displayButtons();
+        displayButtons();
         /*
         // shows the balance (mainly for visual reasons (not functional))
         JLabel balanceLabel = new JLabel("Balance:\t" + 1000.5 + " EUR");
@@ -51,9 +56,6 @@ public class RecipeView extends JFrame {
         setVisible(true);
         balanceLabel.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
         */
-        SwingUtilities.invokeLater(() -> new RecipeModel(this));
-        SwingUtilities.invokeLater(() -> new RecipeController(this));
-
         setVisible(true);
     }
 
@@ -73,11 +75,11 @@ public class RecipeView extends JFrame {
     }
 
     // Show buttons for user to interact with
-    private JPanel displayButtons() {
-        
+    private void displayButtons() {
+
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
-        
+
         //load, add, delete, update, filter, deleteAll buttons
         buttonPanel.add(Box.createVerticalStrut(80));
         loadButton = addButton(buttonPanel, "Load Recipes");
@@ -93,14 +95,13 @@ public class RecipeView extends JFrame {
         deleteAllRecipeButton = addButton(buttonPanel, "Delete all Recipes");
         buttonPanel.add(Box.createVerticalStrut(80));
         add(buttonPanel, BorderLayout.EAST);
-        
+
         //back button
         JPanel backPanel = new JPanel();
         backPanel.setLayout(new BoxLayout(backPanel, BoxLayout.X_AXIS));
         backButton = addButton(backPanel, "Back");
         backPanel.add(Box.createVerticalStrut(40));
         add(backPanel, BorderLayout.NORTH);
-        return buttonPanel;
     }
 
     // create text box with a label
@@ -186,7 +187,100 @@ public class RecipeView extends JFrame {
         return backButton;
     }
 
+    ///////////////////////////////////// --- Filter Frame --- /////////////////////////////////////
+
+    public JTextField getFilterNameField() {
+        return filterNameField;
+    }
+
+    public JTextField getFilterCuisineField() {
+        return filterCuisineField;
+    }
+
+    public JTextField getFilterCategoryField() {
+        return filterCategoryField;
+    }
+
+    public JTextField getFilterInstructionsField() {
+        return filterInstructionsField;
+    }
+
+    public JTextField getFilterNutritionField() {
+        return filterNutritionField;
+    }
+
+    public JTextField getFilterCookingTimeField() {
+        return filterCookingTimeField;
+    }
+
+    public JTextField getFilterIngredientField() {
+        return filterIngredientField;
+    }
+
+    ///////////////////////////////////// --- View Methods --- /////////////////////////////////////
+
+    public void loadTable(Result<Record> result) {
+        // Clear existing rows in the table model, if necessary
+        tableModel.setRowCount(0);
+
+        // Iterate over the query results and populate the table model
+        result.forEach(record -> {
+            tableModel.addRow(new Object[]{
+                    record.getValue(RECIPE.ID),
+                    record.getValue(RECIPE.NAME),
+                    record.getValue(RECIPE.CUISINE),
+                    record.getValue(RECIPE.CATEGORY),
+                    record.getValue(RECIPE.INSTRUCTIONS),
+                    record.getValue(RECIPE.NUTRITION),
+                    record.getValue(RECIPE.COOKINGTIME),
+                    record.getValue(RECIPE.INGREDIENT)
+            });
+        });
+    }
+
+    public void closeView(){
+        this.dispose();
+    }
+
+    public void showErrorDialog(String message) {
+        JOptionPane.showMessageDialog(this, message);
+    }
+
+    public void showSuccessDialog(String message) {
+        JOptionPane.showMessageDialog(this, message);
+    }
+
+    /*
+    public void filterButtonJFrame(){
+        JFrame filterFrame = new JFrame("Filter Recipes");
+        filterFrame.setSize(300, 300);
+        filterFrame.setLayout(new GridLayout(8, 2)); // 7 fields + Filter button
+
+        filterNameField = createFilterInputField(filterFrame, "Name:");
+        filterCuisineField = createFilterInputField(filterFrame, "Cuisine:");
+        filterCategoryField = createFilterInputField(filterFrame, "Category:");
+        filterInstructionsField = createFilterInputField(filterFrame, "Instructions:");
+        filterNutritionField = createFilterInputField(filterFrame, "Nutrition:");
+        filterCookingTimeField = createFilterInputField(filterFrame, "Cooking Time:");
+        filterIngredientField = createFilterInputField(filterFrame, "Ingredient:");
+
+        JButton filterButton = new JButton("Filter");
+
+        filterFrame.add(new JLabel()); // Empty space to align button layout
+        filterFrame.add(filterButton);
+        filterFrame.setVisible(true);
+    }
+
+    private JTextField createFilterInputField(JFrame frame, String labelText) {
+        frame.add(new JLabel(labelText));
+        JTextField textField = new JTextField();
+        frame.add(textField);
+        return textField;
+    }
+    */
+
 }
+
 
 
 /*

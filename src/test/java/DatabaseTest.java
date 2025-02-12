@@ -94,7 +94,7 @@ public class DatabaseTest {
         Database.insertRecipe(2,"NameSecond", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
         Database.insertRecipe(3,"NameThird", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
 
-        var result = Database.filterRecipes("NameThird",null,null,null,0,null,null);
+        var result = Database.filterRecipes(null,"NameThird",null,null,null,null,null,null);
 
         assertEquals(1,result.size());
 

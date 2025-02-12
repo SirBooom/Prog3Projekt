@@ -6,7 +6,8 @@ package com.example.generated.tables;
 
 import com.example.generated.DefaultSchema;
 import com.example.generated.Keys;
-import com.example.generated.tables.Ingredient.IngredientPath;
+import com.example.generated.tables.IngredientDgTmp.IngredientDgTmpPath;
+import com.example.generated.tables.Shop.ShopPath;
 import com.example.generated.tables.records.RecipeRecord;
 
 import java.util.Collection;
@@ -172,16 +173,29 @@ public class Recipe extends TableImpl<RecipeRecord> {
         return Keys.RECIPE__PK_RECIPE;
     }
 
-    private transient IngredientPath _ingredient;
+    private transient IngredientDgTmpPath _ingredientDgTmp;
 
     /**
-     * Get the implicit to-many join path to the <code>Ingredient</code> table
+     * Get the implicit to-many join path to the <code>Ingredient_dg_tmp</code>
+     * table
      */
-    public IngredientPath ingredient() {
-        if (_ingredient == null)
-            _ingredient = new IngredientPath(this, null, Keys.INGREDIENT__FK_INGREDIENT_PK_RECIPE.getInverseKey());
+    public IngredientDgTmpPath ingredientDgTmp() {
+        if (_ingredientDgTmp == null)
+            _ingredientDgTmp = new IngredientDgTmpPath(this, null, Keys.INGREDIENT_DG_TMP__FK_INGREDIENT_DG_TMP_PK_RECIPE.getInverseKey());
 
-        return _ingredient;
+        return _ingredientDgTmp;
+    }
+
+    private transient ShopPath _shop;
+
+    /**
+     * Get the implicit to-many join path to the <code>Shop</code> table
+     */
+    public ShopPath shop() {
+        if (_shop == null)
+            _shop = new ShopPath(this, null, Keys.SHOP__FK_SHOP_PK_RECIPE.getInverseKey());
+
+        return _shop;
     }
 
     @Override

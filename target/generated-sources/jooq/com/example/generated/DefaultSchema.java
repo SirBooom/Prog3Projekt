@@ -4,8 +4,9 @@
 package com.example.generated;
 
 
-import com.example.generated.tables.Ingredient;
+import com.example.generated.tables.IngredientDgTmp;
 import com.example.generated.tables.Recipe;
+import com.example.generated.tables.Shop;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,14 +30,19 @@ public class DefaultSchema extends SchemaImpl {
     public static final DefaultSchema DEFAULT_SCHEMA = new DefaultSchema();
 
     /**
-     * The table <code>Ingredient</code>.
+     * The table <code>Ingredient_dg_tmp</code>.
      */
-    public final Ingredient INGREDIENT = Ingredient.INGREDIENT;
+    public final IngredientDgTmp INGREDIENT_DG_TMP = IngredientDgTmp.INGREDIENT_DG_TMP;
 
     /**
      * The table <code>Recipe</code>.
      */
     public final Recipe RECIPE = Recipe.RECIPE;
+
+    /**
+     * The table <code>Shop</code>.
+     */
+    public final Shop SHOP = Shop.SHOP;
 
     /**
      * No further instances allowed
@@ -54,8 +60,9 @@ public class DefaultSchema extends SchemaImpl {
     @Override
     public final List<Table<?>> getTables() {
         return Arrays.asList(
-            Ingredient.INGREDIENT,
-            Recipe.RECIPE
+            IngredientDgTmp.INGREDIENT_DG_TMP,
+            Recipe.RECIPE,
+            Shop.SHOP
         );
     }
 }

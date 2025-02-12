@@ -1,10 +1,15 @@
-import static com.example.generated.Tables.INGREDIENT;
+import static com.example.generated.Tables.SHOP;
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -16,26 +21,31 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
-public class IngredientManager extends JFrame {
+public class ShopManager extends JFrame {
 
     private DefaultTableModel tableModel;
     private JTable ingredientTable;
 
-    public IngredientManager() {
-        setTitle("Ingredients");
+    private static int balance;
+
+
+    public ShopManager() {
+        setTitle("Shop");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 800);
         setLayout(new BorderLayout());
-
         tableModel = new DefaultTableModel(
-                new Object[]{"ID", "Name", "RECIPE_ID", "PRICE", "NUTRITION"}, 0);
+                new Object[]{"ID", "Name", "Amount", "PRICE(€)", "Nutrition(Kcal)"}, 0);
         ingredientTable = new JTable(tableModel);
         add(new JScrollPane(ingredientTable), BorderLayout.CENTER);
-        ingredientTable.setFont(new Font("Camibri", Font.ITALIC, 15));
+        ingredientTable.setFont(new Font("Camibri", Font.BOLD, 15));
+        //ingredientTable.setFont(ingredientTable.getFont().deriveFont(Font.BOLD));
 
-
+        balance = 1000;
+        addBalanceLabel();
         createBackButton();
         createLoadIngredientButton();
         setVisible(true);
@@ -81,18 +91,27 @@ public class IngredientManager extends JFrame {
             tableModel.setRowCount(0);
             Database.getConnection()
                     .select()
-                    .from(INGREDIENT)
+                    .from(SHOP)
                     .fetch()
                     .forEach(record -> tableModel.addRow(new Object[]{
-                            record.getValue(INGREDIENT.ID),
-                            record.getValue(INGREDIENT.NAME),
-                            record.getValue(INGREDIENT.RECIPE_ID),
-                            record.getValue(INGREDIENT.PRICE),
-                            record.getValue(INGREDIENT.NUTRITION),
+                            record.getValue(SHOP.ID),
+                            record.getValue(SHOP.NAME),
+                            record.getValue(SHOP.AMOUNT_AVAILABLE),
+                            record.getValue(SHOP.PRICE),
+                            record.getValue(SHOP.NUTRITION),
                     }));
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error loading Ingredients.");
         }
+    }
+
+    public void addBalanceLabel(){
+        JLabel balanceLabel = new JLabel("<html>Your Current Balance: " + balance + "   EUR </html>",
+                SwingUtilities.RIGHT);
+        balanceLabel.setBorder(BorderFactory.createEmptyBorder(400, 0, 20, 0));
+        balanceLabel.setFont(new Font("Cambria", Font.BOLD, 20));
+        add(balanceLabel, BorderLayout.SOUTH);
+        setVisible(true);
     }
 }

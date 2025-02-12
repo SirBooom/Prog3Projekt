@@ -1,222 +1,156 @@
-import static com.example.generated.Tables.RECIPE;
-import java.awt.event.ActionListener;
 import javax.swing.*;
-import java.awt.*;
+import org.jooq.Record;
+import org.jooq.Result;
 import java.awt.event.ActionEvent;
 import javax.swing.table.DefaultTableModel;
 
 /**
- * The RecipeManager class provides a graphical user interface for managing recipes.
- * It allows users to perform CRUD (Create, Read, Update, Delete) operations on a database of recipes.
- * Recipes are displayed in a table, and users can perform actions like adding, deleting,
- * updating, and loading recipes through the provided interface components.
- * This class extends JFrame to create a GUI application window.
+ * The RecipeModel class handles the logic and data manipulation for managing recipes
+ * through the RecipeView interface. It acts as a bridge between the user interface
+ * (RecipeView) and the storage layer (Database), providing functionalities like
+ * adding, updating, deleting, reloading, and filtering recipes.
  */
-public class RecipeModel{
+public class RecipeModel {
 
-    private static DefaultTableModel tableModel;
-    //private DefaultTableModel tableModel;
-    private static RecipeView  recipeView;
-    private static JTextField idField, nameField, cuisineField, categoryField, instructionsField,
-            nutritionField, cookingTimeField, ingredientField, balanceField;
+    private DefaultTableModel tableModel;
+    private final RecipeView recipeView;
 
-    public RecipeModel(RecipeView rv) {
-        recipeView = rv;
-        tableModel = rv.getTableModel();
-        idField = rv.getIdField();
-        nameField = rv.getNameField();
-        cuisineField = rv.getCuisineField();
-        categoryField = rv.getCategoryField();
-        instructionsField = rv.getInstructionsField();
-        nutritionField = rv.getNutritionField();
-        cookingTimeField = rv.getCookingTimeField();
-        ingredientField = rv.getIngredientField();
+    private final JTextField idField, nameField, cuisineField, categoryField, instructionsField,
+            nutritionField, cookingTimeField, ingredientField;
 
+    public RecipeModel() {
+        this.tableModel = null;
+        this.recipeView = null;
+        this.idField = null;
+        this.nameField =null;
+        this.cuisineField = null;
+        this.categoryField = null;
+        this.instructionsField = null;
+        this.nutritionField = null;
+        this.cookingTimeField = null;
+        this.ingredientField = null;
     }
 
-    // create text box with a label
-    private JTextField createInputField(JPanel panel, String labelText) {
-        JLabel label = new JLabel(labelText);
-        JTextField textField = new JTextField();
-        panel.add(label);
-        panel.add(textField);
-        return textField;
-
+    private String getTrimmedTextOrNull(JTextField field) {
+        String text = field.getText().trim();
+        return text.isEmpty() ? null : text;
     }
 
-    // load recipes from the db (useful when relaunching or after filtering)
-    public static void loadRecipes(ActionEvent e) {
+    public Result<Record> reloadRecipes(ActionEvent e) {
+        tableModel.setRowCount(0); // Clear existing rows
         try {
-            tableModel.setRowCount(0); // Clear existing rows
-            Database.getConnection()
-                    .select()
-                    .from(RECIPE)
-                    .fetch()
-                    .forEach(record -> tableModel.addRow(new Object[]{
-                            record.getValue(RECIPE.ID),
-                            record.getValue(RECIPE.NAME),
-                            record.getValue(RECIPE.CUISINE),
-                            record.getValue(RECIPE.CATEGORY),
-                            record.getValue(RECIPE.INSTRUCTIONS),
-                            record.getValue(RECIPE.NUTRITION),
-                            record.getValue(RECIPE.COOKINGTIME),
-                            record.getValue(RECIPE.INGREDIENT),
-                    }));
+            return Database.fetchAllRecipes();
         } catch (Exception ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(recipeView, "Error loading recipes.");
+            return null;
+            //showErrorDialog(ERROR_LOADING_RECIPES);
         }
     }
 
-    // add a recipe to the db
-    public static void addRecipe(ActionEvent e) {
+    public Result<Record> addRecipe(ActionEvent e, JTextField idField, JTextField nameField, JTextField cuisineField, JTextField categoryField, JTextField instructionsField, JTextField nutritionField, JTextField cookingTimeField, JTextField ingredientField) {
         try {
-            Database.insertRecipe(
+            return Database.insertRecipe(
                     Integer.parseInt(idField.getText()),
-                    nameField.getText().isEmpty() ? null : nameField.getText(),
-                    cuisineField.getText().isEmpty() ? null : cuisineField.getText(),
-                    categoryField.getText().isEmpty() ? null : categoryField.getText(),
-                    instructionsField.getText().isEmpty() ? null : instructionsField.getText(),
-                    nutritionField.getText().isEmpty() ? 0 : Integer.parseInt(nutritionField.getText()),
-                    cookingTimeField.getText().isEmpty() ? null : cookingTimeField.getText(),
-                    ingredientField.getText().isEmpty() ? null : ingredientField.getText()
+                    getTrimmedTextOrNull(nameField),
+                    getTrimmedTextOrNull(cuisineField),
+                    getTrimmedTextOrNull(categoryField),
+                    getTrimmedTextOrNull(instructionsField),
+                    nutritionField.getText().isEmpty() ? null
+                            : Integer.parseInt(nutritionField.getText()),
+                    getTrimmedTextOrNull(cookingTimeField),
+                    getTrimmedTextOrNull(ingredientField)
             );
-            loadRecipes(null); // Refresh table
-            JOptionPane.showMessageDialog(recipeView, "Recipe added successfully.");
+            //reloadRecipes(null);
+            //JOptionPane.showMessageDialog(recipeView, SUCCESS_RECIPE_ADDED);
         } catch (Exception ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(recipeView, "Error adding recipe.");
+            //showErrorDialog(ERROR_ADDING_RECIPE);
+            return null;
         }
     }
 
-    // delete a recipe by ID
-    public static void deleteRecipe(ActionEvent e) {
-        int id = Integer.parseInt(idField.getText());
+    public Result<Record> deleteRecipe(ActionEvent e, JTextField idToDelete) {
         try {
-            Database.deleteRecipe(id);
-            loadRecipes(null); // Refresh table
-            JOptionPane.showMessageDialog(recipeView, "Recipe deleted successfully.");
+            int parsedId = Integer.parseInt(idToDelete.getText());
+            return Database.deleteRecipe(parsedId);
+            //reloadRecipes(null);
+            //JOptionPane.showMessageDialog(recipeView, SUCCESS_RECIPE_DELETED);
         } catch (Exception ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(recipeView, "Error deleting recipe.");
+            return null;
+            //showErrorDialog(ERROR_DELETING_RECIPE);
         }
     }
 
-    // delete all recipes in the db
-    public static void deleteAllRecipes(ActionEvent e) {
+    public Result<Record> deleteAllRecipes(ActionEvent e) {
         try {
-            Database.deleteAllRecipes();
-            loadRecipes(null); // Refresh table
-            JOptionPane.showMessageDialog(recipeView, "Recipe list has been cleared");
+            return Database.deleteAllRecipes();
+            //JOptionPane.showMessageDialog(recipeView, SUCCESS_ALL_RECIPES_DELETED);
         } catch (Exception ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(recipeView, "Error deleting recipes.");
+            //showErrorDialog(ERROR_DELETING_RECIPE);
         }
+        return reloadRecipes(null);
     }
 
-    // update at least 1 value of a recipe
-    public static void updateRecipe(ActionEvent e) {
+    public Result<Record> updateRecipe(ActionEvent e, JTextField idField, JTextField nameField, JTextField cuisineField, JTextField categoryField, JTextField instructionsField, JTextField nutritionField, JTextField cookingTimeField, JTextField ingredientField) {
         boolean updated = false;
         try {
-            updated = Database.updateRecipe(
+            return Database.updateRecipe(
                     Integer.parseInt(idField.getText()),
-                    nameField.getText().trim().isEmpty() ? null : nameField.getText(),
-                    cuisineField.getText().trim().isEmpty() ? null : cuisineField.getText(),
-                    categoryField.getText().trim().isEmpty() ? null : categoryField.getText(),
-                    instructionsField.getText().trim().isEmpty() ? null : instructionsField.getText(),
-                    nutritionField.getText().trim().isEmpty() ? 0 : Integer.parseInt(nutritionField.getText()),
-                    cookingTimeField.getText().trim().isEmpty() ? null : cookingTimeField.getText(),
-                    ingredientField.getText().trim().isEmpty() ? null : instructionsField.getText()
+                    getTrimmedTextOrNull(nameField),
+                    getTrimmedTextOrNull(cuisineField),
+                    getTrimmedTextOrNull(categoryField),
+                    getTrimmedTextOrNull(instructionsField),
+                    nutritionField.getText().isEmpty() ? 0
+                            : Integer.parseInt(nutritionField.getText()),
+                    getTrimmedTextOrNull(cookingTimeField),
+                    getTrimmedTextOrNull(ingredientField)
             );
-            if(updated) {
-                loadRecipes(null); // Refresh table
-                JOptionPane.showMessageDialog(recipeView, "Recipe updated successfully.");
-            } else {
-                JOptionPane.showMessageDialog(recipeView, "Nothing has been updated.");
-            }
+            //reloadRecipes(null);
+            //String message = updated ? SUCCESS_RECIPE_UPDATED : NOTHING_UPDATED;
+            //JOptionPane.showMessageDialog(recipeView, message);
         } catch (Exception ex) {
-            if(!updated)
+            /*
+            if (!updated) {
+                ex.printStackTrace();
+            }
+            */
+            return null;
+            //showErrorDialog(ERROR_UPDATING_RECIPE);
+        }
+
+    }
+
+    public Result<Record> filterRecipes(ActionEvent e, JTextField idField, JTextField nameField, JTextField cuisineField, JTextField categoryField, JTextField instructionsField, JTextField nutritionField, JTextField cookingTimeField, JTextField ingredientField) {
+        try {
+            //tableModel.setRowCount(0); // Clear the table before filtering
+            return Database.filterRecipes(
+                    idField.getText().isEmpty() ? 0
+                            : Integer.parseInt(idField.getText()),
+                    getTrimmedTextOrNull(nameField),
+                    getTrimmedTextOrNull(cuisineField),
+                    getTrimmedTextOrNull(categoryField),
+                    getTrimmedTextOrNull(instructionsField),
+                    nutritionField.getText().isEmpty() ? 0
+                            : Integer.parseInt(nutritionField.getText()),
+                    getTrimmedTextOrNull(cookingTimeField),
+                    getTrimmedTextOrNull(ingredientField)
+            );
+            //JOptionPane.showMessageDialog(filterFrame, "Recipes filtered successfully!");
+            //filterFrame.dispose(); // Close the frame
+        } catch (Exception ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(recipeView, "Error updating recipe.");
+            return null;
+            //showErrorDialog("Error filtering recipes.");
         }
     }
 
-    // filter recipes by 1 or multiple attributes
-    public static void filterRecipes(ActionEvent e) {
-            // Create a new JFrame for filtering
-            JFrame filterFrame = new JFrame("Filter Recipes");
-            filterFrame.setSize(300, 300);
-            filterFrame.setLayout(new GridLayout(8, 2)); // 7 fields + Filter button
-
-            // Add input fields for all 7 fields
-            JTextField filterNameField = new JTextField();
-            JTextField filterCuisineField = new JTextField();
-            JTextField filterCategoryField = new JTextField();
-            JTextField filterInstructionsField = new JTextField();
-            JTextField filterNutritionField = new JTextField();
-            JTextField filterCookingTimeField = new JTextField();
-            JTextField filterIngredientField = new JTextField();
-
-            // Add labels and text fields to the frame
-            filterFrame.add(new JLabel("Name:"));
-            filterFrame.add(filterNameField);
-
-            filterFrame.add(new JLabel("Cuisine:"));
-            filterFrame.add(filterCuisineField);
-
-            filterFrame.add(new JLabel("Category:"));
-            filterFrame.add(filterCategoryField);
-
-            filterFrame.add(new JLabel("Instructions:"));
-            filterFrame.add(filterInstructionsField);
-
-            filterFrame.add(new JLabel("Nutrition:"));
-            filterFrame.add(filterNutritionField);
-
-            filterFrame.add(new JLabel("Cooking Time:"));
-            filterFrame.add(filterCookingTimeField);
-
-            filterFrame.add(new JLabel("Ingredient:"));
-            filterFrame.add(filterIngredientField);
-
-            // Add Filter button
-            JButton filterButton = new JButton("Filter");
-            filterButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    try {
-                        // Fetch input from fields
-                        String name = filterNameField.getText().trim().isEmpty() ? null : filterNameField.getText();
-                        String cuisine = filterCuisineField.getText().trim().isEmpty() ? null : filterCuisineField.getText();
-                        String category = filterCategoryField.getText().trim().isEmpty() ? null : filterCategoryField.getText();
-                        String instructions = filterInstructionsField.getText().trim().isEmpty() ? null : filterInstructionsField.getText();
-                        int nutrition = filterNutritionField.getText().trim().isEmpty() ? 0 : Integer.parseInt(filterNutritionField.getText());
-                        String cookingTime = filterCookingTimeField.getText().trim().isEmpty() ? null : filterCookingTimeField.getText();
-                        String ingredient = filterIngredientField.getText().trim().isEmpty() ? null : filterIngredientField.getText();
-
-                        // Call the database filtering method
-                        tableModel.setRowCount(0); // Clear the table before filtering
-                        Database.filterRecipesJframe(name, cuisine, category, instructions, nutrition, cookingTime, ingredient, tableModel);
-                        JOptionPane.showMessageDialog(filterFrame, "Recipes filtered successfully!");
-                        filterFrame.dispose(); // Close the frame
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                        JOptionPane.showMessageDialog(filterFrame, "Error filtering recipes.");
-                    }
-                }
-            });
-
-            filterFrame.add(new JLabel()); // Empty space to align button
-            filterFrame.add(filterButton);
-
-            // Show the filter frame
-            filterFrame.setVisible(true);
-        }
-
-    // go back to main menu
-    public static void backToMenu(ActionEvent e) {
-        recipeView.dispose();
+    public boolean backToMenu(ActionEvent e) {
         new MenuManager();
+        return true;
     }
 
+    public void setTableModel(DefaultTableModel tableModel) {
+        this.tableModel = tableModel;
+    }
 }

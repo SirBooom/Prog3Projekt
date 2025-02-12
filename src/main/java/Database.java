@@ -1,4 +1,3 @@
-import com.example.generated.tables.Recipe;
 import com.example.generated.tables.records.RecipeRecord;
 import javax.swing.table.DefaultTableModel;
 import org.jooq.DSLContext;
@@ -29,35 +28,23 @@ public class Database {
         return context;
     }
 
-    // creates a table called Recipe if Table does not exist
-    public static void createRecipeTable() {
-        try {
-            getConnection()
-                    .createTableIfNotExists("Recipe")
-                    .column("ID", SQLDataType.INTEGER.identity(true))
-                    .column("name", SQLDataType.VARCHAR(25))
-                    .column("cuisine", SQLDataType.CLOB)
-                    .column("category", SQLDataType.CLOB)
-                    .column("instructions", SQLDataType.CLOB)
-                    .column("nutrition", SQLDataType.INTEGER)
-                    .column("cookingTime", SQLDataType.CLOB)
-                    .column("ingredient", SQLDataType.CLOB)
-                    .constraint(DSL.primaryKey("ID"))
-                    .execute();
 
+    // reutrns the current database of Recipes
+    public static Result<Record> fetchAllRecipes() {
+        try {
+            return getConnection()
+                    .select()
+                    .from(RECIPE)
+                    .fetch();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    // Possibility, to change the DSLContext for testing with a h2 memory database
-    public static void setContext(DSLContext newContext) {
-        context = newContext;
+        return null;
     }
 
     // insert a new recipe
-    public static boolean insertRecipe(int id, String name, String cuisine, String category,
-            String instructions, int nutrition, String cookingTime, String ingredient) {
+    public static Result<Record> insertRecipe(int id, String name, String cuisine, String category,
+            String instructions, Integer nutrition, String cookingTime, String ingredient) {
         try {
             getConnection()
                     .insertInto(RECIPE)
@@ -67,35 +54,39 @@ public class Database {
                     .values(id, name, cuisine, category, instructions, nutrition, cookingTime,
                             ingredient)
                     .execute();
-            return true;
+            return fetchAllRecipes();
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
 
     //  delete a recipe by ID
-    public static void deleteRecipe(int id) {
+    public static Result<Record> deleteRecipe(int id) {
         try {
             getConnection()
                     .deleteFrom(RECIPE)
                     .where(RECIPE.ID.eq(id))
                     .execute();
+            return fetchAllRecipes();
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
     }
 
     // update values of a recipe
-    public static boolean updateRecipe(int id, String name, String cuisine, String category,
-            String instructions, int nutrition, String cookingTime, String ingredient) {
+    public static Result<Record> updateRecipe(Integer id, String name, String cuisine,
+            String category,
+            String instructions, Integer nutrition, String cookingTime, String ingredient) {
 
         boolean updated = false;
         try {
             UpdateSetFirstStep<RecipeRecord> context = getConnection().update(RECIPE);
-            if(!(getConnection().fetchExists(RECIPE,RECIPE.ID.eq(id)))){
+            if (!(getConnection().fetchExists(RECIPE, RECIPE.ID.eq(id)))) {
                 throw new SQLException();
-            };
+            }
+            ;
             if (name != null) {
                 context.set(RECIPE.NAME, name).where(RECIPE.ID.eq(id))
                         .execute();
@@ -127,36 +118,38 @@ public class Database {
                         .where(RECIPE.ID.eq(id)).execute();
                 updated = true;
             }
-
+            return fetchAllRecipes();
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
-        return updated;
     }
 
     // delete all recipes
-    public static void deleteAllRecipes() {
+    public static Result<Record> deleteAllRecipes() {
         try {
             int lastRecipeId = getConnection().select().from(RECIPE).orderBy(RECIPE.ID.desc())
                     .limit(1).fetchOne().get(RECIPE.ID);
             for (int recipeID = 1; recipeID <= lastRecipeId; recipeID++) {
                 deleteRecipe(recipeID);
             }
+            return fetchAllRecipes();
         } catch (SQLException e) {
             e.printStackTrace();
-
+            return null;
         }
     }
 
     // filter recipes by at least 1 attribute (delete this method)
-    public static Result<Record> filterRecipes(String name, String cuisine, String category,
-                                               String instructions, int nutrition, String cookingTime, String ingredient) {
-        Result<Record> result = null;
+    public static Result<Record> filterRecipes(Integer id, String name, String cuisine,
+            String category,
+            String instructions, Integer nutrition, String cookingTime, String ingredient) {
         try {
-            result = getConnection()
+            getConnection()
                     .select()
                     .from(RECIPE)
-                    .where((name == null || name.isEmpty() ? DSL.trueCondition()
+                    .where(id <= 0 ? DSL.trueCondition() : RECIPE.ID.eq(id))
+                    .and((name == null || name.isEmpty() ? DSL.trueCondition()
                             : RECIPE.NAME.eq(name)))
                     .and((cuisine == null || cuisine.isEmpty() ? DSL.trueCondition()
                             : RECIPE.CUISINE.eq(cuisine)))
@@ -170,44 +163,41 @@ public class Database {
                     .and((ingredient == null || ingredient.isEmpty() ? DSL.trueCondition()
                             : RECIPE.INGREDIENT.eq(ingredient)))
                     .fetch();
-
+            return fetchAllRecipes();
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
         //System.out.println(context.select().from(RECIPE).fetch());
-        return result;
     }
 
 
-    public static void filterRecipesJframe(String name, String cuisine, String category,
-            String instructions, int nutrition, String cookingTime, String ingredient,
-            DefaultTableModel tableModel) {
+
+    //TESTING PURPOSES//
+    // creates a table called Recipe if Table does not exist
+    public static void createRecipeTable() {
         try {
-            tableModel.setRowCount(0); // Clear existing rows
             getConnection()
-                    .select()
-                    .from(RECIPE)
-                    .where((name == null || name.isEmpty()) ? DSL.trueCondition() : RECIPE.NAME.eq(name))
-                    .and((cuisine == null || cuisine.isEmpty()) ? DSL.trueCondition() : RECIPE.CUISINE.eq(cuisine))
-                    .and((category == null || category.isEmpty()) ? DSL.trueCondition() : RECIPE.CATEGORY.eq(category))
-                    .and((instructions == null || instructions.isEmpty()) ? DSL.trueCondition() : RECIPE.INSTRUCTIONS.eq(instructions))
-                    .and((cookingTime == null || cookingTime.isEmpty()) ? DSL.trueCondition() : RECIPE.COOKINGTIME.eq(cookingTime))
-                    .and((ingredient == null || ingredient.isEmpty()) ? DSL.trueCondition() : RECIPE.INGREDIENT.eq(ingredient))
-                    .and(nutrition <= 0 ? DSL.trueCondition() : RECIPE.NUTRITION.eq(nutrition))
-                    .fetch()
-                    .forEach(record -> tableModel.addRow(new Object[]{
-                            record.getValue(RECIPE.ID),
-                            record.getValue(RECIPE.NAME),
-                            record.getValue(RECIPE.CUISINE),
-                            record.getValue(RECIPE.CATEGORY),
-                            record.getValue(RECIPE.INSTRUCTIONS),
-                            record.getValue(RECIPE.NUTRITION),
-                            record.getValue(RECIPE.COOKINGTIME),
-                            record.getValue(RECIPE.INGREDIENT),
-                    }));
+                    .createTableIfNotExists("Recipe")
+                    .column("ID", SQLDataType.INTEGER.identity(true))
+                    .column("name", SQLDataType.VARCHAR(25))
+                    .column("cuisine", SQLDataType.CLOB)
+                    .column("category", SQLDataType.CLOB)
+                    .column("instructions", SQLDataType.CLOB)
+                    .column("nutrition", SQLDataType.INTEGER)
+                    .column("cookingTime", SQLDataType.CLOB)
+                    .column("ingredient", SQLDataType.CLOB)
+                    .constraint(DSL.primaryKey("ID"))
+                    .execute();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    // Possibility, to change the DSLContext for testing with a h2 memory database
+    public static void setContext(DSLContext newContext) {
+        context = newContext;
     }
 }
     /*
