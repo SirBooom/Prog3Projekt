@@ -1,7 +1,11 @@
-C:\Users\emirk\Desktop\Prog3Projekt\src\main\java\BalanceManager.java
+C:\Users\emirk\Desktop\Prog3Projekt\src\main\java\BalanceController.java
+C:\Users\emirk\Desktop\Prog3Projekt\src\main\java\BalanceModel.java
+C:\Users\emirk\Desktop\Prog3Projekt\src\main\java\BalanceView.java
 C:\Users\emirk\Desktop\Prog3Projekt\src\main\java\Database.java
+C:\Users\emirk\Desktop\Prog3Projekt\src\main\java\FileHandler.java
 C:\Users\emirk\Desktop\Prog3Projekt\src\main\java\IngredientManager.java
-C:\Users\emirk\Desktop\Prog3Projekt\src\main\java\MenuManager.java
+C:\Users\emirk\Desktop\Prog3Projekt\src\main\java\MenuController.java
+C:\Users\emirk\Desktop\Prog3Projekt\src\main\java\MenuView.java
 C:\Users\emirk\Desktop\Prog3Projekt\src\main\java\RecipeController.java
 C:\Users\emirk\Desktop\Prog3Projekt\src\main\java\RecipeModel.java
 C:\Users\emirk\Desktop\Prog3Projekt\src\main\java\RecipeView.java
