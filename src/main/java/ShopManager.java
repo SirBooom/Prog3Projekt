@@ -83,7 +83,7 @@ public class ShopManager extends JFrame {
 
     private void backToMenu(ActionEvent e) {
         dispose();
-        new MenuManager();
+        //new MenuManager();
     }
 
     private void loadIngredients (ActionEvent e){

@@ -146,7 +146,7 @@ public class RecipeModel {
     }
 
     public boolean backToMenu(ActionEvent e) {
-        new MenuManager();
+        //new MenuManager();
         return true;
     }
 

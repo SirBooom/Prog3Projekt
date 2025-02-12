@@ -179,7 +179,7 @@ public class BalanceManager extends JFrame {
 
     private void backToMenu(ActionEvent e) {
         dispose();
-        new MenuManager();
+        //new MenuManager();
     }
 
     private void giveBonus(){
