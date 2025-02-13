@@ -1,7 +1,10 @@
 import javax.swing.*;
+
+import com.example.generated.tables.Recipe;
 import org.jooq.Record;
 import org.jooq.Result;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -11,10 +14,15 @@ import javax.swing.table.DefaultTableModel;
  * adding, updating, deleting, reloading, and filtering recipes.
  */
 public class RecipeModel {
-
+    private RecipeRepository recipeRepository;
     private DefaultTableModel tableModel;
 
     public RecipeModel() {
+        try {
+            recipeRepository = new RecipeRepository(DatabaseNew.getDslContext());
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         this.tableModel = null;
     }
 
@@ -26,7 +34,7 @@ public class RecipeModel {
     public Result<Record> reloadRecipes(ActionEvent e) {
         tableModel.setRowCount(0); // Clear existing rows
         try {
-            return Database.fetchAllRecipes();
+            return recipeRepository.fetchAllRecipes();
         } catch (Exception ex) {
             return null;
         }
@@ -34,7 +42,7 @@ public class RecipeModel {
 
     public Result<Record> addRecipe(ActionEvent e, JTextField idField, JTextField nameField, JTextField cuisineField, JTextField categoryField, JTextField instructionsField, JTextField nutritionField, JTextField cookingTimeField, JTextField ingredientField) {
         try {
-            return Database.insertRecipe(
+            return recipeRepository.insertRecipe(
                     Integer.parseInt(idField.getText()),
                     getTrimmedTextOrNull(nameField),
                     getTrimmedTextOrNull(cuisineField),
@@ -57,7 +65,7 @@ public class RecipeModel {
     public Result<Record> deleteRecipe(ActionEvent e, JTextField idToDelete) {
         try {
             int parsedId = Integer.parseInt(idToDelete.getText());
-            return Database.deleteRecipe(parsedId);
+            return recipeRepository.deleteRecipe(parsedId);
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
@@ -66,7 +74,7 @@ public class RecipeModel {
 
     public Result<Record> deleteAllRecipes(ActionEvent e) {
         try {
-            return Database.deleteAllRecipes();
+            return recipeRepository.deleteAllRecipes();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -76,7 +84,7 @@ public class RecipeModel {
     public Result<Record> updateRecipe(ActionEvent e, JTextField idField, JTextField nameField, JTextField cuisineField, JTextField categoryField, JTextField instructionsField, JTextField nutritionField, JTextField cookingTimeField, JTextField ingredientField) {
         boolean updated = false;
         try {
-            return Database.updateRecipe(
+            return recipeRepository.updateRecipe(
                     Integer.parseInt(idField.getText()),
                     getTrimmedTextOrNull(nameField),
                     getTrimmedTextOrNull(cuisineField),
@@ -96,7 +104,7 @@ public class RecipeModel {
 
     public Result<Record> filterRecipes(ActionEvent e, JTextField idField, JTextField nameField, JTextField cuisineField, JTextField categoryField, JTextField instructionsField, JTextField nutritionField, JTextField cookingTimeField, JTextField ingredientField) {
         try {
-            return Database.filterRecipes(
+            return recipeRepository.filterRecipes(
                     idField.getText().isEmpty() ? 0
                             : Integer.parseInt(idField.getText()),
                     getTrimmedTextOrNull(nameField),

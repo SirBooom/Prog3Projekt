@@ -32,11 +32,11 @@ public class Skeleton {
             */
             //Database.deleteAllRecipes();
             //Database.filterRecipes(null,null,null,null,0,"15 mins", null);
-
             Connection connection = DriverManager.getConnection(url);
             DSLContext create = DSL.using(connection, SQLDialect.SQLITE);
-            Result<org.jooq.Record> result = create.select().from(RECIPE).fetch();
-            System.out.println(result);
+            DatabaseNew.setDslContext(create);
+            //Result<org.jooq.Record> result = create.select().from(RECIPE).fetch();
+            //System.out.println(result);
         }
 
         // For the sake of this tutorial, let's keep exception handling simple

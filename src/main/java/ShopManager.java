@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.SQLException;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -25,7 +26,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 public class ShopManager extends JFrame {
-
     private DefaultTableModel tableModel;
     private JTable ingredientTable;
 
@@ -90,7 +90,7 @@ public class ShopManager extends JFrame {
     private void loadIngredients (ActionEvent e){
         try {
             tableModel.setRowCount(0);
-            Database.getConnection()
+            DatabaseNew.getDslContext()
                     .select()
                     .from(SHOP)
                     .fetch()
