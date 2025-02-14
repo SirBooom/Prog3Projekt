@@ -1,13 +1,10 @@
-import javax.xml.crypto.Data;
 import org.jooq.DSLContext;
-import org.jooq.Result;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import static com.example.generated.Tables.*;
 
 import static org.jooq.impl.DSL.table;
 
@@ -16,8 +13,16 @@ public class Skeleton {
         String userName = "root";
         String password = "";
         String url = "jdbc:SQLite:rezeptverwaltungsdb.db";
-        new MenuController(new MenuView());
-        //new MenuController(new MenuView());
+
+        try {
+            Application app = new Application();
+            app.start();
+        } catch (Exception e) {
+            System.err.println("An error occurred while starting the app: " + e.getMessage());
+            e.printStackTrace();
+            System.exit(1);
+        }
+
         System.setProperty("org.jooq.no-logo", "true");
         System.setProperty("org.jooq.no-tips", "true");
 
@@ -26,17 +31,17 @@ public class Skeleton {
         try {
             /*
             for(int i = 11; i <= 15; i++ ) {
-                Database.insertRecipe(i, "pasta1", "Italian", "dessert", "Cook then eat", 100,
+                database.Database.insertRecipe(i, "pasta1", "Italian", "dessert", "Cook then eat", 100,
                         "15 Mins", "noodles");
             }
             */
-            //Database.deleteAllRecipes();
-            //Database.filterRecipes(null,null,null,null,0,"15 mins", null);
-
+            //database.Database.deleteAllRecipes();
+            //database.Database.filterRecipes(null,null,null,null,0,"15 mins", null);
             Connection connection = DriverManager.getConnection(url);
             DSLContext create = DSL.using(connection, SQLDialect.SQLITE);
-            Result<org.jooq.Record> result = create.select().from(RECIPE).fetch();
-            System.out.println(result);
+            //DatabaseNew.setDslContext(create);
+            //Result<org.jooq.Record> result = create.select().from(RECIPE).fetch();
+            //System.out.println(result);
         }
 
         // For the sake of this tutorial, let's keep exception handling simple

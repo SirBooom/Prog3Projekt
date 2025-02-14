@@ -2,7 +2,6 @@ import com.example.generated.tables.records.RecipeRecord;
 import org.h2.jdbcx.JdbcDataSource;
 import org.jooq.DSLContext;
 import org.jooq.Record;
-import org.jooq.Result;
 import org.jooq.impl.DSL;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,18 +21,18 @@ public class DatabaseTest {
 
         DSLContext h2Context = DSL.using(h2DataSource, org.jooq.SQLDialect.H2);
 
-        Database.setContext(h2Context);
+        Databasew.setContext(h2Context);
 
-        Database.createRecipeTable();
+        Databasew.createRecipeTable();
     }
 
 
     @Test
     public void testInsert() throws SQLException {
-        Database.insertRecipe(1,"Name", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
-        Database.insertRecipe(2,"NameSecond", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
-        Record recordID1 = Database.getConnection().selectFrom(RECIPE).where(RECIPE.ID.equal(1)).fetchOne();
-        Record recordID2 = Database.getConnection().selectFrom(RECIPE).where(RECIPE.ID.equal(2)).fetchOne();
+        Databasew.insertRecipe(1,"Name", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
+        Databasew.insertRecipe(2,"NameSecond", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
+        Record recordID1 = Databasew.getConnection().selectFrom(RECIPE).where(RECIPE.ID.equal(1)).fetchOne();
+        Record recordID2 = Databasew.getConnection().selectFrom(RECIPE).where(RECIPE.ID.equal(2)).fetchOne();
         assertNotNull(recordID1);
         assertEquals(recordID1.getValue(RECIPE.CUISINE),"Cuisine");
         assertEquals(recordID1.getValue(RECIPE.NUTRITION), 10);
@@ -43,9 +42,9 @@ public class DatabaseTest {
 
     @Test
     public void testUpdateRecipe() throws SQLException{
-        Database.insertRecipe(1,"Name", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
-        Database.updateRecipe(1,null,"NewCuisine", "Category", "Instruction" , 5, "12min", "Ingredient");
-        Record record = Database.getConnection().selectFrom(RECIPE).where(RECIPE.ID.equal(1)).fetchOne();
+        Databasew.insertRecipe(1,"Name", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
+        Databasew.updateRecipe(1,null,"NewCuisine", "Category", "Instruction" , 5, "12min", "Ingredient");
+        Record record = Databasew.getConnection().selectFrom(RECIPE).where(RECIPE.ID.equal(1)).fetchOne();
         assertNotNull(record);
         assertEquals(record.getValue(RECIPE.CUISINE),"NewCuisine");
         assertEquals(record.getValue(RECIPE.NUTRITION),5);
@@ -54,35 +53,35 @@ public class DatabaseTest {
 
     @Test
     public void showTable() throws SQLException {
-        Database.insertRecipe(1,"Name", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
-        List<RecipeRecord> records = Database.getConnection().selectFrom(RECIPE).fetch();
+        Databasew.insertRecipe(1,"Name", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
+        List<RecipeRecord> records = Databasew.getConnection().selectFrom(RECIPE).fetch();
         assertNotNull(records);
         records.forEach(System.out::println);
     }
 
     @Test
     public void testDeleteAllRecipes() throws SQLException {
-        Database.insertRecipe(1,"Name", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
-        Database.insertRecipe(2,"NameSecond", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
-        Database.deleteAllRecipes();
+        Databasew.insertRecipe(1,"Name", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
+        Databasew.insertRecipe(2,"NameSecond", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
+        Databasew.deleteAllRecipes();
 
-        int rowCount = Database.getConnection().fetchCount(RECIPE);
+        int rowCount = Databasew.getConnection().fetchCount(RECIPE);
         assertEquals(0, rowCount);
 
     }
 
     @Test
     public void testDeleteRecipe() throws SQLException{
-        Database.insertRecipe(1,"Name", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
-        Database.insertRecipe(2,"NameSecond", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
+        Databasew.insertRecipe(1,"Name", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
+        Databasew.insertRecipe(2,"NameSecond", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
 
-        int rowCount = Database.getConnection().fetchCount(RECIPE);
+        int rowCount = Databasew.getConnection().fetchCount(RECIPE);
         assertEquals(2,rowCount);
 
-        Database.deleteRecipe(1);
-        int rowCountAfterDelete = Database.getConnection().fetchCount(RECIPE);
+        Databasew.deleteRecipe(1);
+        int rowCountAfterDelete = Databasew.getConnection().fetchCount(RECIPE);
         assertEquals(1,rowCountAfterDelete);
-        var recipeRecord = Database.getConnection().select().from(RECIPE).fetchOne();
+        var recipeRecord = Databasew.getConnection().select().from(RECIPE).fetchOne();
 
         assert recipeRecord != null;
         assertEquals(recipeRecord.getValue(RECIPE.NAME), "NameSecond");
@@ -90,11 +89,11 @@ public class DatabaseTest {
 
     @Test
     public void testFilterRecipes() throws SQLException {
-        Database.insertRecipe(1,"Name", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
-        Database.insertRecipe(2,"NameSecond", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
-        Database.insertRecipe(3,"NameThird", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
+        Databasew.insertRecipe(1,"Name", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
+        Databasew.insertRecipe(2,"NameSecond", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
+        Databasew.insertRecipe(3,"NameThird", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
 
-        var result = Database.filterRecipes(null,"NameThird",null,null,null,null,null,null);
+        var result = Databasew.filterRecipes(null,"NameThird",null,null,null,null,null,null);
 
         assertEquals(1,result.size());
 
@@ -105,7 +104,7 @@ public class DatabaseTest {
 
     @AfterEach
     public void cleanDatabase() throws SQLException {
-        DSLContext context = Database.getConnection();
+        DSLContext context = Databasew.getConnection();
         context.dropTableIfExists(RECIPE).execute();
     }
 
