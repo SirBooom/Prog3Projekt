@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: RecipeControllerTest
 -------------------------------------------------------------------------------
-Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.892 s -- in RecipeControllerTest
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.763 s -- in RecipeControllerTest
