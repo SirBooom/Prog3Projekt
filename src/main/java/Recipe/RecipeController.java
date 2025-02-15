@@ -45,7 +45,7 @@ public class RecipeController {
 
     // Button action handlers
 
-    private void handleLoadRecipes(ActionEvent event) {
+    public void handleLoadRecipes(ActionEvent event) {
         processModelAction(
                 recipeModel::reloadRecipes,
                 RecipeMessage.SUCCESS_RECIPE_LOADED,
@@ -53,7 +53,7 @@ public class RecipeController {
         );
     }
 
-    private void handleDeleteAllRecipes(ActionEvent event) {
+    public void handleDeleteAllRecipes(ActionEvent event) {
         processModelAction(
                 recipeModel::deleteAllRecipes,
                 RecipeMessage.SUCCESS_ALL_RECIPES_DELETED,
@@ -61,7 +61,7 @@ public class RecipeController {
         );
     }
 
-    private void handleDeleteRecipe(ActionEvent event) {
+    public void handleDeleteRecipe(ActionEvent event) {
         processModelAction(
                 () -> recipeModel.deleteRecipe(recipeView.getFormData().get("id")),
                 RecipeMessage.SUCCESS_RECIPE_DELETED,
@@ -69,7 +69,7 @@ public class RecipeController {
         );
     }
 
-    private void handleAddRecipe(ActionEvent event) {
+    public void handleAddRecipe(ActionEvent event) {
         processModelAction(
                 () -> recipeModel.addRecipe(recipeView.getFormData()),
 
@@ -86,7 +86,7 @@ public class RecipeController {
         );
     }
 
-    private void handleUpdateRecipe(ActionEvent event) {
+    public void handleUpdateRecipe(ActionEvent event) {
         try {
             Result<Record> result = recipeModel.updateRecipe(recipeView.getFormData());
             if (result != null && !result.isEmpty()) {

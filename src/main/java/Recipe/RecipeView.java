@@ -63,6 +63,7 @@ public class RecipeView extends JFrame {
     ///////////////////////////////////// --- Construct The Recipe View --- /////////////////////////////////////
 
     // fields to modify the table (incl. loading, adding, deleting, updating, etc...)
+
     private void displayInputFields() {
         // panel for inputs (texfields at bottom)
         JPanel inputPanel = new JPanel(new GridLayout(8, 2)); // Changed GridLayout to 9 rows
@@ -77,7 +78,9 @@ public class RecipeView extends JFrame {
         add(inputPanel, BorderLayout.SOUTH);
     }
 
+
     // Show buttons for user to interact with
+
     private void displayButtons() {
 
         JPanel buttonPanel = new JPanel();
@@ -106,6 +109,8 @@ public class RecipeView extends JFrame {
         backPanel.add(Box.createVerticalStrut(40));
         add(backPanel, BorderLayout.NORTH);
     }
+
+
 
     // create text box with a label
     private JTextField createInputField(JPanel panel, String labelText) {

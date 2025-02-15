@@ -1,5 +1,6 @@
 package Recipe;
 
+import com.example.generated.tables.Recipe;
 import database.Database;
 import database.RecipeDatabase;
 import org.jooq.Record;
@@ -169,5 +170,13 @@ public class RecipeModel {
      */
     public void setTableModel(DefaultTableModel tableModel) {
         this.tableModel = tableModel;
+    }
+
+    /**
+     *  ONLY for testing purposes !
+     */
+    public RecipeModel(RecipeDatabase recipeDatabase){
+        this.recipeDatabase = recipeDatabase;
+        this.tableModel=new DefaultTableModel();
     }
 }
