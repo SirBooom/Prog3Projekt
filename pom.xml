@@ -185,15 +185,18 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.5.2</version>
                 <configuration>
-                    <useModulePath>false</useModulePath> <!-- Wichtig für JUnit 5 mit Java 9+ -->
+                        <!-- Headless-Modus aktivieren -->
+                    <argLine>-Djava.awt.headless=true</argLine>
+                        <!-- Wichtige Konfiguration für JUnit 5 mit Java 9+ -->
+                    <useModulePath>false</useModulePath>
+                        <!-- Testklassen angeben -->
                     <includes>
                         <include>**/*Test.java</include> <!-- Alle Testklassen -->
                     </includes>
+                        <!-- Mockito Agent -->
                     <argLine>-javaagent:"${settings.localRepository}/org/mockito/mockito-core/5.15.2/mockito-core-5.15.2.jar"</argLine>
                 </configuration>
             </plugin>
-
-
         </plugins>
 
     </build>
