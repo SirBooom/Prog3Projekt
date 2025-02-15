@@ -45,7 +45,11 @@ jobs:
       - name: Compile
         run: mvn compile
 
-      # Step 6: Test the project
+      # Step 6: Set Java to Headless mode (before running tests)
+      - name: Set Java to Headless mode
+        run: echo "java.awt.headless=true" >> $GITHUB_ENV
+
+      # Step 6.1: Test the project
       - name: Test
         run: mvn test
 
