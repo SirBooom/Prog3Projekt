@@ -112,22 +112,22 @@ public class RecipeModel {
     }
 
     /**
-     * Filter recipes based on provided criteria.
+     * Filter recipes based on provided data.
      * Only non-null or non-empty fields are included in the filter.
-     * @param criteria A map containing the filter criteria.
+     * @param data A map containing the filter data.
      * @return The result after applying the filter.
      */
-    public Result<Record> filterRecipes(Map<String, String> criteria) {
+    public Result<Record> filterRecipes(Map<String, String> data) {
         try {
             return recipeDatabase.filterRecipes(
-                    parseIntegerOrDefault(criteria.get("id"), 0),
-                    getStringOrNull(criteria.get("name")),
-                    getStringOrNull(criteria.get("cuisine")),
-                    getStringOrNull(criteria.get("category")),
-                    getStringOrNull(criteria.get("instructions")),
-                    parseIntegerOrDefault(criteria.get("nutrition"), 0),
-                    getStringOrNull(criteria.get("cookingTime")),
-                    getStringOrNull(criteria.get("ingredient"))
+                    parseIntegerOrDefault(data.get("id"), 0),
+                    getStringOrNull(data.get("name")),
+                    getStringOrNull(data.get("cuisine")),
+                    getStringOrNull(data.get("category")),
+                    getStringOrNull(data.get("instructions")),
+                    parseIntegerOrDefault(data.get("nutrition"), 0),
+                    getStringOrNull(data.get("cookingTime")),
+                    getStringOrNull(data.get("ingredient"))
             );
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -136,14 +136,14 @@ public class RecipeModel {
     }
 
     /**
-     * Utility: Convert an empty string to null.
+     * Convert an empty string to null.
      */
     private String getStringOrNull(String value) {
         return (value == null || value.trim().isEmpty()) ? null : value.trim();
     }
 
     /**
-     * Utility: Parse an integer or return null if invalid.
+     * Parse an integer or return null if invalid.
      */
     private Integer parseIntegerOrNull(String value) {
         try {
@@ -154,7 +154,7 @@ public class RecipeModel {
     }
 
     /**
-     * Utility: Parse an integer or return a default value if invalid.
+     * Parse an integer or return a default value if invalid.
      */
     private int parseIntegerOrDefault(String value, int defaultValue) {
         try {

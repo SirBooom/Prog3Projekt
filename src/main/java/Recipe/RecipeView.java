@@ -35,10 +35,8 @@ public class RecipeView extends JFrame {
 
 
     public RecipeView() {
-        setTitle("Recipes System");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1440, 880);
-        setLayout(new BorderLayout());
+
+        setupFrame();
 
         // db table
         tableModel = new DefaultTableModel(new Object[]{"ID", "Name", "Cuisine", "Category",
@@ -48,23 +46,23 @@ public class RecipeView extends JFrame {
 
         displayInputFields();
         displayButtons();
-        /*
-        // shows the balance (mainly for visual reasons (not functional))
-        JLabel balanceLabel = new JLabel("Balance:\t" + 1000.5 + " EUR");
-        balanceLabel.setFont(new Font("Camibri", Font.BOLD, 15));
-        backButton.add(balanceLabel);
-        setVisible(true);
-        balanceLabel.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
-        */
+
         setVisible(true);
     }
 
 
     ///////////////////////////////////// --- Construct The Recipe View --- /////////////////////////////////////
 
+    private void setupFrame() {
+        setTitle("Recipes System");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(1440, 880);
+        setLayout(new BorderLayout());
+    }
+
     // fields to modify the table (incl. loading, adding, deleting, updating, etc...)
     private void displayInputFields() {
-        // panel for inputs (texfields at bottom)
+
         JPanel inputPanel = new JPanel(new GridLayout(8, 2)); // Changed GridLayout to 9 rows
         idField = createInputField(inputPanel, "ID:");
         nameField = createInputField(inputPanel, "Name:");
@@ -107,7 +105,6 @@ public class RecipeView extends JFrame {
         add(backPanel, BorderLayout.NORTH);
     }
 
-    // create text box with a label
     private JTextField createInputField(JPanel panel, String labelText) {
         JLabel label = new JLabel(labelText);
         JTextField textField = new JTextField();
@@ -172,10 +169,7 @@ public class RecipeView extends JFrame {
     ///////////////////////////////////// --- View Methods --- /////////////////////////////////////
 
     public void loadTable(Result<Record> result) {
-        // Clear existing rows in the table model, if necessary
         tableModel.setRowCount(0);
-
-        // Iterate over the query results and populate the table model
         result.forEach(record -> {
             tableModel.addRow(new Object[]{
                     record.getValue(RECIPE.ID),

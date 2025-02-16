@@ -1,9 +1,7 @@
 package Recipe;
 
 import Factory.ControllerFactory;
-import Menu.MenuController;
-import Menu.MenuView;
-
+import com.example.generated.tables.Recipe;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.Map;
@@ -12,8 +10,8 @@ import org.jooq.Record;
 import org.jooq.Result;
 
 /**
- * The Recipes.RecipeController class handles the interactions between Recipes.RecipeView and Recipes.RecipeModel.
- * It sets up actions for user interface components and facilitates MVC design pattern roles.
+ * This class handles the interactions between RecipeView and RecipeModel.
+ * It sets up actions for UI components and controls the entire process.
  */
 public class RecipeController {
 
@@ -39,11 +37,9 @@ public class RecipeController {
                 recipeView.getUpdateRecipeButton(), this::handleUpdateRecipe,
                 recipeView.getBackButton(), this::handleBackToMenu
         );
-        // Assign actions to buttons.
+        // assign actions to buttons.
         actions.forEach(this::setButtonAction);
     }
-
-    // Button action handlers
 
     private void handleLoadRecipes(ActionEvent event) {
         processModelAction(
@@ -70,11 +66,15 @@ public class RecipeController {
     }
 
     private void handleAddRecipe(ActionEvent event) {
-        processModelAction(
-                () -> recipeModel.addRecipe(recipeView.getFormData()),
+        Map<String, String> formData = recipeView.getFormData();
+        String errorMessage = (formData.get("id") == null || formData.get("name") == null)
+                ? RecipeMessage.ERROR_ADDING_RECIPE
+                : RecipeMessage.ERROR_INVALID_RECIPE_ID_NAME;
 
+        processModelAction(
+                () -> recipeModel.addRecipe(formData),
                 RecipeMessage.SUCCESS_RECIPE_ADDED,
-                RecipeMessage.ERROR_ADDING_RECIPE
+                errorMessage
         );
     }
 
@@ -105,8 +105,7 @@ public class RecipeController {
         try {
             ControllerFactory.getInstance().getMenuController().show();
         } catch (SQLException ex) {
-            recipeView.showErrorDialog("Failed to return to the menu: " + ex.getMessage());
-            ex.printStackTrace();
+            handleUnexpectedError(ex);
         }
     }
 
@@ -114,9 +113,16 @@ public class RecipeController {
         button.addActionListener(recipeAction::execute);
     }
 
-    private void processModelAction(ModelAction modelAction, String successMessage, String errorMessage) {
+    /**
+     * Führt eine ModelAction aus, aktualisiert die View  zeigt Feedback.
+     *
+     * @param recipeModelAction    Die auszuführende Aktion auf dem Model.
+     * @param successMessage Erfolgsnachricht bei erfolgreicher Ausführung.
+     * @param errorMessage   Fehlermeldung bei Misserfolg oder fehlendem Ergebnis.
+     */
+    private void processModelAction(RecipeModelAction recipeModelAction, String successMessage, String errorMessage) {
         try {
-            Result<Record> result = modelAction.execute();
+            Result<Record> result = recipeModelAction.execute();
             if (result != null) {
                 recipeView.loadTable(result);
                 recipeView.showSuccessDialog(successMessage);
@@ -137,15 +143,37 @@ public class RecipeController {
         recipeView.setVisible(true);
     }
 
-    // Functional interfaces for clean abstractions
 
+    /**
+     * Funktionales Interface, das eine Aktion repräsentiert, die durch eine Benutzerinteraktion
+     * in dem view ausgelöst wird, z.B. click auf einen Button.
+     * Die Aktion ist dazu gedacht, das Ereignis im Controller zu verarbeiten.
+     */
     @FunctionalInterface
     private interface RecipeAction {
+        /**
+         * Führt die Aktion basierend auf einem vom Benutzer ausgelösten Ereignis aus.
+         *
+         * @param event Das ActionEvent, das mit der Interaktion des Benutzers verknüpft ist
+         *              z.B. ein button click.
+         */
         void execute(ActionEvent event);
     }
 
+    /**
+     * Funktionales Interface, das eine Aktion auf dem Model repräsentiert,
+     * typischerweise einhergehend mit Datenabruf, einfügen, löschen, updaten, etc..
+     *
+     */
     @FunctionalInterface
-    private interface ModelAction {
+    private interface RecipeModelAction {
+        /**
+         * Führt die Datenbankoperation auf dem Model aus.
+         *
+         * @return ein Result<Record> Objekt, dass das Ergebnis der Operation repräsentiert
+         *         z.B. Abfrageergebnis.
+         * @throws Exception Falls bei der Operation etwas schief läuft gibt z.B. Datenbankfehler.
+         */
         Result<Record> execute() throws Exception;
     }
 }

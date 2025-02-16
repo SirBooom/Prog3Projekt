@@ -43,9 +43,8 @@ public class MenuController {
 
     private void handleError(String message, Exception ex) {
         menuView.showError(message);
-        ex.printStackTrace(); // Log for debugging (optional)
+        ex.printStackTrace();
     }
-
 
     private void openRecipeView() throws SQLException {
         menuView.setVisible(false);

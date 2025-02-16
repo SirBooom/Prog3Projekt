@@ -3,6 +3,7 @@ package Recipe;
 public final class RecipeMessage {
     public static final String ERROR_LOADING_RECIPES = "Error loading recipes.";
     public static final String ERROR_ADDING_RECIPE = "Error adding recipe.";
+    public static final String ERROR_INVALID_RECIPE_ID_NAME = "Error: Invalid ID or Name";
     public static final String ERROR_DELETING_RECIPE = "Error deleting recipe.";
     public static final String ERROR_DELETING_ALL_RECIPES = "Error deleting all recipes.";
     public static final String ERROR_FILTERING_RECIPE = "Error filtering recipes.";

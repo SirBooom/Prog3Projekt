@@ -6,7 +6,7 @@ import javax.swing.*;
 
 public class MenuView extends JFrame {
 
-    // Buttons for menu navigation
+    // buttons for menu
     private final JButton recipeButton;
     private final JButton ingredientsButton;
     private final JButton balanceButton;
@@ -15,18 +15,18 @@ public class MenuView extends JFrame {
         // construct the frame
         setupFrame();
 
-        // Add the welcome title at the top
+        // add the welcome title at the top
         addWelcomeLabel();
 
-        // Panel for buttons
+        // panel for buttons
         JPanel buttonPanel = createButtonPanel();
 
-        // Create and add buttons
+        // create and add buttons
         recipeButton = createAndAddButton("Recipe", buttonPanel);
         ingredientsButton = createAndAddButton("Shop", buttonPanel);
         balanceButton = createAndAddButton("Balance", buttonPanel);
 
-        // Add the button panel to the center of the frame
+        // add the button panel to the center of the frame
         add(buttonPanel, BorderLayout.CENTER);
 
         // show the frame
@@ -91,7 +91,7 @@ public class MenuView extends JFrame {
         button.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         button.setOpaque(true);
-        button.setBackground(Color.getHSBColor(0f, 0f, 1f)); // Light blue color
+        button.setBackground(Color.getHSBColor(0f, 0f, 1f));
         return button;
     }
 
