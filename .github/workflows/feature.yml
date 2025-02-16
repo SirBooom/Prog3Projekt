@@ -45,7 +45,19 @@ jobs:
       - name: Compile
         run: mvn compile
 
-      # Step 6: Test the project
+       # Step 6: Install Xvfb (Virtual Display für GUI-Tests)
+      - name: Install Xvfb
+        run: sudo apt-get install -y xvfb
+
+      # Step 6.1: Start Xvfb
+      - name: Start Xvfb
+        run: Xvfb :99 -screen 0 1920x1080x24 &
+
+      # Step 6.2: Set DISPLAY variable für GUI-Anwendungen
+      - name: Set DISPLAY variable
+        run: echo "DISPLAY=:99" >> $GITHUB_ENV
+
+      # Step 6.3: Test the project
       - name: Test
         run: mvn test
 
