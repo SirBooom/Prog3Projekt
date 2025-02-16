@@ -185,8 +185,6 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.5.2</version>
                 <configuration>
-                        <!-- Headless-Modus aktivieren -->
-                    <argLine>-Djava.awt.headless=true</argLine>
                         <!-- Wichtige Konfiguration für JUnit 5 mit Java 9+ -->
                     <useModulePath>false</useModulePath>
                         <!-- Testklassen angeben -->
