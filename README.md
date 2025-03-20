@@ -1,14 +1,32 @@
-# Rezeptverwaltungssystem
+# **Rezeptverwaltungssystem**
 
-Eine einfache Anwendung zur Speicherung und Verwaltung von Rezepten
+## 📖 Einführung 
 
+Das Rezeptverwaltungssystem ist eine einfache Anwendung zur **Speicherung und Verwaltung von Rezepten.**
+
+Die Rezepte werden in einer **SQLite Datenbank** gespeichert. 
+
+
+## 💡 Warum ist das Rezeptverwaltungssystem sinnvoll?
+Es bietet eine einfache und effiziente Möglichkeit, die Rezepte **digital** und **zentral** zu verwalten, sodass die Rezepte an einem Ort gespeichert und jederzeit abrufbar sind.
+Die übersichtliche und benutzerfreundliche Benutzeroberfläche ermöglicht, das leichte und effiziente 
+- **Hinzufügen**
+- **Löschen**
+- **Bearbeiten**
+- **Filtern der Rezepte nach Kriterien.** 
 
 ## 🚀 Installation
+
+
 
 ### 📌 Voraussetzungen
 - Java 23+ (Empfohlen OpenJDK 23)
 - Apache Maven
-- [H2 Database](https://www.h2database.com/)
+- [H2 Database](https://www.h2database.com/) (Empfohlen 2.3.232)
+- Mockito (Empfohlen 5.15.2)
+- JUnit (Empfohlen 5.10.0)
+- JDBC Treiber (Empfohlen 3.47.2.0)
+- JOOQ (Empfohlen 3.19.17)
 
 ### 🛢️ Datenbankeinrichtung
 
@@ -112,6 +130,39 @@ Um alle Rezepte auf einmal zu löschen, klicke auf **"Delete all Recipes"**. Ach
 
 ---
 
+## 👥 Autoren
+
+Dieses Projekt wird von folgenden Teammitgliedern betreut:  
+
+[@EmirKayaagil](https://github.com/EmirKayaagil) • [@SirBooom](https://github.com/SirBooom) • [@SmallYhorm](https://github.com/SmallYhorm)  
+
+
+## 🔧 Mitwirken
+**Beiträge von der Community sind willkommen!**  
+Wenn du mithelfen möchtest, folge diesen Schritten:
+
+1. Forke das Repository
+2. Erstelle einen neuen Branch (feature/neue-funktion)
+3. Mache deine Änderungen und committe sie
+4. Erstelle einen Pull Request (PR)
+
+
+Hast du eine Idee oder Verbesserungsvorschläge?
+
+Erstelle ein Issue mit einer kurzen Beschreibung deines Vorschlags.
+Diskutiere mit dem Team oder anderen Beitragenden.
+
+📢 Wir freuen uns auf deine Hilfe!
+
+## ❓ Hilfe & Support
+
+Falls du Probleme hast oder Fragen aufkommen, gibt es mehrere Möglichkeiten, Unterstützung zu bekommen:
+
+📜 README & Dokumentation: Schau zuerst in diese README, ob deine Frage bereits beantwortet wurde.
+
+🐞 GitHub Issues: Falls du einen Bug gefunden hast, erstelle bitte ein Issue.
+
+🚀 Wir helfen gerne weiter!
 
 
 
