@@ -37,5 +37,10 @@ rezeptverwaltungsdb.db
 
 
 ## Nutzung
-Beispiele der Anwendung mit screenshots folgen
+
+**Speichern eines neuen Rezeptes**
+
+Fülle die Felder **ID, Name, etc** unten aus und klicke auf den Button **"Add Recipe"**
+![Speichern eines Rezeptes](images/screenshot1.png)
+
 
