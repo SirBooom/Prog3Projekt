@@ -14,10 +14,8 @@ public class BalanceView extends JFrame{
     private Timer cooldownTimer;
     private Runnable onCooldownFinished;
     public BalanceView(){
-        setTitle("BalanceManager");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 600);
-        setLayout(new BorderLayout());
+
+        setupFrame();
 
         // top panel for back button
         JPanel topPanel = new JPanel();
@@ -48,6 +46,13 @@ public class BalanceView extends JFrame{
 
         setVisible(true);
 
+    }
+
+    private void setupFrame() {
+        setTitle("Balance Manager");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(800, 600);
+        setLayout(new BorderLayout());
     }
 
     private JButton addButton(JPanel panel, String buttonText) {
@@ -85,13 +90,13 @@ public class BalanceView extends JFrame{
                     this.onCooldownFinished.run();
                 }
             } else {
-                updateBonusLabel(cooldownEnd - System.currentTimeMillis());
+                updateBonusView(cooldownEnd - System.currentTimeMillis());
             }
         });
         cooldownTimer.start();
     }
 
-    private void updateBonusLabel(long remainingMillis){
+    private void updateBonusView(long remainingMillis){
         long hours = (remainingMillis / (1000 * 60 * 60)) % 24;
         long minutes = (remainingMillis / (1000 * 60)) % 60;
         long seconds = (remainingMillis / 1000) % 60;
@@ -137,6 +142,7 @@ public class BalanceView extends JFrame{
             ex.printStackTrace();
         }
     }
+
 
     public JButton getBonusButton() {
         return this.bonusButton;

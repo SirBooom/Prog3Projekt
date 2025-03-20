@@ -10,9 +10,8 @@ import org.jooq.Record;
 import org.jooq.Result;
 
 /**
- * The Recipes.RecipeView class represents the graphical user interface (GUI) for managing recipes.
- * It is built as an extension of the JFrame class and provides various components for
- * performing actions such as loading, adding, updating, deleting, filtering, and displaying recipe data.
+ * The RecipeView class represents the graphical user interface (GUI) for managing recipes.
+ * It is built as an extension of the JFrame class and serves for display purposes ONLY
  */
 public class RecipeView extends JFrame {
 
@@ -41,8 +40,8 @@ public class RecipeView extends JFrame {
         // fields to modify the table (incl. loading, adding, deleting, updating, etc...)
         displayInputFields();
 
-        // show buttons for user to interact with
-        displayButtons();
+        // create buttons for user to interact with
+        createButtons();
 
         // display the frame
         setVisible(true);
@@ -52,7 +51,7 @@ public class RecipeView extends JFrame {
     ///////////////////////////////////// --- Construct The Recipe View --- /////////////////////////////////////
 
     private void setupFrame() {
-        setTitle("Recipes System");
+        setTitle("Recipes Manager");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1440, 880);
         setLayout(new BorderLayout());
@@ -80,7 +79,7 @@ public class RecipeView extends JFrame {
         add(inputPanel, BorderLayout.SOUTH);
     }
 
-    private void displayButtons() {
+    private void createButtons() {
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));

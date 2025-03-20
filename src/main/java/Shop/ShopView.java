@@ -1,15 +1,12 @@
 package Shop;
 
 import static com.example.generated.Tables.SHOP;
-import Factory.ControllerFactory;
 import FileData.FileHandler;
-import database.Database;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.SQLException;
+import java.awt.GridLayout;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -20,6 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import org.jooq.Record;
@@ -30,7 +28,10 @@ public class ShopView extends JFrame  {
     private DefaultTableModel tableModel;
 
     private JButton loadButton;
+    private JButton buyButton;
     private JButton backButton;
+
+    private JTextField idField, amountField;
 
     public ShopView() {
 
@@ -42,8 +43,8 @@ public class ShopView extends JFrame  {
         // show balance label
         addBalanceLabel();
 
-        // show buttons for user to interact with
-        displayButtons();
+        // create buttons for user to interact with
+        createButtons();
 
         // display the frame
         setVisible(true);
@@ -66,12 +67,13 @@ public class ShopView extends JFrame  {
         ingredientTable.setFont(new Font("Camibri", Font.BOLD, 15));
     }
 
-    private void displayButtons() {
+    private void createButtons() {
 
         JPanel buttonPanel = new JPanel();
         //buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 
         loadButton = addButton(buttonPanel, "Load ingredients");
+        buyButton = addButton(buttonPanel, "Buy Item");
 
         Box centeredBox = new Box(BoxLayout.Y_AXIS);
         centeredBox.add(Box.createVerticalGlue()); // Fill vertical space to push the button to center
@@ -90,6 +92,23 @@ public class ShopView extends JFrame  {
         backPanel.add(Box.createVerticalStrut(40));
         add(backPanel, BorderLayout.NORTH);
     }
+
+    public void displayItemDialog() {
+        JPanel panel = new JPanel(new GridLayout(2, 2, 10, 10)); // 2 rows, 2 columns, 10px gap
+
+        JLabel idLabel = new JLabel("Item ID:");
+        idField = new JTextField();
+        JLabel amountLabel = new JLabel("Desired Quantity:");
+        amountField = new JTextField();
+
+        panel.add(idLabel);
+        panel.add(idField);
+        panel.add(amountLabel);
+        panel.add(amountField);
+
+        showItemDialog(panel);
+
+        }
 
     public void addBalanceLabel(){
         JLabel balanceLabel = new JLabel("<html>Your Current Balance: " + FileHandler.loadBalance() + "   EUR </html>",
@@ -120,6 +139,17 @@ public class ShopView extends JFrame  {
         return backButton;
     }
 
+    public JButton getBuyButton() {
+        return buyButton;
+    }
+
+    public Map<String, String> getFormData() {
+        Map<String, String> formData = new HashMap<>();
+        formData.put("Item ID", idField.getText());
+        formData.put("Desired Quantity", amountField.getText());
+        return formData;
+    }
+
     ///////////////////////////////////// --- View Methods --- /////////////////////////////////////
 
     public void loadItems (Result<Record> result){
@@ -145,6 +175,11 @@ public class ShopView extends JFrame  {
 
     public void showSuccessDialog(String message) {
         JOptionPane.showMessageDialog(this, message);
+    }
+
+    private void showItemDialog(JPanel panel){
+        JOptionPane.showConfirmDialog(this, panel,"Buy an Item",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
     }
 
 }

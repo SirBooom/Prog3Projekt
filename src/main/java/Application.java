@@ -18,6 +18,7 @@ public class Application {
         menuController = controllerFactory.getMenuController();
 
         menuController.show();
+
     }
 
     public void exit() {

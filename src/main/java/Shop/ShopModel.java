@@ -2,6 +2,7 @@ package Shop;
 
 import database.Database;
 import database.ShopDatabase;
+import java.util.Map;
 import javax.swing.table.DefaultTableModel;
 import org.jooq.Record;
 import org.jooq.Result;
@@ -25,6 +26,26 @@ public class ShopModel {
             return shopDatabase.showItems();
         } catch (Exception ex) {
             ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public Result<Record> buyItem(Map<String, String> data) {
+        try {
+            return shopDatabase.buyItem(
+                    parseIntegerOrNull(data.get("Item ID")),
+                    parseIntegerOrNull(data.get("Desired Quantity"))
+                    );
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    private Integer parseIntegerOrNull(String value) {
+        try {
+            return value == null || value.trim().isEmpty() ? null : Integer.parseInt(value.trim());
+        } catch (NumberFormatException ex) {
             return null;
         }
     }

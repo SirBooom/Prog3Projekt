@@ -21,7 +21,7 @@ public class RecipeDatabase {
         this.context = context;
     }
 
-    public Result<Record> fetchAllRecipes() {
+    public Result<Record> showRecipes() {
         return context.select().from(RECIPE).fetch();
     }
 
@@ -37,7 +37,7 @@ public class RecipeDatabase {
                         RECIPE.INGREDIENT)
                 .values(id, name, cuisine, category, instructions, nutrition, cookingTime, ingredient)
                 .execute();
-        return fetchAllRecipes();
+        return showRecipes();
     }
 
     public Result<Record> deleteRecipe(int id) {
@@ -45,7 +45,7 @@ public class RecipeDatabase {
             throw new IllegalArgumentException("Recipe with ID " + id + " does not exist.");
         }
         context.deleteFrom(RECIPE).where(RECIPE.ID.eq(id)).execute();
-        return fetchAllRecipes();
+        return showRecipes();
     }
 
     public Result<Record> updateRecipe(Integer id, String name, String cuisine,
@@ -67,12 +67,12 @@ public class RecipeDatabase {
         Optional.ofNullable(ingredient).ifPresent(value -> updateQuery.set(RECIPE.INGREDIENT, value));
 
         updateQuery.where(RECIPE.ID.eq(id)).execute();
-        return fetchAllRecipes();
+        return showRecipes();
     }
 
     public Result<Record> deleteAllRecipes() {
         context.deleteFrom(RECIPE).execute();
-        return fetchAllRecipes();
+        return showRecipes();
     }
 
     public Result<Record> filterRecipes(Integer id, String name, String cuisine, String category,

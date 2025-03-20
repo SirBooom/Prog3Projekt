@@ -41,7 +41,7 @@ public record MenuController(MenuView menuView) {
 
     private void handleError(String message, Exception ex) {
         menuView.showError(message);
-        ex.printStackTrace();
+        //ex.printStackTrace();
     }
 
     private void openRecipeView() throws SQLException {

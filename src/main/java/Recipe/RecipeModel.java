@@ -1,6 +1,5 @@
 package Recipe;
 
-import com.example.generated.tables.Recipe;
 import database.Database;
 import database.RecipeDatabase;
 import org.jooq.Record;
@@ -9,8 +8,8 @@ import javax.swing.table.DefaultTableModel;
 import java.util.Map;
 
 /**
- * The Recipes.RecipeModel class handles the logic and data manipulation for managing recipes.
- * It bridges the Recipes.RecipeView (via the controller) and the database layer (RecipeDatabase).
+ * The RecipeModel class handles the logic and data manipulation for managing recipes.
+ * It bridges the RecipeView (via the controller) and the database layer (RecipeDatabase).
  * This version decouples it from UI components (like JTextField).
  */
 public class RecipeModel {
@@ -32,7 +31,7 @@ public class RecipeModel {
     public Result<Record> reloadRecipes() {
         tableModel.setRowCount(0);
         try {
-            return recipeDatabase.fetchAllRecipes();
+            return recipeDatabase.showRecipes();
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
@@ -121,12 +120,12 @@ public class RecipeModel {
     public Result<Record> filterRecipes(Map<String, String> data) {
         try {
             return recipeDatabase.filterRecipes(
-                    parseIntegerOrDefault(data.get("id"), 0),
+                    parseIntegerOrDefault(data.get("id")),
                     getStringOrNull(data.get("name")),
                     getStringOrNull(data.get("cuisine")),
                     getStringOrNull(data.get("category")),
                     getStringOrNull(data.get("instructions")),
-                    parseIntegerOrDefault(data.get("nutrition"), 0),
+                    parseIntegerOrDefault(data.get("nutrition")),
                     getStringOrNull(data.get("cookingTime")),
                     getStringOrNull(data.get("ingredient"))
             );
@@ -157,11 +156,11 @@ public class RecipeModel {
     /**
      * Parse an integer or return a default value if invalid.
      */
-    private int parseIntegerOrDefault(String value, int defaultValue) {
+    private int parseIntegerOrDefault(String value) {
         try {
-            return value == null || value.trim().isEmpty() ? defaultValue : Integer.parseInt(value.trim());
+            return value == null || value.trim().isEmpty() ? 0 : Integer.parseInt(value.trim());
         } catch (NumberFormatException ex) {
-            return defaultValue;
+            return 0;
         }
     }
 
