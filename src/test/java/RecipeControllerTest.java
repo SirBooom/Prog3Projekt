@@ -1,39 +1,30 @@
-import Factory.ControllerFactory;
-import Menu.MenuController;
-import Menu.MenuView;
+/*
 import Recipe.RecipeController;
 import Recipe.RecipeMessage;
 import Recipe.RecipeModel;
 import Recipe.RecipeView;
 import database.Database;
-import database.RecipeDatabase;
 import java.sql.SQLException;
-import org.h2.jdbcx.JdbcDataSource;
 import org.jooq.DSLContext;
-import org.jooq.impl.DSL;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
-import java.util.Map;
-import org.mockito.InOrder;
 
 import static com.example.generated.Tables.RECIPE;
 import static org.mockito.Mockito.*;
 
-class RecipeControllerButtonTest {
+class RecipeControllerTest {
 
     static RecipeView mockRecipeView;
     static RecipeController recipeController;
     static RecipeModel mockRecipeModel;
-
+}
     @BeforeAll
     static void setUp() throws SQLException {
 
-        /*
+
         ControllerFactory controllerFactory = ControllerFactory.getInstance();
         MenuController menuController = controllerFactory.getMenuController();
         MenuView mockMenuView = menuController.menuView();
@@ -41,12 +32,12 @@ class RecipeControllerButtonTest {
         mockRecipeButton.doClick();
 
         //recipeController = ControllerFactory.getInstance().getRecipeController();
-        */
+
         mockRecipeView = mock(RecipeView.class);
         mockRecipeModel = mock(RecipeModel.class);
 
 
-        /*
+
         JdbcDataSource h2DataSource = new JdbcDataSource();
         h2DataSource.setURL("jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
 
@@ -64,7 +55,7 @@ class RecipeControllerButtonTest {
                 "cookingTime INT," +
                 "ingredient TEXT" +
                 ")");
-        */
+
     }
 
 
@@ -167,7 +158,7 @@ class RecipeControllerButtonTest {
         verify(mockRecipeView, times(1)).showErrorDialog(RecipeMessage.ERROR_DELETING_RECIPE);
     }
 
-    /*
+
     @Test
     void testUpdateRecipeSuccess() {
 
@@ -181,7 +172,7 @@ class RecipeControllerButtonTest {
         verify(mockRecipeModel, times(1)).deleteRecipe(RecipeDataInputSamples.emptyInput().get("id"));
         verify(mockRecipeView, times(1)).showSuccessDialog(RecipeMessage.ERROR_DELETING_RECIPE);
     }
-    */
+
     @Test
     void testUpdateRecipeFail() {
 
@@ -226,12 +217,12 @@ class RecipeControllerButtonTest {
 
 
 
-    /*
+
     @Test
     void testDeleteRecipeButtonAction() throws SQLException {
 
         JButton mockDeleteRecipeButton = mockRecipeView.getDeleteRecipeButton();
-        /*
+
         Map<String, String> dataDelete = Map.of(
                 "id", "1",
                 "name", "",
@@ -252,11 +243,23 @@ class RecipeControllerButtonTest {
         verify(mockRecipeModel, times(1)).deleteRecipe("1");
         verify(mockRecipeView, times(1)).showSuccessDialog(RecipeMessage.SUCCESS_RECIPE_DELETED);
     }
-    */
+
     @AfterAll
     public static void cleanDatabase() throws SQLException {
         DSLContext context = Database.getDslContext();
         context.deleteFrom(RECIPE).execute();
     }
 
+}
+*/
+
+import Recipe.RecipeController;
+import Recipe.RecipeModel;
+import Recipe.RecipeView;
+
+public class RecipeControllerTest {
+
+    static RecipeView mockRecipeView;
+    static RecipeController recipeController;
+    static RecipeModel mockRecipeModel;
 }
