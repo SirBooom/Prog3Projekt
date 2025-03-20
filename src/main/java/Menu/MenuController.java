@@ -4,9 +4,7 @@ import Factory.ControllerFactory;
 
 import java.sql.SQLException;
 
-public class MenuController {
-    private final MenuView menuView;
-
+public record MenuController(MenuView menuView) {
 
     public MenuController(MenuView menuView) {
         this.menuView = menuView;
@@ -65,4 +63,9 @@ public class MenuController {
     public void show() {
         menuView.setVisible(true);
     }
+
+    public void closeView() {
+        menuView.setVisible(false);
+    }
+
 }

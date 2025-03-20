@@ -172,11 +172,4 @@ public class RecipeModel {
         this.tableModel = tableModel;
     }
 
-    /**
-     *  ONLY for testing purposes !
-     */
-    public RecipeModel(RecipeDatabase recipeDatabase){
-        this.recipeDatabase = recipeDatabase;
-        this.tableModel=new DefaultTableModel();
-    }
 }

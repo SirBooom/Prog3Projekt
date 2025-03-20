@@ -1,121 +1,99 @@
 package Shop;
 
-import static com.example.generated.Tables.SHOP;
 import Factory.ControllerFactory;
-import FileData.FileHandler;
-import Menu.MenuController;
-import Menu.MenuView;
-import database.Database;
-import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.SQLException;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
+import java.util.Map;
 import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.SwingUtilities;
-import javax.swing.table.DefaultTableModel;
+import org.jooq.Record;
+import org.jooq.Result;
 
-public class ShopManager extends JFrame {
-    private DefaultTableModel tableModel;
-    private JTable ingredientTable;
+public record ShopController(ShopView shopView, ShopModel shopModel) {
 
-    private static int balance;
+    public ShopController(ShopView shopView, ShopModel shopModel) {
+        this.shopModel = shopModel;
+        this.shopView = shopView;
 
-
-    public ShopManager() {
-        setTitle("Shop");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1000, 800);
-        setLayout(new BorderLayout());
-        tableModel = new DefaultTableModel(
-                new Object[]{"ID", "Name", "Amount", "PRICE(€)", "Nutrition(Kcal)"}, 0);
-        ingredientTable = new JTable(tableModel);
-        add(new JScrollPane(ingredientTable), BorderLayout.CENTER);
-        ingredientTable.setFont(new Font("Camibri", Font.BOLD, 15));
-        //ingredientTable.setFont(ingredientTable.getFont().deriveFont(Font.BOLD));
-
-        balance = 1000;
-        addBalanceLabel();
-        createBackButton();
-        createLoadIngredientButton();
-        setVisible(true);
+        shopModel.setTableModel(shopView.getTableModel());
+        initializeButtonActions();
     }
 
-    private void createLoadIngredientButton() {
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
-        JButton loadButton = addButton(buttonPanel, "Load ingredients",this::loadIngredients);
-        loadButton.setFont(new Font("Arial", Font.BOLD, 20));
-
-        Box centeredBox = new Box(BoxLayout.Y_AXIS);
-        centeredBox.add(Box.createVerticalGlue()); // Fill vertical space to push the button to center
-        centeredBox.add(buttonPanel);  // Add the button panel
-        centeredBox.add(Box.createVerticalGlue());
-        centeredBox.setBorder(BorderFactory.createEmptyBorder(20,0,20,0));
-
-        add(centeredBox, BorderLayout.SOUTH);
+    private void initializeButtonActions() {
+        Map<JButton, ShopAction> actions = Map.of(
+                shopView.getLoadButton(), this::handleLoadRecipes,
+                shopView.getBackButton(), this::handleBackToMenu
+        );
+        // assign actions to buttons.
+        actions.forEach(this::setButtonAction);
     }
 
-    private void createBackButton() {
-        JPanel backButton = new JPanel();
-        backButton.setLayout(new BoxLayout(backButton, BoxLayout.X_AXIS));
-        addButton(backButton, "Back", this::backToMenu);
-        backButton.add(Box.createVerticalStrut(40));
-        add(backButton, BorderLayout.NORTH);
+    private void handleLoadRecipes(ActionEvent event) {
+        processModelAction(
+                shopModel::reloadItems,
+                "Success, congrats!","Error, try again later!"
+        );
     }
 
-    private JButton addButton(JPanel panel, String buttonText, ActionListener action) {
-        JButton button = new JButton(buttonText);
-        button.addActionListener(action);
-        panel.add(button);
-        return button;
-    }
-
-    private void backToMenu(ActionEvent e) {
-        dispose();
+    private void handleBackToMenu(ActionEvent e) {
+        shopView.closeView();
         try {
             ControllerFactory.getInstance().getMenuController().show();
         } catch (SQLException ex) {
-            ex.printStackTrace(); // Log for debugging (optional)
+            handleUnexpectedError(ex);
         }
     }
 
+    private void setButtonAction(JButton button, ShopAction shopAction) {
+        button.addActionListener(shopAction::execute);
+    }
 
-    private void loadIngredients (ActionEvent e){
+    private void processModelAction(ShopModelAction shopModelAction, String successMessage,
+            String errorMessage) {
         try {
-            tableModel.setRowCount(0);
-            Database.getDslContext()
-                    .select()
-                    .from(SHOP)
-                    .fetch()
-                    .forEach(record -> tableModel.addRow(new Object[]{
-                            record.getValue(SHOP.ID),
-                            record.getValue(SHOP.NAME),
-                            record.getValue(SHOP.AMOUNT_AVAILABLE),
-                            record.getValue(SHOP.PRICE),
-                            record.getValue(SHOP.NUTRITION),
-                    }));
+            Result<Record> result = shopModelAction.execute();
+            if (result != null) {
+                shopView.loadItems(result);
+                shopView.showSuccessDialog(successMessage);
+            } else {
+                shopView.showErrorDialog(errorMessage);
+            }
         } catch (Exception ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error loading Ingredients.");
+            handleUnexpectedError(ex);
         }
     }
 
-    public void addBalanceLabel(){
-        JLabel balanceLabel = new JLabel("<html>Your Current Balance: " + FileHandler.loadBalance() + "   EUR </html>",
-                SwingUtilities.RIGHT);
-        balanceLabel.setBorder(BorderFactory.createEmptyBorder(400, 0, 20, 0));
-        balanceLabel.setFont(new Font("Cambria", Font.BOLD, 20));
-        add(balanceLabel, BorderLayout.SOUTH);
-        setVisible(true);
+    private void handleUnexpectedError(Exception ex) {
+        ex.printStackTrace();
+        shopView.showErrorDialog("An unexpected error occurred: " + ex.getMessage());
     }
+
+    public void show() {
+        shopView.setVisible(true);
+    }
+
+    @FunctionalInterface
+    private interface ShopAction {
+
+        /**
+         * Führt die Aktion basierend auf einem vom Benutzer ausgelösten Ereignis aus.
+         *
+         * @param event Das ActionEvent, das mit der Interaktion des Benutzers verknüpft ist z.B.
+         *              ein button click.
+         */
+        void execute(ActionEvent event);
+    }
+
+    @FunctionalInterface
+    private interface ShopModelAction {
+
+        /**
+         * Führt die Datenbankoperation auf dem Model aus.
+         *
+         * @return ein Result<Record> Objekt, dass das Ergebnis der Operation repräsentiert z.B.
+         * Abfrageergebnis.
+         * @throws Exception Falls bei der Operation etwas schief läuft gibt z.B. Datenbankfehler.
+         */
+        Result<Record> execute() throws Exception;
+    }
+    
 }

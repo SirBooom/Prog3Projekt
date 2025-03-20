@@ -29,14 +29,6 @@ public class Skeleton {
         // Connection is the only JDBC resource that we need
         // PreparedStatement and ResultSet are handled by jOOQ, internally
         try {
-            /*
-            for(int i = 11; i <= 15; i++ ) {
-                database.Database.insertRecipe(i, "pasta1", "Italian", "dessert", "Cook then eat", 100,
-                        "15 Mins", "noodles");
-            }
-            */
-            //database.Database.deleteAllRecipes();
-            //database.Database.filterRecipes(null,null,null,null,0,"15 mins", null);
             Connection connection = DriverManager.getConnection(url);
             DSLContext create = DSL.using(connection, SQLDialect.SQLITE);
             //DatabaseNew.setDslContext(create);

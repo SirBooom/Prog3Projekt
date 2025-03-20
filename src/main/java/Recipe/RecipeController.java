@@ -10,14 +10,10 @@ import org.jooq.Record;
 import org.jooq.Result;
 
 /**
- * This class handles the interactions between RecipeView and RecipeModel.
- * It sets up actions for UI components and controls the entire process.
+ * This class handles the interactions between RecipeView and RecipeModel. It sets up actions for UI
+ * components and controls the entire process.
  */
-public class RecipeController {
-
-    private final RecipeModel recipeModel;
-    private final RecipeView recipeView;
-
+public record RecipeController(RecipeView recipeView, RecipeModel recipeModel) {
 
     public RecipeController(RecipeView recipeView, RecipeModel recipeModel) {
         this.recipeModel = recipeModel;
@@ -114,13 +110,14 @@ public class RecipeController {
     }
 
     /**
-     * Führt eine ModelAction aus, aktualisiert die View  zeigt Feedback.
+     * Führt eine ModelAction aus, aktualisiert die View & zeigt Feedback.
      *
-     * @param recipeModelAction    Die auszuführende Aktion auf dem Model.
-     * @param successMessage Erfolgsnachricht bei erfolgreicher Ausführung.
-     * @param errorMessage   Fehlermeldung bei Misserfolg oder fehlendem Ergebnis.
+     * @param recipeModelAction Die auszuführende Aktion auf dem Model.
+     * @param successMessage    Erfolgsnachricht bei erfolgreicher Ausführung.
+     * @param errorMessage      Fehlermeldung bei Misserfolg oder fehlendem Ergebnis.
      */
-    private void processModelAction(RecipeModelAction recipeModelAction, String successMessage, String errorMessage) {
+    private void processModelAction(RecipeModelAction recipeModelAction, String successMessage,
+            String errorMessage) {
         try {
             Result<Record> result = recipeModelAction.execute();
             if (result != null) {
@@ -139,39 +136,39 @@ public class RecipeController {
         recipeView.showErrorDialog("An unexpected error occurred: " + ex.getMessage());
     }
 
-    public void show(){
+    public void show() {
         recipeView.setVisible(true);
     }
 
-
     /**
-     * Funktionales Interface, das eine Aktion repräsentiert, die durch eine Benutzerinteraktion
-     * in dem view ausgelöst wird, z.B. click auf einen Button.
-     * Die Aktion ist dazu gedacht, das Ereignis im Controller zu verarbeiten.
+     * Funktionales Interface, das eine Aktion repräsentiert, die durch eine Benutzerinteraktion in
+     * dem view ausgelöst wird, z.B. click auf einen Button. Die Aktion ist dazu gedacht, das
+     * Ereignis im Controller zu verarbeiten.
      */
     @FunctionalInterface
     private interface RecipeAction {
+
         /**
          * Führt die Aktion basierend auf einem vom Benutzer ausgelösten Ereignis aus.
          *
-         * @param event Das ActionEvent, das mit der Interaktion des Benutzers verknüpft ist
-         *              z.B. ein button click.
+         * @param event Das ActionEvent, das mit der Interaktion des Benutzers verknüpft ist z.B.
+         *              ein button click.
          */
         void execute(ActionEvent event);
     }
 
     /**
-     * Funktionales Interface, das eine Aktion auf dem Model repräsentiert,
-     * typischerweise einhergehend mit Datenabruf, einfügen, löschen, updaten, etc..
-     *
+     * Funktionales Interface, das eine Aktion auf dem Model repräsentiert, typischerweise
+     * einhergehend mit Datenabruf, einfügen, löschen, updaten, etc..
      */
     @FunctionalInterface
     private interface RecipeModelAction {
+
         /**
          * Führt die Datenbankoperation auf dem Model aus.
          *
-         * @return ein Result<Record> Objekt, dass das Ergebnis der Operation repräsentiert
-         *         z.B. Abfrageergebnis.
+         * @return ein Result<Record> Objekt, dass das Ergebnis der Operation repräsentiert z.B.
+         * Abfrageergebnis.
          * @throws Exception Falls bei der Operation etwas schief läuft gibt z.B. Datenbankfehler.
          */
         Result<Record> execute() throws Exception;

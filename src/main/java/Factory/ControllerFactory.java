@@ -8,7 +8,9 @@ import Menu.MenuView;
 import Recipe.RecipeController;
 import Recipe.RecipeModel;
 import Recipe.RecipeView;
-import Shop.ShopManager;
+import Shop.ShopController;
+import Shop.ShopModel;
+import Shop.ShopView;
 import database.Database;
 import java.sql.SQLException;
 import org.jooq.DSLContext;
@@ -17,18 +19,11 @@ public class ControllerFactory {
 
 
     private static  ControllerFactory instance;
-    //private final database.RecipeDatabase recipeDatabase;
-
 
     private MenuController menuController;
     private RecipeController recipeController;
-    private ShopManager shopManager;
+    private ShopController shopManager;
     private BalanceController balanceController;
-
-    private ControllerFactory() throws SQLException {
-        DSLContext dbContext = Database.getDslContext();
-        //this.recipeDatabase = new database.RecipeDatabase(dbContext);
-    }
 
     public static ControllerFactory getInstance() throws SQLException {
             if (instance == null) {
@@ -51,9 +46,9 @@ public class ControllerFactory {
         return recipeController;
     }
 
-    public ShopManager getShopController() {
+    public ShopController getShopController() {
         if (shopManager == null) {
-            shopManager = new ShopManager();
+            shopManager = new ShopController(new ShopView(), new ShopModel());
         }
         return shopManager;
     }

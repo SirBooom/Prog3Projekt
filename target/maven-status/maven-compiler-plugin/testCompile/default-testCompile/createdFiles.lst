@@ -1,5 +1,3 @@
-RecipeControllerTest.class
-DatabaseTest.class
 RecipeViewTest.class
 DatabaseNewTest.class
 H2TestDatabaseExtension.class

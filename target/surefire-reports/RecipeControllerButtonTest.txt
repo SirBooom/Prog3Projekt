@@ -1,0 +1,161 @@
+-------------------------------------------------------------------------------
+Test set: RecipeControllerButtonTest
+-------------------------------------------------------------------------------
+Tests run: 11, Failures: 4, Errors: 1, Skipped: 0, Time elapsed: 1.223 s <<< FAILURE! -- in RecipeControllerButtonTest
+RecipeControllerButtonTest.testAddRecipeFailMissingID -- Time elapsed: 0.017 s <<< FAILURE!
+org.mockito.exceptions.verification.TooManyActualInvocations: 
+
+recipeView.showErrorDialog(
+    "Error: Invalid ID or Name"
+);
+Wanted 1 time:
+-> at Recipe.RecipeView.showErrorDialog(RecipeView.java:207)
+But was 2 times:
+-> at RecipeControllerButtonTest.testAddRecipeFailMissingName(RecipeControllerTest.java:98)
+-> at RecipeControllerButtonTest.testAddRecipeFailMissingID(RecipeControllerTest.java:115)
+
+
+	at Recipe.RecipeView.showErrorDialog(RecipeView.java:207)
+	at RecipeControllerButtonTest.testAddRecipeFailMissingID(RecipeControllerTest.java:120)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+
+RecipeControllerButtonTest.testUpdateRecipeFail -- Time elapsed: 0.002 s <<< FAILURE!
+org.mockito.exceptions.verification.TooManyActualInvocations: 
+
+recipeModel.updateRecipe(
+    {"name" = "", "category" = "Main Course", "ingredient" = "", "cuisine" = "", "instructions" = "", "cookingTime" = "", "nutrition" = "", "id" = ""}
+);
+Wanted 1 time:
+-> at Recipe.RecipeModel.updateRecipe(RecipeModel.java:99)
+But was 2 times:
+-> at RecipeControllerButtonTest.testFilterRecipeFail(RecipeControllerTest.java:218)
+-> at RecipeControllerButtonTest.testUpdateRecipeFail(RecipeControllerTest.java:190)
+
+
+	at Recipe.RecipeModel.updateRecipe(RecipeModel.java:99)
+	at RecipeControllerButtonTest.testUpdateRecipeFail(RecipeControllerTest.java:194)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+
+RecipeControllerButtonTest.testUpdateRecipeSuccess -- Time elapsed: 0.010 s <<< FAILURE!
+Argument(s) are different! Wanted:
+recipeView.showSuccessDialog(
+    "Error deleting recipe."
+);
+-> at Recipe.RecipeView.showSuccessDialog(RecipeView.java:211)
+Actual invocations have different arguments:
+recipeView.setFormData(
+    {"name" = "Margherita Pizza", "category" = "Main Course", "ingredient" = "Dough, Tomato Sauce, Mozzarella Cheese, Basil", "cuisine" = "Italian", "instructions" = "Bake the pizza until the cheese melts.", "cookingTime" = "15", "nutrition" = "800", "id" = "1"}
+);
+-> at RecipeControllerButtonTest.testAddRecipeSuccess(RecipeControllerTest.java:76)
+recipeView.showSuccessDialog(
+    "Recipe added successfully."
+);
+-> at RecipeControllerButtonTest.testAddRecipeSuccess(RecipeControllerTest.java:79)
+recipeView.showErrorDialog(
+    "Error updating recipe."
+);
+-> at RecipeControllerButtonTest.testFilterRecipeFail(RecipeControllerTest.java:219)
+recipeView.setFormData(
+    {"name" = "", "category" = "", "ingredient" = "", "cuisine" = "", "instructions" = "", "cookingTime" = "", "nutrition" = "", "id" = "4"}
+);
+-> at RecipeControllerButtonTest.testAddRecipeFailMissingName(RecipeControllerTest.java:95)
+recipeView.showErrorDialog(
+    "Error: Invalid ID or Name"
+);
+-> at RecipeControllerButtonTest.testAddRecipeFailMissingName(RecipeControllerTest.java:98)
+recipeView.setFormData(
+    {"name" = "Spaghetti", "category" = "", "ingredient" = "", "cuisine" = "", "instructions" = "", "cookingTime" = "", "nutrition" = "", "id" = ""}
+);
+-> at RecipeControllerButtonTest.testAddRecipeFailMissingID(RecipeControllerTest.java:112)
+recipeView.showErrorDialog(
+    "Error: Invalid ID or Name"
+);
+-> at RecipeControllerButtonTest.testAddRecipeFailMissingID(RecipeControllerTest.java:115)
+recipeView.showErrorDialog(
+    "Error deleting recipe."
+);
+-> at RecipeControllerButtonTest.testDeleteRecipeFail(RecipeControllerTest.java:163)
+recipeView.setFormData(
+    {"name" = "Margherita Pizza", "category" = "Main Course", "ingredient" = "Dough, Tomato Sauce, Mozzarella Cheese, Basil", "cuisine" = "Italian", "instructions" = "Bake the pizza until the cheese melts.", "cookingTime" = "15", "nutrition" = "800", "id" = "1"}
+);
+-> at RecipeControllerButtonTest.testDeleteRecipeSuccess(RecipeControllerTest.java:146)
+recipeView.showSuccessDialog(
+    "Recipe deleted successfully."
+);
+-> at RecipeControllerButtonTest.testDeleteRecipeSuccess(RecipeControllerTest.java:149)
+recipeView.setFormData(
+    {"name" = "", "category" = "", "ingredient" = "", "cuisine" = "", "instructions" = "", "cookingTime" = "", "nutrition" = "", "id" = "-6"}
+);
+-> at RecipeControllerButtonTest.testAddRecipeNegativeID(RecipeControllerTest.java:129)
+recipeView.showErrorDialog(
+    ""
+);
+-> at RecipeControllerButtonTest.testAddRecipeNegativeID(RecipeControllerTest.java:132)
+recipeView.showErrorDialog(
+    "Error updating recipe."
+);
+-> at RecipeControllerButtonTest.testUpdateRecipeFail(RecipeControllerTest.java:191)
+recipeView.showSuccessDialog(
+    "Recipe updated successfully."
+);
+-> at RecipeControllerButtonTest.testUpdateRecipeSuccess(RecipeControllerTest.java:177)
+
+	at Recipe.RecipeView.showSuccessDialog(RecipeView.java:211)
+	at RecipeControllerButtonTest.testUpdateRecipeSuccess(RecipeControllerTest.java:181)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+
+RecipeControllerButtonTest.testFilterRecipeSuccess -- Time elapsed: 0.004 s <<< FAILURE!
+org.mockito.exceptions.verification.TooManyActualInvocations: 
+
+recipeModel.updateRecipe(
+    {"name" = "", "category" = "Main Course", "ingredient" = "", "cuisine" = "", "instructions" = "", "cookingTime" = "", "nutrition" = "", "id" = ""}
+);
+Wanted 1 time:
+-> at Recipe.RecipeModel.updateRecipe(RecipeModel.java:99)
+But was 3 times:
+-> at RecipeControllerButtonTest.testFilterRecipeFail(RecipeControllerTest.java:218)
+-> at RecipeControllerButtonTest.testUpdateRecipeFail(RecipeControllerTest.java:190)
+-> at RecipeControllerButtonTest.testFilterRecipeSuccess(RecipeControllerTest.java:204)
+
+
+	at Recipe.RecipeModel.updateRecipe(RecipeModel.java:99)
+	at RecipeControllerButtonTest.testFilterRecipeSuccess(RecipeControllerTest.java:208)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+
+RecipeControllerButtonTest -- Time elapsed: 1.223 s <<< ERROR!
+org.jooq.exception.DataAccessException: SQL [delete from "Recipe"]; The object is already closed [90007-232]
+	at org.jooq_3.19.17.H2.debug(Unknown Source)
+	at org.jooq.impl.Tools.translate(Tools.java:3621)
+	at org.jooq.impl.Tools.translate(Tools.java:3609)
+	at org.jooq.impl.DefaultExecuteContext.sqlException(DefaultExecuteContext.java:827)
+	at org.jooq.impl.AbstractQuery.execute(AbstractQuery.java:362)
+	at org.jooq.impl.AbstractDelegatingQuery.execute(AbstractDelegatingQuery.java:115)
+	at RecipeControllerButtonTest.cleanDatabase(RecipeControllerTest.java:258)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at java.base/java.util.Collections$UnmodifiableCollection.forEach(Collections.java:1117)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-232]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:566)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.message.DbException.get(DbException.java:188)
+	at org.h2.jdbc.JdbcConnection.checkClosed(JdbcConnection.java:1420)
+	at org.h2.jdbc.JdbcConnection.prepareStatement(JdbcConnection.java:313)
+	at org.jooq.impl.ProviderEnabledConnection.prepareStatement(ProviderEnabledConnection.java:109)
+	at org.jooq.impl.SettingsEnabledConnection.prepareStatement(SettingsEnabledConnection.java:91)
+	at org.jooq.impl.AbstractQuery.prepare(AbstractQuery.java:431)
+	at org.jooq.impl.AbstractDMLQuery.prepare0(AbstractDMLQuery.java:994)
+	at org.jooq.impl.AbstractDMLQuery.prepare(AbstractDMLQuery.java:985)
+	at org.jooq.impl.AbstractQuery.execute(AbstractQuery.java:315)
+	... 6 more
+

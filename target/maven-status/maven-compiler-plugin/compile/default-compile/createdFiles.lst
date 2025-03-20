@@ -1,18 +1,14 @@
 com\example\generated\tables\Shop.class
 Menu\MenuView.class
-Shop\ShopManager.class
 com\example\generated\Tables.class
-RecipeRepository.class
 Balance\BalanceController.class
 com\example\generated\Keys.class
 com\example\generated\tables\records\RecipeRecord.class
 Balance\BalanceModel.class
 Balance\BalanceView.class
-Recipe\RecipeController$ModelAction.class
 com\example\generated\tables\IngredientDgTmp$IngredientDgTmpPath.class
 Recipe\RecipeMessage.class
 Recipe\RecipeModel.class
-Databasew.class
 Skeleton.class
 Recipe\RecipeController.class
 Application.class
@@ -24,7 +20,6 @@ com\example\generated\DefaultSchema.class
 com\example\generated\tables\IngredientDgTmp.class
 com\example\generated\tables\records\IngredientDgTmpRecord.class
 database\RecipeDatabase.class
-DatabaseNew.class
 com\example\generated\tables\Recipe$RecipePath.class
 Factory\ControllerFactory.class
 com\example\generated\DefaultCatalog.class

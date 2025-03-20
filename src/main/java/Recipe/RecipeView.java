@@ -17,16 +17,13 @@ import org.jooq.Result;
 public class RecipeView extends JFrame {
 
     protected JTable recipeTable;
-    private final DefaultTableModel tableModel;
+    private DefaultTableModel tableModel;
 
     private JTextField idField, nameField, cuisineField, categoryField, instructionsField,
             nutritionField, cookingTimeField, ingredientField;
-    private JTextField filterNameField, filterCuisineField, filterCategoryField, filterInstructionsField,
-            filterNutritionField, filterCookingTimeField, filterIngredientField;
 
     private JButton loadButton;
     private JButton addRecipeButton;
-
     private JButton deleteRecipeButton;
     private JButton updateRecipeButton;
     private JButton filterRecipeButton;
@@ -38,15 +35,16 @@ public class RecipeView extends JFrame {
 
         setupFrame();
 
-        // db table
-        tableModel = new DefaultTableModel(new Object[]{"ID", "Name", "Cuisine", "Category",
-                "Instructions", "Nutrition", "Cooking Time", "Ingredient"}, 0);
-        recipeTable = new JTable(tableModel);
-        add(new JScrollPane(recipeTable), BorderLayout.CENTER);
+        // create layout table for data
+        setupRecipeTable();
 
+        // fields to modify the table (incl. loading, adding, deleting, updating, etc...)
         displayInputFields();
+
+        // show buttons for user to interact with
         displayButtons();
 
+        // display the frame
         setVisible(true);
     }
 
@@ -60,7 +58,14 @@ public class RecipeView extends JFrame {
         setLayout(new BorderLayout());
     }
 
-    // fields to modify the table (incl. loading, adding, deleting, updating, etc...)
+    private void setupRecipeTable() {
+        tableModel = new DefaultTableModel(new Object[]{"ID", "Name", "Cuisine", "Category",
+                "Instructions", "Nutrition", "Cooking Time", "Ingredient"}, 0);
+
+        recipeTable = new JTable(tableModel);
+        add(new JScrollPane(recipeTable), BorderLayout.CENTER);
+    }
+
     private void displayInputFields() {
 
         JPanel inputPanel = new JPanel(new GridLayout(8, 2)); // Changed GridLayout to 9 rows
@@ -75,7 +80,6 @@ public class RecipeView extends JFrame {
         add(inputPanel, BorderLayout.SOUTH);
     }
 
-    // Show buttons for user to interact with
     private void displayButtons() {
 
         JPanel buttonPanel = new JPanel();
@@ -164,6 +168,17 @@ public class RecipeView extends JFrame {
         formData.put("cookingTime", cookingTimeField.getText());
         formData.put("ingredient", ingredientField.getText());
         return formData;
+    }
+
+    public void setFormData(Map<String, String> formData) {
+        idField.setText(formData.getOrDefault("id", ""));
+        nameField.setText(formData.getOrDefault("name", ""));
+        cuisineField.setText(formData.getOrDefault("cuisine", ""));
+        categoryField.setText(formData.getOrDefault("category", ""));
+        instructionsField.setText(formData.getOrDefault("instructions", ""));
+        nutritionField.setText(formData.getOrDefault("nutrition", ""));
+        cookingTimeField.setText(formData.getOrDefault("cookingTime", ""));
+        ingredientField.setText(formData.getOrDefault("ingredient", ""));
     }
 
     ///////////////////////////////////// --- View Methods --- /////////////////////////////////////
