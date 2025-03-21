@@ -1,11 +1,7 @@
 package Balance;
 
-import Factory.ControllerFactory;
-import java.sql.SQLException;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class BalanceView extends JFrame{
     private JButton bonusButton;
@@ -13,46 +9,44 @@ public class BalanceView extends JFrame{
     private JLabel bonusLabel;
     private Timer cooldownTimer;
     private Runnable onCooldownFinished;
+    private JButton backButton;
     public BalanceView(){
-
         setupFrame();
-
-        // top panel for back button
-        JPanel topPanel = new JPanel();
-        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
-        topPanel.setPreferredSize(new Dimension(0, 30));
-        topPanel.setBackground(Color.WHITE);
-        add(topPanel, BorderLayout.NORTH);
-
-        // rest panel for dividing into 4 panels
-        JPanel bottomPanel = new JPanel();
-        bottomPanel.setLayout(new GridLayout(2,2));
-        add(bottomPanel, BorderLayout.CENTER);
-
-        // divide bottomPanel into leftTop -, rightTop - , leftBottom - , rightBottom panel
-        JPanel leftTopPanel = createPanel(bottomPanel);
-        JPanel rightTopPanel = createPanel(bottomPanel);
-        JPanel leftBottomPanel = createPanel(bottomPanel);
-        JPanel rightBottomPanel = createPanel(bottomPanel);
-
-        // adding backButton to the TopPanel
-        addBackButton(topPanel, "Back", this::backToMenu);
-
-        balanceLabel = createBalanceLabel();
-        leftTopPanel.add(balanceLabel);
-
-        setBonusLabel(rightTopPanel);
-        addBonusButton(rightTopPanel);
-
+        displayButtons();
         setVisible(true);
-
     }
 
-    private void setupFrame() {
-        setTitle("Balance Manager");
+    private void setupFrame(){
+        setTitle("BalanceManager");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
         setLayout(new BorderLayout());
+    }
+
+    private void displayButtons() {
+        // top panel for back button
+        JPanel backPanel = new JPanel();
+        backPanel.setLayout(new BoxLayout(backPanel, BoxLayout.X_AXIS));
+        backPanel.setPreferredSize(new Dimension(0, 30));
+        backPanel.setBackground(Color.WHITE);
+        add(backPanel, BorderLayout.NORTH);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(2,2));
+        add(buttonPanel, BorderLayout.CENTER);
+
+        // create panel for balance and bonus button
+        JPanel balancePanel = createPanel(buttonPanel);
+        JPanel bonusPanel = createPanel(buttonPanel);
+
+        balanceLabel = createBalanceLabel();
+        balancePanel.add(balanceLabel);
+
+        bonusButton = addButton(bonusPanel, "Daily Bonus");
+        setBonusLabel(bonusPanel);
+        //back button
+        backButton = addBackButton(backPanel, "Back");
+        backPanel.add(backButton);
     }
 
     private JButton addButton(JPanel panel, String buttonText) {
@@ -65,9 +59,8 @@ public class BalanceView extends JFrame{
         return button;
     }
 
-    private JButton addBackButton(JPanel panel, String buttonText, ActionListener action) {
+    private JButton addBackButton(JPanel panel, String buttonText) {
         JButton button = new JButton(buttonText);
-        button.addActionListener(action);
         panel.add(button);
         return button;
     }
@@ -90,13 +83,13 @@ public class BalanceView extends JFrame{
                     this.onCooldownFinished.run();
                 }
             } else {
-                updateBonusView(cooldownEnd - System.currentTimeMillis());
+                updateBonusLabel(cooldownEnd - System.currentTimeMillis());
             }
         });
         cooldownTimer.start();
     }
 
-    private void updateBonusView(long remainingMillis){
+    private void updateBonusLabel(long remainingMillis){
         long hours = (remainingMillis / (1000 * 60 * 60)) % 24;
         long minutes = (remainingMillis / (1000 * 60)) % 60;
         long seconds = (remainingMillis / 1000) % 60;
@@ -130,19 +123,17 @@ public class BalanceView extends JFrame{
         panel.add(bonusLabel, gbcBonusText);
     }
 
-    public void addBonusButton(JPanel panel){
-        bonusButton = addButton(panel, "Daily Bonus");
+    public void closeView(){
+        this.dispose();
     }
 
-    private void backToMenu(ActionEvent e) {
-        dispose();
-        try {
-            ControllerFactory.getInstance().getMenuController().show();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+    public void showErrorDialog(String message) {
+        JOptionPane.showMessageDialog(this, message);
     }
 
+    public JButton getBackButton() {
+        return backButton;
+    }
 
     public JButton getBonusButton() {
         return this.bonusButton;

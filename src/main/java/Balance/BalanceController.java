@@ -1,6 +1,12 @@
 package Balance;
 
+import Factory.ControllerFactory;
+import Recipe.RecipeController;
+
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.sql.SQLException;
+import java.util.Map;
 
 public class BalanceController {
     private final BalanceView balanceView;
@@ -10,17 +16,38 @@ public class BalanceController {
         this.balanceView = balanceView;
         this.balanceModel = balanceModel;
         updateBalance(0);
-
-        balanceView.getBonusButton().addActionListener(_ ->bonusButtonClicked());
-
+        initializeButtonActions();
         checkBonusCooldown();
     }
 
-    private void bonusButtonClicked(){
+    private void initializeButtonActions() {
+        Map<JButton, BalanceController.BalanceAction> actions = Map.of(
+                balanceView.getBonusButton(), this::handleBonusButton,
+                balanceView.getBackButton(), this::handleBackToMenu
+        );
+        // Assign actions to buttons.
+        actions.forEach(this::setButtonAction);
+    }
+
+    private void handleBackToMenu(ActionEvent event) {
+        balanceView.closeView();
+        try {
+            ControllerFactory.getInstance().getMenuController().show();
+        } catch (SQLException ex) {
+            balanceView.showErrorDialog("Failed to return to the menu: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+
+    private void handleBonusButton(ActionEvent event){
         updateBalance(1000);
         long cooldownEnd = System.currentTimeMillis() + 24 * 60 * 60 * 1000;
         balanceModel.setCooldownTime(cooldownEnd);
         startBonusCooldownIfNeeded(cooldownEnd);
+    }
+
+    private void setButtonAction(JButton button, BalanceController.BalanceAction balanceAction) {
+        button.addActionListener(balanceAction::execute);
     }
 
     private void updateBalance(int bonus){
@@ -45,5 +72,10 @@ public class BalanceController {
 
     public void show() {
         balanceView.setVisible(true);
+    }
+
+    @FunctionalInterface
+    private interface BalanceAction {
+        void execute(ActionEvent event);
     }
 }
