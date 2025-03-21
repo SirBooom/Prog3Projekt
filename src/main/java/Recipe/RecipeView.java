@@ -210,7 +210,5 @@ public class RecipeView extends JFrame {
         JOptionPane.showMessageDialog(this, message);
     }
 
-
-
 }
 
