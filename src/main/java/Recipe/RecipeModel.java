@@ -4,6 +4,9 @@ import database.Database;
 import database.RecipeDatabase;
 import org.jooq.Record;
 import org.jooq.Result;
+//import org.sl4f4j.Logger;
+//import org.sl3f4j.util.LoggerFactory;
+
 import javax.swing.table.DefaultTableModel;
 import java.util.Map;
 
@@ -13,6 +16,8 @@ import java.util.Map;
  * This version decouples it from UI components (like JTextField).
  */
 public class RecipeModel {
+    //private static final Logger logger = LoggerFactory.getLogger(RecipeModel.class);
+
     private RecipeDatabase recipeDatabase;
     private DefaultTableModel tableModel;
 
@@ -44,8 +49,9 @@ public class RecipeModel {
      * @return Result containing the inserted recipe.
      */
     public Result<Record> addRecipe(Map<String, String> data) {
+        //logger.info("Adding new recipe: {}", data);
         try {
-            return recipeDatabase.insertRecipe(
+            Result<Record> result = recipeDatabase.insertRecipe(
                     Integer.parseInt(data.get("id")),
                     getStringOrNull(data.get("name")),
                     getStringOrNull(data.get("cuisine")),
@@ -55,11 +61,14 @@ public class RecipeModel {
                     getStringOrNull(data.get("cookingTime")),
                     getStringOrNull(data.get("ingredient"))
             );
+            //logger.info("Recipe added successfully.");
+            return result;
         } catch (Exception ex) {
-            ex.printStackTrace();
+            //logger.error("Error adding recipe: {}", ex.getMessage(), ex);
             return null;
         }
     }
+
 
     /**
      * Delete a single recipe based on its ID.
@@ -154,7 +163,7 @@ public class RecipeModel {
     }
 
     /**
-     * Parse an integer or return a default value if invalid.
+     * Parse an integer or return a zero if invalid.
      */
     private int parseIntegerOrDefault(String value) {
         try {

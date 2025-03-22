@@ -77,7 +77,7 @@ public class RecipeViewTest {
     }
 
     /**
-     * help - method
+     * helper method
      */
     private void setTextFieldValue(RecipeView view, String fieldName, String value) throws Exception {
         Field field = RecipeView.class.getDeclaredField(fieldName);

@@ -30,6 +30,19 @@ public class RecipeDataInputSamples {
         );
     }
 
+    public static Map<String,String> fullRecipe1DifferentCuisine() {
+        return Map.of(
+                "id", "1",
+                "name", "Margherita Pizza",
+                "cuisine", "Spanish",
+                "category", "Main Course",
+                "instructions", "Bake the pizza until the cheese melts.",
+                "nutrition", "800",
+                "cookingTime", "15",
+                "ingredient", "Dough, Tomato Sauce, Mozzarella Cheese, Basil"
+        );
+    }
+
     public static Map<String,String> fullRecipe2() {
         return Map.of(
                 "id", "2",
@@ -71,7 +84,7 @@ public class RecipeDataInputSamples {
 
     public static Map<String,String> nameInput() {
         return Map.of(
-                "id", "",
+                "id", "1",
                 "name", "Spaghetti",
                 "cuisine", "",
                 "category", "",
@@ -84,7 +97,7 @@ public class RecipeDataInputSamples {
 
     public static Map<String,String> cuisineInput() {
         return Map.of(
-                "id", "",
+                "id", "2",
                 "name", "",
                 "cuisine", "Italien",
                 "category", "",
@@ -97,7 +110,7 @@ public class RecipeDataInputSamples {
 
     public static Map<String,String> categoryInput() {
         return Map.of(
-                "id", "",
+                "id", "3",
                 "name", "",
                 "cuisine", "",
                 "category", "Main Course",
@@ -110,7 +123,7 @@ public class RecipeDataInputSamples {
 
     public static Map<String,String> instructionsInput() {
         return Map.of(
-                "id", "",
+                "id", "4",
                 "name", "",
                 "cuisine", "",
                 "category", "",
@@ -129,7 +142,7 @@ public class RecipeDataInputSamples {
 
     public static Map<String,String> nutritionInput() {
         return Map.of(
-                "id", "",
+                "id", "1",
                 "name", "",
                 "cuisine", "",
                 "category", "",
@@ -142,7 +155,7 @@ public class RecipeDataInputSamples {
 
     public static Map<String,String> cookingTimeInput() {
         return Map.of(
-                "id", "",
+                "id", "2",
                 "name", "",
                 "cuisine", "",
                 "category", "",
@@ -155,7 +168,7 @@ public class RecipeDataInputSamples {
 
     public static Map<String,String> ingredientInput() {
         return Map.of(
-                "id", "",
+                "id", "3",
                 "name", "",
                 "cuisine", "",
                 "category", "",
