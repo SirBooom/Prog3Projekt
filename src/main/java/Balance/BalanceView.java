@@ -1,19 +1,21 @@
 package Balance;
 
+import FileData.FileHandler;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class BalanceView extends JFrame{
+public class BalanceView extends JFrame {
     private JButton bonusButton;
     private JLabel balanceLabel;
     private JLabel bonusLabel;
     private Timer cooldownTimer;
     private Runnable onCooldownFinished;
     private JButton backButton;
+
     public BalanceView(){
         setupFrame();
         displayButtons();
-        setVisible(true);
     }
 
     private void setupFrame(){
@@ -45,27 +47,17 @@ public class BalanceView extends JFrame{
         bonusButton = addButton(bonusPanel, "Daily Bonus");
         setBonusLabel(bonusPanel);
         //back button
-        backButton = addBackButton(backPanel, "Back");
+        backButton = addButton(backPanel, "Back");
         backPanel.add(backButton);
     }
 
     private JButton addButton(JPanel panel, String buttonText) {
         JButton button = new JButton(buttonText);
-        button.setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
-        button.setFont(new Font("Cambria", Font.ITALIC, 35));
-        button.setOpaque(true);
-        button.setBackground(Color.getHSBColor(0f, 0f, 1f));
         panel.add(button);
         return button;
     }
 
-    private JButton addBackButton(JPanel panel, String buttonText) {
-        JButton button = new JButton(buttonText);
-        panel.add(button);
-        return button;
-    }
-
-    public void updateBalanceLabel(int newBalance){
+    public void updateBalanceLabel(float newBalance){
         balanceLabel.setText("<html>Your Current Balance: " + newBalance + "   EUR </html>");
     }
 
@@ -121,6 +113,9 @@ public class BalanceView extends JFrame{
         gbcBonusText.gridy = 1;
         gbcBonusText.insets = new Insets(10, 10, 10, 10);
         panel.add(bonusLabel, gbcBonusText);
+    }
+    public void showSuccessDialog() {
+        JOptionPane.showMessageDialog(this, 1000 + " EUR Bonus has been added to your balance");
     }
 
     public void closeView(){
