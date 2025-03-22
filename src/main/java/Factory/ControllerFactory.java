@@ -19,11 +19,16 @@ public class ControllerFactory {
 
 
     private static  ControllerFactory instance;
+    private final DSLContext context;
 
     private MenuController menuController;
     private RecipeController recipeController;
     private ShopController shopManager;
     private BalanceController balanceController;
+
+    private ControllerFactory() throws SQLException {
+        this.context = Database.getDslContext();
+    }
 
     public static ControllerFactory getInstance() throws SQLException {
             if (instance == null) {
@@ -41,14 +46,14 @@ public class ControllerFactory {
 
     public RecipeController getRecipeController() {
         if (recipeController == null) {
-            recipeController = new RecipeController(new RecipeView(), new RecipeModel());
+            recipeController = new RecipeController(new RecipeView(), new RecipeModel(context));
         }
         return recipeController;
     }
 
     public ShopController getShopController() {
         if (shopManager == null) {
-            shopManager = new ShopController(new ShopView(), new ShopModel());
+            shopManager = new ShopController(new ShopView(), new ShopModel(context));
         }
         return shopManager;
     }

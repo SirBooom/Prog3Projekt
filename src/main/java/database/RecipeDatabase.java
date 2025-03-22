@@ -31,6 +31,14 @@ public class RecipeDatabase {
             throw new IllegalArgumentException("ID and name cannot be invalid or null");
         }
 
+        if(context.fetchExists(RECIPE, RECIPE.ID.eq(id))){
+        throw new IllegalArgumentException("Recipe with ID " + id + " already exists.");
+        }
+
+        if(context.fetchExists(RECIPE, RECIPE.NAME.eq(name))){
+            throw new IllegalArgumentException("Recipe with name " + name + " already exists.");
+        }
+
         context.insertInto(RECIPE)
                 .columns(RECIPE.ID, RECIPE.NAME, RECIPE.CUISINE, RECIPE.CATEGORY,
                         RECIPE.INSTRUCTIONS, RECIPE.NUTRITION, RECIPE.COOKINGTIME,

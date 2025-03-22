@@ -2,70 +2,101 @@ package Menu;
 
 import Factory.ControllerFactory;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 import java.sql.SQLException;
+import java.util.Map;
 
 public record MenuController(MenuView menuView) {
 
     public MenuController(MenuView menuView) {
         this.menuView = menuView;
-
-        menuView.addButtonListener(menuView.getRecipeButton(), e -> handleRecipeButton());
-        menuView.addButtonListener(menuView.getIngredientsButton(), e -> handleIngredientsButton());
-        menuView.addButtonListener(menuView.getBalanceButton(), e -> handleBalanceButton());
+        
+        initializeButtonActions();
+       
     }
 
-
-    private void handleRecipeButton() {
+    public void initializeButtonActions() {
+        Map<JButton, MenuAction> actions = Map.of(
+                menuView.getRecipeButton(), this::handleRecipeButton,
+                menuView.getShopButton(), this::handleShopButton,
+                menuView.getBalanceButton(), this::handleBalanceButton);
+        
+        actions.forEach(this::setButtonAction);
+    }
+    
+    private void handleRecipeButton(ActionEvent event) {
         try {
             openRecipeView();
         } catch (SQLException ex) {
-            handleError("Failed to open Recipe View", ex);
+            handleUnexpectedError("Failed to open Recipe View", ex);
         }
     }
 
-    private void handleIngredientsButton() {
+    private void handleShopButton(ActionEvent event) {
         try {
             openShopView();
         } catch (SQLException ex) {
-            handleError("Failed to open Ingredients View", ex);
+            handleUnexpectedError("Failed to open Ingredients View", ex);
         }
     }
 
-    private void handleBalanceButton() {
+    private void handleBalanceButton(ActionEvent event) {
         try {
             openBalanceView();
         } catch (SQLException ex) {
-            handleError("Failed to open Balance View", ex);
+            handleUnexpectedError("Failed to open Balance View", ex);
         }
     }
 
-    private void handleError(String message, Exception ex) {
+    /**
+     * Adds an ActionListener to a button.
+     *
+     * @param button   The button to which the listener will be added.
+     * @param menuAction The Action to be executed upon button press.
+     */
+    private void setButtonAction(JButton button, MenuAction menuAction) {
+        button.addActionListener(menuAction::execute);
+    }
+
+    public void handleUnexpectedError(String message, Exception ex) {
         menuView.showError(message);
-        //ex.printStackTrace();
     }
 
     private void openRecipeView() throws SQLException {
-        menuView.setVisible(false);
+        menuView.closeView();
         ControllerFactory.getInstance().getRecipeController().show();
     }
 
     private void openShopView() throws SQLException {
-        menuView.setVisible(false);
+        menuView.closeView();
         ControllerFactory.getInstance().getShopController().show();
     }
 
     private void openBalanceView() throws SQLException {
-        menuView.setVisible(false);
+        menuView.closeView();
         ControllerFactory.getInstance().getBalanceController().show();
     }
 
-    // show menu view
     public void show() {
-        menuView.setVisible(true);
+        menuView.showView();
     }
 
-    public void closeView() {
-        menuView.setVisible(false);
+    /**
+     * Funktionales Interface, das eine Aktion repräsentiert, die durch eine Benutzerinteraktion in
+     * dem view ausgelöst wird, z.B. click auf einen Button. Die Aktion ist dazu gedacht, das
+     * Ereignis im Controller zu verarbeiten.
+     */
+    @FunctionalInterface
+    private interface MenuAction {
+
+        /**
+         * Führt die Aktion basierend auf einem vom Benutzer ausgelösten Ereignis aus.
+         *
+         * @param event Das ActionEvent, das mit der Interaktion des Benutzers verknüpft ist z.B.
+         *              ein button click.
+         */
+        void execute(ActionEvent event);
     }
 
 }

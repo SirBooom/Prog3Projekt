@@ -1,31 +1,37 @@
 package Balance;
 
-import FileData.FileHandler;
+import MVC.View;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class BalanceView extends JFrame {
+public class BalanceView extends View {
     private JButton bonusButton;
     private JLabel balanceLabel;
     private JLabel bonusLabel;
     private Timer cooldownTimer;
     private Runnable onCooldownFinished;
-    private JButton backButton;
 
     public BalanceView(){
+
         setupFrame();
-        displayButtons();
+
+        // create buttons for user to interact with
+        createButtons();
     }
 
-    private void setupFrame(){
-        setTitle("BalanceManager");
+    ///////////////////////////////////// --- Construct The Shop View --- /////////////////////////////////////
+
+    @Override
+    protected void setupFrame(){
+        setTitle("Balance Manager");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
         setLayout(new BorderLayout());
     }
 
-    private void displayButtons() {
+    @Override
+    protected void createButtons() {
         // top panel for back button
         JPanel backPanel = new JPanel();
         backPanel.setLayout(new BoxLayout(backPanel, BoxLayout.X_AXIS));
@@ -46,20 +52,32 @@ public class BalanceView extends JFrame {
 
         bonusButton = addButton(bonusPanel, "Daily Bonus");
         setBonusLabel(bonusPanel);
-        //back button
+
         backButton = addButton(backPanel, "Back");
         backPanel.add(backButton);
     }
 
-    private JButton addButton(JPanel panel, String buttonText) {
-        JButton button = new JButton(buttonText);
-        panel.add(button);
-        return button;
+    public JPanel createPanel(JPanel panel){
+        JPanel jPanel = new JPanel(new GridBagLayout());
+        jPanel.setBackground(Color.WHITE);
+        panel.add(jPanel);
+        return jPanel;
     }
 
-    public void updateBalanceLabel(float newBalance){
-        balanceLabel.setText("<html>Your Current Balance: " + newBalance + "   EUR </html>");
+    public JLabel createBalanceLabel(){
+        balanceLabel = new JLabel("<html>Your Current Balance: " + "1000" + " EUR </html>");
+        balanceLabel.setPreferredSize(new Dimension(300, 250));
+        balanceLabel.setFont(new Font("Cambria", Font.BOLD, 35));
+        return balanceLabel;
     }
+
+    ///////////////////////////////////// --- Obtain The Visual Data --- /////////////////////////////////////
+
+    public JButton getBonusButton() {
+        return this.bonusButton;
+    }
+
+    ////////////////////////////////// --- View Methods --- ////////////////////////////////////////
 
     public void startBonusCooldown(long cooldownEnd, Runnable onCooldownFinished) {
         this.onCooldownFinished = onCooldownFinished;
@@ -88,21 +106,6 @@ public class BalanceView extends JFrame {
         bonusLabel.setText(String.format("Available in: %02dh %02dm %02ds", hours, minutes, seconds));
     }
 
-    //creates and returns a new panel and adds it to panel
-    public JPanel createPanel(JPanel panel){
-        JPanel jPanel = new JPanel(new GridBagLayout());
-        jPanel.setBackground(Color.WHITE);
-        panel.add(jPanel);
-        return jPanel;
-    }
-
-    public JLabel createBalanceLabel(){
-        balanceLabel = new JLabel("<html>Your Current Balance: " + "1000" + " EUR </html>");
-        balanceLabel.setPreferredSize(new Dimension(300, 250));
-        balanceLabel.setFont(new Font("Cambria", Font.BOLD, 35));
-        return balanceLabel;
-    }
-
     public void setBonusLabel(JPanel panel){
         // Bonus-Button mit Cooldown
         bonusLabel = new JLabel("Bonus available!");
@@ -114,23 +117,10 @@ public class BalanceView extends JFrame {
         gbcBonusText.insets = new Insets(10, 10, 10, 10);
         panel.add(bonusLabel, gbcBonusText);
     }
-    public void showSuccessDialog() {
-        JOptionPane.showMessageDialog(this, 1000 + " EUR Bonus has been added to your balance");
+
+    public void updateBalanceLabel(float newBalance){
+        balanceLabel.setText("<html>Your Current Balance: " + newBalance + "   EUR </html>");
     }
 
-    public void closeView(){
-        this.dispose();
-    }
 
-    public void showErrorDialog(String message) {
-        JOptionPane.showMessageDialog(this, message);
-    }
-
-    public JButton getBackButton() {
-        return backButton;
-    }
-
-    public JButton getBonusButton() {
-        return this.bonusButton;
-    }
 }

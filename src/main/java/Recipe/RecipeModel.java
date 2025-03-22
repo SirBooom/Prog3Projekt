@@ -2,10 +2,11 @@ package Recipe;
 
 import database.Database;
 import database.RecipeDatabase;
+import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Result;
-//import org.sl4f4j.Logger;
-//import org.sl3f4j.util.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.Map;
@@ -16,16 +17,15 @@ import java.util.Map;
  * This version decouples it from UI components (like JTextField).
  */
 public class RecipeModel {
-    //private static final Logger logger = LoggerFactory.getLogger(RecipeModel.class);
-
-    private RecipeDatabase recipeDatabase;
+    private static final Logger logger = LoggerFactory.getLogger(RecipeModel.class);
+    private final RecipeDatabase recipeDatabase;
     private DefaultTableModel tableModel;
 
-    public RecipeModel() {
+    public RecipeModel(DSLContext context) {
         try {
-            recipeDatabase = new RecipeDatabase(Database.getDslContext());
+            recipeDatabase = new RecipeDatabase(context);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException("Error initializing RecipeModel: " + e.getMessage(), e);
         }
         this.tableModel = null;
     }
@@ -38,8 +38,7 @@ public class RecipeModel {
         try {
             return recipeDatabase.showRecipes();
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
+            throw new RuntimeException("Error reloading recipes: " + ex.getMessage(), ex);
         }
     }
 
@@ -49,9 +48,8 @@ public class RecipeModel {
      * @return Result containing the inserted recipe.
      */
     public Result<Record> addRecipe(Map<String, String> data) {
-        //logger.info("Adding new recipe: {}", data);
         try {
-            Result<Record> result = recipeDatabase.insertRecipe(
+            return  recipeDatabase.insertRecipe(
                     Integer.parseInt(data.get("id")),
                     getStringOrNull(data.get("name")),
                     getStringOrNull(data.get("cuisine")),
@@ -61,11 +59,10 @@ public class RecipeModel {
                     getStringOrNull(data.get("cookingTime")),
                     getStringOrNull(data.get("ingredient"))
             );
-            //logger.info("Recipe added successfully.");
-            return result;
+        } catch (NumberFormatException ex) {
+            throw new IllegalArgumentException("Invalid input: ID must be an integer.", ex);
         } catch (Exception ex) {
-            //logger.error("Error adding recipe: {}", ex.getMessage(), ex);
-            return null;
+            throw new RuntimeException("Error adding recipe: " + ex.getMessage(), ex);
         }
     }
 
@@ -79,9 +76,10 @@ public class RecipeModel {
         try {
             int parsedId = Integer.parseInt(id);
             return recipeDatabase.deleteRecipe(parsedId);
+        } catch (NumberFormatException ex) {
+            throw new IllegalArgumentException("Invalid input: ID must be an integer.", ex);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
+            throw new RuntimeException("Error deleting recipe: " + ex.getMessage(), ex);
         }
     }
 
@@ -92,9 +90,8 @@ public class RecipeModel {
         try {
             return recipeDatabase.deleteAllRecipes();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            throw new RuntimeException("Error deleting all recipes: " + ex.getMessage(), ex);
         }
-        return reloadRecipes();
     }
 
     /**
@@ -114,9 +111,10 @@ public class RecipeModel {
                     getStringOrNull(data.get("cookingTime")),
                     getStringOrNull(data.get("ingredient"))
             );
+        } catch (NumberFormatException ex) {
+            throw new IllegalArgumentException("Invalid input: ID must be an integer.", ex);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
+            throw new RuntimeException("Error updating recipe: " + ex.getMessage(), ex);
         }
     }
 
@@ -139,8 +137,7 @@ public class RecipeModel {
                     getStringOrNull(data.get("ingredient"))
             );
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
+            throw new RuntimeException("Error filtering recipes: " + ex.getMessage(), ex);
         }
     }
 
@@ -158,7 +155,7 @@ public class RecipeModel {
         try {
             return value == null || value.trim().isEmpty() ? null : Integer.parseInt(value.trim());
         } catch (NumberFormatException ex) {
-            return null;
+            return null; // Or throw an exception depending on your needs.
         }
     }
 
@@ -169,7 +166,7 @@ public class RecipeModel {
         try {
             return value == null || value.trim().isEmpty() ? 0 : Integer.parseInt(value.trim());
         } catch (NumberFormatException ex) {
-            return 0;
+            return 0; // Or throw an exception depending on your needs.
         }
     }
 

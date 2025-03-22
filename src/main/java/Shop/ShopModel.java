@@ -4,6 +4,8 @@ import database.Database;
 import database.ShopDatabase;
 import java.util.Map;
 import javax.swing.table.DefaultTableModel;
+
+import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Result;
 
@@ -11,9 +13,9 @@ public class ShopModel {
     private ShopDatabase shopDatabase;
     private DefaultTableModel tableModel;
 
-    public ShopModel() {
+    public ShopModel(DSLContext context) {
         try {
-            shopDatabase = new ShopDatabase(Database.getDslContext());
+            shopDatabase = new ShopDatabase(context);
         } catch (Exception e) {
             e.printStackTrace();
         }

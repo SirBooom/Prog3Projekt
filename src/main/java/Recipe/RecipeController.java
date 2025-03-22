@@ -1,13 +1,14 @@
 package Recipe;
 
 import Factory.ControllerFactory;
-import com.example.generated.tables.Recipe;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.Map;
 import javax.swing.*;
+
 import org.jooq.Record;
 import org.jooq.Result;
+import org.jooq.exception.DataAccessException;
 
 /**
  * This class handles the interactions between RecipeView and RecipeModel. It sets up actions for UI
@@ -23,7 +24,7 @@ public record RecipeController(RecipeView recipeView, RecipeModel recipeModel) {
         initializeButtonActions();
     }
 
-    private void initializeButtonActions() {
+    public void initializeButtonActions() {
         Map<JButton, RecipeAction> actions = Map.of(
                 recipeView.getLoadButton(), this::handleLoadRecipes,
                 recipeView.getDeleteAllRecipeButton(), this::handleDeleteAllRecipes,
@@ -91,7 +92,7 @@ public record RecipeController(RecipeView recipeView, RecipeModel recipeModel) {
             } else {
                 recipeView.showErrorDialog(RecipeMessage.ERROR_UPDATING_RECIPE);
             }
-        } catch (Exception ex) {
+        } catch (DataAccessException ex) {
             handleUnexpectedError(ex);
         }
     }
@@ -131,13 +132,12 @@ public record RecipeController(RecipeView recipeView, RecipeModel recipeModel) {
         }
     }
 
-    private void handleUnexpectedError(Exception ex) {
-        ex.printStackTrace();
-        recipeView.showErrorDialog("An unexpected error occurred: " + ex.getMessage());
+    public void handleUnexpectedError(Exception ex) {
+        recipeView.showErrorDialog(ex.getMessage());
     }
 
     public void show() {
-        recipeView.setVisible(true);
+        recipeView.showView();
     }
 
     /**
@@ -159,7 +159,7 @@ public record RecipeController(RecipeView recipeView, RecipeModel recipeModel) {
 
     /**
      * Funktionales Interface, das eine Aktion auf dem Model repräsentiert, typischerweise
-     * einhergehend mit Datenabruf, einfügen, löschen, updaten, etc..
+     * einhergehend mit Datenabruf, einfügen, löschen, updaten, etc.
      */
     @FunctionalInterface
     private interface RecipeModelAction {

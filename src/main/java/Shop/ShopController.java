@@ -79,7 +79,7 @@ public record ShopController(ShopView shopView, ShopModel shopModel) {
     }
 
     public void show() {
-        shopView.setVisible(true);
+        shopView.showView();
     }
 
     @FunctionalInterface

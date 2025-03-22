@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import MVC.View;
 import java.awt.*;
 import org.jooq.Record;
 import org.jooq.Result;
@@ -13,7 +14,7 @@ import org.jooq.Result;
  * The RecipeView class represents the graphical user interface (GUI) for managing recipes.
  * It is built as an extension of the JFrame class and serves for display purposes ONLY
  */
-public class RecipeView extends JFrame {
+public class RecipeView extends View {
 
     protected JTable recipeTable;
     private DefaultTableModel tableModel;
@@ -21,13 +22,12 @@ public class RecipeView extends JFrame {
     private JTextField idField, nameField, cuisineField, categoryField, instructionsField,
             nutritionField, cookingTimeField, ingredientField;
 
-    private JButton loadButton;
+    //private JButton loadButton;
     private JButton addRecipeButton;
     private JButton deleteRecipeButton;
     private JButton updateRecipeButton;
     private JButton filterRecipeButton;
     private JButton deleteAllRecipeButton;
-    private JButton backButton;
 
 
     public RecipeView() {
@@ -43,14 +43,12 @@ public class RecipeView extends JFrame {
         // create buttons for user to interact with
         createButtons();
 
-        // display the frame
-        setVisible(true);
     }
 
 
-    ///////////////////////////////////// --- Construct The Recipe View --- /////////////////////////////////////
-
-    private void setupFrame() {
+    ///////////////////////////////////// --- Construct The Recipe MVC.View --- /////////////////////////////////////
+    @Override
+    protected void setupFrame() {
         setTitle("Recipes Manager");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1440, 880);
@@ -79,7 +77,8 @@ public class RecipeView extends JFrame {
         add(inputPanel, BorderLayout.SOUTH);
     }
 
-    private void createButtons() {
+    @Override
+    protected void createButtons() {
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
@@ -116,20 +115,10 @@ public class RecipeView extends JFrame {
         return textField;
     }
 
-    private JButton addButton(JPanel panel, String buttonText) {
-        JButton button = new JButton(buttonText);
-        panel.add(button);
-        return button;
-    }
-
-    ///////////////////////////////////// --- Obtain The Visual Data --- /////////////////////////////////////
+    /// ////////////////////////////////// --- Obtain The Visual Data --- /////////////////////////////////////
 
     public DefaultTableModel getTableModel() {
         return tableModel;
-    }
-
-    public JButton getLoadButton() {
-        return loadButton;
     }
 
     public JButton getAddRecipeButton() {
@@ -152,10 +141,6 @@ public class RecipeView extends JFrame {
         return deleteAllRecipeButton;
     }
 
-    public JButton getBackButton() {
-        return backButton;
-    }
-
     public Map<String, String> getFormData() {
         Map<String, String> formData = new HashMap<>();
         formData.put("id", idField.getText());
@@ -169,18 +154,7 @@ public class RecipeView extends JFrame {
         return formData;
     }
 
-    public void setFormData(Map<String, String> formData) {
-        idField.setText(formData.getOrDefault("id", ""));
-        nameField.setText(formData.getOrDefault("name", ""));
-        cuisineField.setText(formData.getOrDefault("cuisine", ""));
-        categoryField.setText(formData.getOrDefault("category", ""));
-        instructionsField.setText(formData.getOrDefault("instructions", ""));
-        nutritionField.setText(formData.getOrDefault("nutrition", ""));
-        cookingTimeField.setText(formData.getOrDefault("cookingTime", ""));
-        ingredientField.setText(formData.getOrDefault("ingredient", ""));
-    }
-
-    ///////////////////////////////////// --- View Methods --- /////////////////////////////////////
+    /// ////////////////////////////////// --- View Methods --- /////////////////////////////////////
 
     public void loadTable(Result<Record> result) {
         tableModel.setRowCount(0);
@@ -196,18 +170,6 @@ public class RecipeView extends JFrame {
                     record.getValue(RECIPE.INGREDIENT)
             });
         });
-    }
-
-    public void closeView(){
-        this.dispose();
-    }
-
-    public void showErrorDialog(String message) {
-        JOptionPane.showMessageDialog(this, message);
-    }
-
-    public void showSuccessDialog(String message) {
-        JOptionPane.showMessageDialog(this, message);
     }
 
 }

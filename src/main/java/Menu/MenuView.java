@@ -1,14 +1,13 @@
 package Menu;
 
 import java.awt.*;
-import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class MenuView extends JFrame {
 
     // buttons for menu
     private final JButton recipeButton;
-    private final JButton ingredientsButton;
+    private final JButton shopButton;
     private final JButton balanceButton;
 
     public MenuView() {
@@ -16,21 +15,19 @@ public class MenuView extends JFrame {
         setupFrame();
 
         // add the welcome title at the top
-        addWelcomeLabel();
+        createWelcomeLabel();
 
         // panel for buttons
         JPanel buttonPanel = createButtonPanel();
 
         // create and add buttons
         recipeButton = createAndAddButton("Recipe", buttonPanel);
-        ingredientsButton = createAndAddButton("Shop", buttonPanel);
+        shopButton = createAndAddButton("Shop", buttonPanel);
         balanceButton = createAndAddButton("Balance", buttonPanel);
 
         // add the button panel to the center of the frame
         add(buttonPanel, BorderLayout.CENTER);
 
-        // show the frame
-        setVisible(true);
     }
 
     /**
@@ -47,7 +44,7 @@ public class MenuView extends JFrame {
     /**
      * Adds a welcome label to the top of the Menu.MenuView.
      */
-    private void addWelcomeLabel() {
+    private void createWelcomeLabel() {
         JLabel welcomeLabel = new JLabel("Welcome to Recipes Paradise!", SwingUtilities.CENTER);
         welcomeLabel.setFont(new Font("Calibri", Font.BOLD, 40));
         welcomeLabel.setBorder(BorderFactory.createEmptyBorder(150, 0, 20, 0));
@@ -95,15 +92,6 @@ public class MenuView extends JFrame {
         return button;
     }
 
-    /**
-     * Adds an ActionListener to a button.
-     *
-     * @param button   The button to which the listener will be added.
-     * @param listener The ActionListener for the button.
-     */
-    public void addButtonListener(JButton button, ActionListener listener) {
-        button.addActionListener(listener);
-    }
 
     /**
      * Displays an error message in a dialog.
@@ -118,11 +106,19 @@ public class MenuView extends JFrame {
         return recipeButton;
     }
 
-    public JButton getIngredientsButton() {
-        return ingredientsButton;
+    public JButton getShopButton() {
+        return shopButton;
     }
 
     public JButton getBalanceButton() {
         return balanceButton;
+    }
+
+    public void closeView(){
+        this.setVisible(false);
+    }
+
+    public void showView(){
+        this.setVisible(true);
     }
 }

@@ -1,6 +1,8 @@
 import Factory.ControllerFactory;
 import Menu.MenuController;
 import database.Database;
+import database.RecipeDatabase;
+import database.ShopDatabase;
 import org.jooq.DSLContext;
 
 public class Application {
@@ -11,18 +13,13 @@ public class Application {
 
         System.out.println("Initializing database connection...");
 
-        //DSLContext context = Database.getDslContext(); // DatabaseManager is your singleton class for managing the database.
-
         ControllerFactory controllerFactory = ControllerFactory.getInstance();
+
+        System.out.println("Database connection initialized successfully.");
 
         menuController = controllerFactory.getMenuController();
 
         menuController.show();
 
     }
-
-    public void exit() {
-        menuController.closeView();
-    }
-
 }

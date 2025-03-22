@@ -1,7 +1,6 @@
 package Balance;
 
 import Factory.ControllerFactory;
-import Recipe.RecipeController;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -20,7 +19,7 @@ public class BalanceController {
         checkBonusCooldown();
     }
 
-    private void initializeButtonActions() {
+    public void initializeButtonActions() {
         Map<JButton, BalanceController.BalanceAction> actions = Map.of(
                 balanceView.getBonusButton(), this::handleBonusButton,
                 balanceView.getBackButton(), this::handleBackToMenu
@@ -55,7 +54,7 @@ public class BalanceController {
         balanceModel.setBalance(newBalance);
         balanceView.updateBalanceLabel(newBalance);
         if (bonus>0) {
-            JOptionPane.showMessageDialog(balanceView, bonus + " EUR Bonus has been added to your balance");
+            balanceView.showSuccessDialog(1000 + " EUR Bonus has been added to your balance");
         }
     }
 
@@ -71,7 +70,7 @@ public class BalanceController {
     }
 
     public void show() {
-        balanceView.setVisible(true);
+        balanceView.showView();
     }
 
     @FunctionalInterface

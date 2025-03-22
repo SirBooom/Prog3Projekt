@@ -20,16 +20,16 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+
+import MVC.View;
 import org.jooq.Record;
 import org.jooq.Result;
 
-public class ShopView extends JFrame  {
+public class ShopView extends View {
 
     private DefaultTableModel tableModel;
 
-    private JButton loadButton;
     private JButton buyButton;
-    private JButton backButton;
 
     private JTextField idField, amountField;
 
@@ -46,13 +46,11 @@ public class ShopView extends JFrame  {
         // create buttons for user to interact with
         createButtons();
 
-        // display the frame
-        setVisible(true);
     }
 
     ///////////////////////////////////// --- Construct The Shop View --- /////////////////////////////////////
-
-    private void setupFrame() {
+    @Override
+    protected void setupFrame() {
         setTitle("Shop");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 800);
@@ -67,10 +65,10 @@ public class ShopView extends JFrame  {
         ingredientTable.setFont(new Font("Camibri", Font.BOLD, 15));
     }
 
-    private void createButtons() {
+    @Override
+    protected void createButtons() {
 
         JPanel buttonPanel = new JPanel();
-        //buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 
         loadButton = addButton(buttonPanel, "Load ingredients");
         buyButton = addButton(buttonPanel, "Buy Item");
@@ -119,24 +117,10 @@ public class ShopView extends JFrame  {
         setVisible(true);
     }
 
-    private JButton addButton(JPanel panel, String buttonText) {
-        JButton button = new JButton(buttonText);
-        panel.add(button);
-        return button;
-    }
-
     ///////////////////////////////////// --- Obtain The Visual Data --- /////////////////////////////////////
 
     public DefaultTableModel getTableModel() {
         return tableModel;
-    }
-
-    public JButton getLoadButton() {
-        return loadButton;
-    }
-
-    public JButton getBackButton() {
-        return backButton;
     }
 
     public JButton getBuyButton() {
@@ -163,18 +147,6 @@ public class ShopView extends JFrame  {
                     record.getValue(SHOP.NUTRITION),
             });
         });
-    }
-
-    public void closeView() {
-        this.dispose();
-    }
-
-    public void showErrorDialog(String message) {
-        JOptionPane.showMessageDialog(this, message);
-    }
-
-    public void showSuccessDialog(String message) {
-        JOptionPane.showMessageDialog(this, message);
     }
 
     private void showItemDialog(JPanel panel){
