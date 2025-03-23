@@ -167,43 +167,63 @@ public class RecipeModelTest {
     }
 
 
-    @AfterAll
-    void tearDownAll() throws SQLException {
-        context.dropTable(RECIPE).execute();
-    }
-
-    private DSLContext createDSLContext() throws SQLException {
-        Connection connection = DriverManager.getConnection("jdbc:h2:mem:testdb");
-        return DSL.using(connection, SQLDialect.H2); //Replace with your dialect
-    }
+    ////////////////////////////////////////// -- Add RECIPE -- //////////////////////////////////////////
 
     @Test
-    void testReloadRecipes() {
-        // Add a recipe to the database
-        Map<String, String> recipeData = new HashMap<>();
-        recipeData.put("id", "1");
-        recipeData.put("name", "Test Recipe");
-        model.addRecipe(recipeData);
-
-        Result<Record> result = model.reloadRecipes();
+    void testAddRecipe_FullRecipe() {
+        Result<Record> result = model.addRecipe(RecipeDataHelper.fullRecipe1());
         assertNotNull(result);
         assertEquals(1, result.size());
+        assertRecipeDataEquals(result.getFirst(), RecipeDataHelper.fullRecipe1());
     }
 
     @Test
-    void testAddRecipe() {
-        Map<String, String> recipeData = new HashMap<>();
-        recipeData.put("id", "1");
-        recipeData.put("name", "Test Recipe");
-        recipeData.put("cuisine", "Italian");
-
-        Result<Record> result = model.addRecipe(recipeData);
+    void testAddRecipe_PartialData() {
+        Map<String, String> partialData = Map.of("id", "4", "name", "Test Recipe");
+        Result<Record> result = model.addRecipe(partialData);
         assertNotNull(result);
-        assertEquals(1, result.size()); // Verify one record added
-
+        assertEquals(1, result.size());
         Record addedRecipe = result.getFirst();
         assertEquals("Test Recipe", addedRecipe.get(RECIPE.NAME));
-        assertEquals("Italian", addedRecipe.get(RECIPE.CUISINE));
+        assertNull(addedRecipe.get(RECIPE.CUISINE));
+        assertNull(addedRecipe.get(RECIPE.CATEGORY));
+    }
+
+    @Test
+    void testAddRecipe_EmptyInput() {
+        assertThrows(IllegalArgumentException.class, () -> model.addRecipe(RecipeDataHelper.emptyInput()));
+    }
+
+    @Test
+    void testAddRecipe_NegativeID() {
+        assertThrows(RuntimeException.class, () -> model.addRecipe(RecipeDataHelper.negativeID()));
+    }
+
+    @Test
+    void testAddRecipe_NullName() {
+        assertThrows(RuntimeException.class, () -> model.addRecipe(RecipeDataHelper.IdInput()));
+    }
+
+    @Test
+    void testAddRecipe_existingID() {
+        model.addRecipe(RecipeDataHelper.fullRecipe3()); // Add a recipe with ID 1
+        assertThrows(RuntimeException.class, () -> model.addRecipe(RecipeDataHelper.existingID())); // Attempt to add a duplicate
+    }
+
+    @Test
+    void testAddRecipe_existingName() {
+        model.addRecipe(RecipeDataHelper.fullRecipe1()); // Add a recipe with ID 1
+        assertThrows(RuntimeException.class, () -> model.addRecipe(RecipeDataHelper.existingName())); // Attempt to add a duplicate
+    }
+
+    ////////////////////////////////////////// -- Delete RECIPE -- //////////////////////////////////////////
+
+    @Test
+    void testDeleteRecipe_NonExisting() { assertThrows(RuntimeException.class, () -> model.deleteRecipe("999"));
+    }
+
+    @Test
+    void testDeleteRecipe_NullID() { assertThrows(IllegalArgumentException.class, () -> model.deleteRecipe(""));
     }
 
     @Test
@@ -218,111 +238,24 @@ public class RecipeModelTest {
         assertEquals(0, afterDelete.size());
     }
 
-    @Test
-    void testDeleteAllRecipes() {
-        model.addRecipe(Map.of("id", "1", "name", "Test")); // Add a recipe
-        model.addRecipe(Map.of("id", "2", "name", "Test2")); // Add another recipe
-
-        Result<Record> beforeDeleteAll = model.reloadRecipes();
-        assertEquals(2,beforeDeleteAll.size());
-
-        model.deleteAllRecipes();
-        Result<Record> afterDeleteAll = model.reloadRecipes();
-        assertEquals(0, afterDeleteAll.size());
-    }
-
-    @Test
-    void testUpdateRecipe() {
-        Map<String, String> initialData = Map.of("id", "1", "name", "Old Name");
-        model.addRecipe(initialData);
-
-        Map<String, String> updatedData = Map.of("id", "1", "name", "New Name");
-        model.updateRecipe(updatedData);
-        Record updatedRecipe = context.selectFrom(RECIPE).where(RECIPE.ID.eq(1)).fetchOne();
-        assertNotNull(updatedRecipe);
-        assertEquals("New Name", updatedRecipe.get(RECIPE.NAME));
-    }
-
-    @Test
-    void testFilterRecipes() {
-        model.addRecipe(Map.of("id", "1", "name", "Italian Pasta", "cuisine", "Italian"));
-        model.addRecipe(Map.of("id", "2", "name", "Mexican Tacos", "cuisine", "Mexican"));
-
-        Map<String, String> filterCriteria = new HashMap<>();
-        filterCriteria.put("cuisine", "Italian");
-        Result<Record> filteredRecipes = model.filterRecipes(filterCriteria);
-        assertEquals(1, filteredRecipes.size());
-        assertEquals("Italian Pasta", filteredRecipes.getFirst().get(RECIPE.NAME));
-    }
-
-    @Test
-    void testAddRecipe_FullRecipe() {
-        Result<Record> result = model.addRecipe(RecipeDataInputSamples.fullRecipe1());
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        assertRecipeDataEquals(result.getFirst(), RecipeDataInputSamples.fullRecipe1());
-    }
-
-    @Test
-    void testAddRecipe_PartialData() {
-        Map<String, String> partialData = Map.of("id", "4", "name", "Test Recipe");
-        Result<Record> result = model.addRecipe(partialData);
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        Record addedRecipe = result.getFirst();
-        assertEquals("Test Recipe", addedRecipe.get(RECIPE.NAME));
-        assertNull(addedRecipe.get(RECIPE.CUISINE)); //Verify other fields are null
-        assertNull(addedRecipe.get(RECIPE.CATEGORY));
-    }
-
-    @Test
-    void testAddRecipe_EmptyInput() {
-        assertThrows(IllegalArgumentException.class, () -> model.addRecipe(RecipeDataInputSamples.emptyInput()));
-    }
-
-    @Test
-    void testAddRecipe_NegativeID() {
-        assertThrows(RuntimeException.class, () -> model.addRecipe(RecipeDataInputSamples.negativeID()));
-    }
-
-    @Test
-    void testAddRecipe_ExistingID() {
-        model.addRecipe(RecipeDataInputSamples.fullRecipe1());
-        assertThrows(RuntimeException.class, () -> model.addRecipe(RecipeDataInputSamples.existingID()));
-    }
-
-    @Test
-    void testAddRecipe_NullName() {
-        Map<String, String> dataWithNullName = new HashMap<>(RecipeDataInputSamples.fullRecipe1());
-        dataWithNullName.put("name", null);
-        assertThrows(RuntimeException.class, () -> model.addRecipe(dataWithNullName));
-    }
-
-
-    @Test
-    void testDeleteRecipe_NonExisting() {
-        assertThrows(RuntimeException.class, () -> model.deleteRecipe("999"));
-    }
-
-    @Test
-    void testAddRecipe_DuplicateID() {
-        model.addRecipe(RecipeDataInputSamples.fullRecipe1()); // Add a recipe with ID 1
-        assertThrows(RuntimeException.class, () -> model.addRecipe(RecipeDataInputSamples.fullRecipe1())); // Attempt to add a duplicate
-    }
-
+    ////////////////////////////////////////// -- Update RECIPE -- //////////////////////////////////////////
 
     @Test
     void testUpdateRecipe_FullUpdate() {
-        model.addRecipe(RecipeDataInputSamples.fullRecipe1());
-        model.updateRecipe(RecipeDataInputSamples.fullRecipe1DifferentCuisine()); //Completely update
+        model.addRecipe(RecipeDataHelper.fullRecipe1());
+
+        Map<String, String> newRecipe1 = new HashMap<>(RecipeDataHelper.fullRecipe2());
+        newRecipe1.put("id", "1");
+        model.updateRecipe(newRecipe1);
         Record updatedRecipe = context.selectFrom(RECIPE).where(RECIPE.ID.eq(1)).fetchOne();
-        assertRecipeDataEquals(updatedRecipe,RecipeDataInputSamples.fullRecipe1DifferentCuisine());
+        assertNotNull(updatedRecipe);
+        assertRecipeDataEquals(updatedRecipe,newRecipe1);
     }
 
     @Test
     void testUpdateRecipe_PartialUpdate() {
-        model.addRecipe(RecipeDataInputSamples.fullRecipe1());
-        Map<String, String> updateData = new HashMap<>(RecipeDataInputSamples.fullRecipe1());
+        model.addRecipe(RecipeDataHelper.fullRecipe1());
+        Map<String, String> updateData = new HashMap<>(RecipeDataHelper.fullRecipe1());
         updateData.put("name", "Updated Pizza");
         model.updateRecipe(updateData);
         Record updatedRecipe = context.selectFrom(RECIPE).where(RECIPE.ID.eq(1)).fetchOne();
@@ -332,16 +265,29 @@ public class RecipeModelTest {
 
     @Test
     void testUpdateRecipe_NonExisting() {
-        Map<String, String> updateData = new HashMap<>(RecipeDataInputSamples.fullRecipe1());
-        updateData.put("id", "999"); // Non-existing ID
+        Map<String, String> updateData = new HashMap<>(RecipeDataHelper.fullRecipe1());
+        updateData.put("id", "999");
         assertThrows(RuntimeException.class, () -> model.updateRecipe(updateData));
     }
 
     @Test
-    void testFilterRecipes_VariousCriteria() {
-        model.addRecipe(RecipeDataInputSamples.fullRecipe1());
-        model.addRecipe(RecipeDataInputSamples.fullRecipe2());
-        model.addRecipe(RecipeDataInputSamples.fullRecipe3());
+    void testUpdateRecipe_negativeID() {
+        Map<String, String> updateData = new HashMap<>(RecipeDataHelper.negativeID());
+        assertThrows(RuntimeException.class, () -> model.updateRecipe(updateData));
+    }
+
+    @Test
+    void testUpdateRecipe_nullID() {
+        Map<String, String> updateData = new HashMap<>(RecipeDataHelper.emptyInput());
+        assertThrows(IllegalArgumentException.class, () -> model.updateRecipe(updateData));
+    }
+
+    ////////////////////////////////////////// -- Filter RECIPE -- //////////////////////////////////////////
+    @Test
+    void testFilterRecipes_multipleFilters() {
+        model.addRecipe(RecipeDataHelper.fullRecipe1());
+        model.addRecipe(RecipeDataHelper.fullRecipe2());
+        model.addRecipe(RecipeDataHelper.fullRecipe3());
 
 
         //different filter combinations
@@ -351,7 +297,8 @@ public class RecipeModelTest {
         assertEquals(0, model.filterRecipes(Map.of("cuisine", "French")).size());  //No French recipes
     }
 
-    //Helper function
+    ////////////////////////////////////////// -- Helper Functions -- //////////////////////////////////////////
+
     private void assertRecipeDataEquals(Record record, Map<String, String> expectedData) {
         assertEquals(Integer.parseInt(expectedData.get("id")), record.get(RECIPE.ID));
         assertEquals(expectedData.get("name"), record.get(RECIPE.NAME));
@@ -361,6 +308,17 @@ public class RecipeModelTest {
         assertEquals(Integer.parseInt(expectedData.get("nutrition")), record.get(RECIPE.NUTRITION));
         assertEquals(expectedData.get("cookingTime"), record.get(RECIPE.COOKINGTIME));
         assertEquals(expectedData.get("ingredient"), record.get(RECIPE.INGREDIENT));
+    }
+
+    private DSLContext createDSLContext() throws SQLException {
+        Connection connection = DriverManager.getConnection("jdbc:h2:mem:testdb");
+        return DSL.using(connection, SQLDialect.H2); //Replace with your dialect
+    }
+
+
+    @AfterAll
+    void tearDownAll() throws SQLException {
+        context.dropTable(RECIPE).execute();
     }
 
 }

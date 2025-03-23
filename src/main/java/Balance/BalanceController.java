@@ -1,6 +1,7 @@
 package Balance;
 
 import Factory.ControllerFactory;
+import Template.BalanceView;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

@@ -1,6 +1,3 @@
-RecipeControllerTest.class
-RecipeDataInputSamples.class
 RecipeViewTest.class
-DatabaseNewTest.class
 H2TestDatabaseExtension.class
 RecipeModelTest.class

@@ -1,11 +1,10 @@
-package Recipe;
+package Template;
 
 import static com.example.generated.Tables.RECIPE;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import MVC.View;
 import java.awt.*;
 import org.jooq.Record;
 import org.jooq.Result;

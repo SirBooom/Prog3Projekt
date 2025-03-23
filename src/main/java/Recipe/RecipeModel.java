@@ -1,6 +1,5 @@
 package Recipe;
 
-import database.Database;
 import database.RecipeDatabase;
 import org.jooq.DSLContext;
 import org.jooq.Record;
@@ -99,6 +98,7 @@ public class RecipeModel {
      * @param data A map containing the recipe properties.
      * @return Result containing the updated recipe.
      */
+
     public Result<Record> updateRecipe(Map<String, String> data) {
         try {
             return recipeDatabase.updateRecipe(
@@ -114,7 +114,7 @@ public class RecipeModel {
         } catch (NumberFormatException ex) {
             throw new IllegalArgumentException("Invalid input: ID must be an integer.", ex);
         } catch (Exception ex) {
-            throw new RuntimeException("Error updating recipe: " + ex.getMessage(), ex);
+            throw new RuntimeException("Error updating Recipe: " + ex.getMessage(), ex);
         }
     }
 
@@ -155,7 +155,7 @@ public class RecipeModel {
         try {
             return value == null || value.trim().isEmpty() ? null : Integer.parseInt(value.trim());
         } catch (NumberFormatException ex) {
-            return null; // Or throw an exception depending on your needs.
+            return null;
         }
     }
 
@@ -166,7 +166,7 @@ public class RecipeModel {
         try {
             return value == null || value.trim().isEmpty() ? 0 : Integer.parseInt(value.trim());
         } catch (NumberFormatException ex) {
-            return 0; // Or throw an exception depending on your needs.
+            return 0;
         }
     }
 

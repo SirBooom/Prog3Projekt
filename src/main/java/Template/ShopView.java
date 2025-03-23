@@ -1,4 +1,4 @@
-package Shop;
+package Template;
 
 import static com.example.generated.Tables.SHOP;
 import FileData.FileHandler;
@@ -21,7 +21,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
-import MVC.View;
 import org.jooq.Record;
 import org.jooq.Result;
 

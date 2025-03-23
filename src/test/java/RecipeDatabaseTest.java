@@ -11,7 +11,7 @@ import static com.example.generated.Tables.RECIPE;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(H2TestDatabaseExtension.class)
-public class DatabaseNewTest {
+public class RecipeDatabaseTest {
     private RecipeDatabase recipeDatabase;
     private DSLContext context;
 
@@ -21,6 +21,7 @@ public class DatabaseNewTest {
         recipeDatabase = new RecipeDatabase(context);
     }
 
+    ////////////////////////////////////////// -- insert -- //////////////////////////////////////////
     @Test
     public void testInsert() {
         recipeDatabase.insertRecipe(1,"Name", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
@@ -35,6 +36,24 @@ public class DatabaseNewTest {
     }
 
     @Test
+    public void testInsertNoName() {
+        assertThrows(IllegalArgumentException.class, () -> recipeDatabase.insertRecipe(1,null, "Cuisine", "Category", "Instruction", 10,"12min","Ingredient"));
+    }
+
+    @Test
+    public void testInsertNegativeID() {
+        assertThrows(IllegalArgumentException.class, () -> recipeDatabase.insertRecipe(-1,"Name", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient"));
+    }
+
+    @Test
+    public void testInsertExistingIDAndName() {
+        recipeDatabase.insertRecipe(1,"Name", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
+        assertThrows(IllegalArgumentException.class, () -> recipeDatabase.insertRecipe(1,"Name", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient"));
+
+    }
+
+    ////////////////////////////////////////// -- update -- //////////////////////////////////////////
+    @Test
     public void testUpdateRecipe() throws SQLException {
         recipeDatabase.insertRecipe(1,"Name", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
         recipeDatabase.updateRecipe(1,null,"NewCuisine", "Category", "Instruction" , 5, "12min", "Ingredient");
@@ -46,6 +65,13 @@ public class DatabaseNewTest {
     }
 
     @Test
+    public void testUpdateRecipeNonExistingID() {
+        assertThrows(IllegalArgumentException.class, () -> recipeDatabase.updateRecipe(1,"Name", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient"));
+        assertThrows(IllegalArgumentException.class, () -> recipeDatabase.updateRecipe(-1,"Name", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient"));
+    }
+
+    ////////////////////////////////////////// -- Reload -- //////////////////////////////////////////
+    @Test
     public void showTable() {
         recipeDatabase.insertRecipe(1,"Name", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
         List<RecipeRecord> records = context.selectFrom(RECIPE).fetch();
@@ -53,6 +79,7 @@ public class DatabaseNewTest {
         records.forEach(System.out::println);
     }
 
+    ////////////////////////////////////////// -- Delete all -- //////////////////////////////////////////
     @Test
     public void testDeleteAllRecipes() {
         recipeDatabase.insertRecipe(1,"Name", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
@@ -62,6 +89,7 @@ public class DatabaseNewTest {
         assertEquals(0, rowCount);
     }
 
+    ////////////////////////////////////////// -- Delete -- //////////////////////////////////////////
     @Test
     public void testDeleteRecipe() {
         recipeDatabase.insertRecipe(1,"Name", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");
@@ -74,6 +102,12 @@ public class DatabaseNewTest {
         assertEquals("NameSecond", recipeRecord.getValue(RECIPE.NAME));
     }
 
+    @Test
+    public void testDeleteRecipeNonExistent() {
+        assertThrows(IllegalArgumentException.class, () -> recipeDatabase.deleteRecipe(1));
+    }
+
+    ////////////////////////////////////////// -- Filter -- //////////////////////////////////////////
     @Test
     public void testFilterRecipes() {
         recipeDatabase.insertRecipe(1,"Name", "Cuisine", "Category", "Instruction", 10,"12min","Ingredient");

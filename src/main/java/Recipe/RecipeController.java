@@ -6,9 +6,9 @@ import java.sql.SQLException;
 import java.util.Map;
 import javax.swing.*;
 
+import Template.RecipeView;
 import org.jooq.Record;
 import org.jooq.Result;
-import org.jooq.exception.DataAccessException;
 
 /**
  * This class handles the interactions between RecipeView and RecipeModel. It sets up actions for UI
@@ -84,17 +84,11 @@ public record RecipeController(RecipeView recipeView, RecipeModel recipeModel) {
     }
 
     private void handleUpdateRecipe(ActionEvent event) {
-        try {
-            Result<Record> result = recipeModel.updateRecipe(recipeView.getFormData());
-            if (result != null && !result.isEmpty()) {
-                recipeView.loadTable(result);
-                recipeView.showSuccessDialog(RecipeMessage.SUCCESS_RECIPE_UPDATED);
-            } else {
-                recipeView.showErrorDialog(RecipeMessage.ERROR_UPDATING_RECIPE);
-            }
-        } catch (DataAccessException ex) {
-            handleUnexpectedError(ex);
-        }
+        Map<String, String> formData = recipeView.getFormData();
+            processModelAction(
+                    () -> recipeModel.updateRecipe(formData),
+                    RecipeMessage.SUCCESS_RECIPE_UPDATED,
+                    RecipeMessage.ERROR_UPDATING_RECIPE);
     }
 
     private void handleBackToMenu(ActionEvent event) {
@@ -167,9 +161,9 @@ public record RecipeController(RecipeView recipeView, RecipeModel recipeModel) {
         /**
          * Führt die Datenbankoperation auf dem Model aus.
          *
-         * @return ein Result<Record> Objekt, dass das Ergebnis der Operation repräsentiert z.B.
+         * @return ein Result<Record> Objekt, dass das Ergebnis der Enum.Operation repräsentiert z.B.
          * Abfrageergebnis.
-         * @throws Exception Falls bei der Operation etwas schief läuft gibt z.B. Datenbankfehler.
+         * @throws Exception Falls bei der Enum.Operation etwas schief läuft gibt z.B. Datenbankfehler.
          */
         Result<Record> execute() throws Exception;
     }

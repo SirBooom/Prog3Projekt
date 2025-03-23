@@ -1,4 +1,4 @@
-package MVC;
+package Template;
 
 import javax.swing.*;
 

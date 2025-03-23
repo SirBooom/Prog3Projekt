@@ -7,11 +7,9 @@ com\example\generated\Keys.class
 com\example\generated\tables\records\RecipeRecord.class
 Recipe\RecipeController$RecipeModelAction.class
 Balance\BalanceModel.class
-Balance\BalanceView.class
 com\example\generated\tables\IngredientDgTmp$IngredientDgTmpPath.class
 Recipe\RecipeMessage.class
 Recipe\RecipeModel.class
-MVC\View.class
 Skeleton.class
 Shop\ShopModel.class
 Recipe\RecipeController.class
@@ -20,7 +18,6 @@ com\example\generated\tables\records\ShopRecord.class
 Menu\MenuController.class
 Recipe\RecipeController$RecipeAction.class
 Shop\ShopController$ShopAction.class
-Shop\ShopView.class
 database\Database.class
 database\ShopDatabase.class
 Shop\ShopController$ShopModelAction.class
@@ -35,5 +32,4 @@ com\example\generated\DefaultCatalog.class
 com\example\generated\tables\Recipe.class
 Menu\MenuController$MenuAction.class
 FileData\FileHandler.class
-Recipe\RecipeView.class
 com\example\generated\tables\Shop$ShopPath.class

@@ -2,15 +2,15 @@ package Factory;
 
 import Balance.BalanceController;
 import Balance.BalanceModel;
-import Balance.BalanceView;
+import Template.BalanceView;
 import Menu.MenuController;
 import Menu.MenuView;
 import Recipe.RecipeController;
 import Recipe.RecipeModel;
-import Recipe.RecipeView;
+import Template.RecipeView;
 import Shop.ShopController;
 import Shop.ShopModel;
-import Shop.ShopView;
+import Template.ShopView;
 import database.Database;
 import java.sql.SQLException;
 import org.jooq.DSLContext;

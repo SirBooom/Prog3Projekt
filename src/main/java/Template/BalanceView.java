@@ -1,6 +1,4 @@
-package Balance;
-
-import MVC.View;
+package Template;
 
 import javax.swing.*;
 import java.awt.*;

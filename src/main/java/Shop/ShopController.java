@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.Map;
 import javax.swing.JButton;
 
-import FileData.FileHandler;
+import Template.ShopView;
 import org.jooq.Record;
 import org.jooq.Result;
 

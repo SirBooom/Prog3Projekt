@@ -1,6 +1,6 @@
 import java.util.Map;
 
-public class RecipeDataInputSamples {
+public class RecipeDataHelper {
 
 
 
@@ -182,7 +182,20 @@ public class RecipeDataInputSamples {
     public static Map<String,String> existingID() {
         return Map.of(
                 "id", "3",
-                "name", "",
+                "name", "Noodles",
+                "cuisine", "",
+                "category", "",
+                "instructions", "",
+                "nutrition", "",
+                "cookingTime", "",
+                "ingredient", ""
+        );
+    }
+
+    public static Map<String,String> existingName() {
+        return Map.of(
+                "id", "7",
+                "name", "Margherita Pizza",
                 "cuisine", "",
                 "category", "",
                 "instructions", "",

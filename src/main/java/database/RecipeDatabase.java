@@ -56,12 +56,12 @@ public class RecipeDatabase {
         return showRecipes();
     }
 
-    public Result<Record> updateRecipe(Integer id, String name, String cuisine,
+    public Result<Record> updateRecipe(int   id, String name, String cuisine,
                                                  String category, String instructions, Integer nutrition,
-                                                 String cookingTime, String ingredient) throws SQLException {
+                                                 String cookingTime, String ingredient) {
 
-        if (!context.fetchExists(RECIPE, RECIPE.ID.eq(id))) {
-            throw new SQLException("Recipe with ID " + id + " is invalid.");
+        if (!context.fetchExists(RECIPE, RECIPE.ID.eq(id)) || id <= 0) {
+            throw new IllegalArgumentException("Recipe with ID " + id + " is invalid.");
         }
 
         UpdateSetMoreStep<RecipeRecord> updateQuery = context.update(RECIPE).set(RECIPE.ID, id);
