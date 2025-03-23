@@ -1,51 +1,55 @@
-# **Rezeptverwaltungssystem**
+# **Recipe Management System**
 
-## 📖 Einführung 
+## 📖 Introduction 
 
-Das Rezeptverwaltungssystem ist eine einfache Anwendung zur **Speicherung und Verwaltung von Rezepten.**
+The recipe management system is a simple application for **storing and managing recipes**.
 
-Die Rezepte werden in einer **SQLite Datenbank** gespeichert. 
+The recipes are stored in an **SQLite** database. 
 
+## 💡 Why is the recipe management system useful?
+It provides a simple and efficient way to manage recipes **digitally** and **centrally**, ensuring that all recipes are stored in one place and accessible at any time.
 
-## 💡 Warum ist das Rezeptverwaltungssystem sinnvoll?
-Es bietet eine einfache und effiziente Möglichkeit, die Rezepte **digital** und **zentral** zu verwalten, sodass die Rezepte an einem Ort gespeichert und jederzeit abrufbar sind.
-Die übersichtliche und benutzerfreundliche Benutzeroberfläche ermöglicht, das leichte und effiziente 
-- **Hinzufügen**
-- **Löschen**
-- **Bearbeiten**
-- **Filtern der Rezepte nach Kriterien.** 
+The clear and user-friendly interface allows users the:
+
+- **Adding**
+
+- **Deleting**
+
+- **Editing**
+
+- **Filtering recipes by criteria.**
 
 ## 🚀 Installation
 
 
 
-### 📌 Voraussetzungen
-- Java 23+ (Empfohlen OpenJDK 23)
+### 📌 Requirements
+- Java 23+ (Recommended OpenJDK 23)
 - Apache Maven
-- [H2 Database](https://www.h2database.com/) (Empfohlen 2.3.232)
-- Mockito (Empfohlen 5.15.2)
-- JUnit (Empfohlen 5.10.0)
-- JDBC Treiber (Empfohlen 3.47.2.0)
-- JOOQ (Empfohlen 3.19.17)
+- [H2 Database](https://www.h2database.com/) (Recommended 2.3.232)
+- Mockito (Recommended 5.15.2)
+- JUnit (Recommended 5.10.0)
+- JDBC Treiber (Recommended 3.47.2.0)
+- JOOQ (Recommended 3.19.17)
 
-### 🛢️ Datenbankeinrichtung
+### 🛢️ Database Setup
 
-Das Projekt verwendet **SQLite** als Datenbank. Die Datenbankdatei befindet sich im Repository unter:
+The project uses **SQLite** as database. The database file is located in the repository at:
 
 ```plaintext
 rezeptverwaltungsdb.db
 ```
-### 📂 Projekt klonen & starten
-- Repository klonen
+### 📂 Clone and Start the project
+- Clone the Repository
 ```sh
-  git clone https://github.com/SmallYhorm/Prog3Projekt.git
+  git clone https://github.com/SirBooom/Prog3Projekt.git
 ```
-- Abhängigkeiten installieren
+- Install Dependencies
 ```sh
   cd Prog3Projekt
   mvn clean install
 ```
-- Starte die Anwendung
+- Start the Application
 
   
 ```sh
@@ -54,115 +58,124 @@ rezeptverwaltungsdb.db
 
 
 
-## 🍴📋 Nutzung
+## 🍴📋 Usage
 
-### ➕🍲 Hinzufügen eines neuen Rezepts
+### ➕🍲 Adding a New Recipe
 
-Um ein neues Rezept hinzuzufügen, kannst du das folgende Formular verwenden:
+To add a new recipe, you can use the following form:
 
-- **ID**: Die ID des Rezepts
-- **Name**: Der Name des Rezepts
-- **Cuisine**: Der Küche des Rezepts
-- **Category**: Die Kategorie des Rezepts
-- **Instructions**: Eine Schritt-für-Schritt-Beschreibung der Zubereitung
-- **Nutrition**: Die Nährwerte des Rezepts
-- **Cooking Time**: Die Zubereitungszeit 
-- **Ingredients**: Die Zutaten des Rezepts
+- **ID**: The recipe's ID
+- **Name**: The name of the recipe
+- **Cuisine**: The cuisine of the recipe
+- **Category**: The category of the recipe
+- **Instructions**: A step-by-step description of the preparation
+- **Nutrition**: The nutritional values of the recipe
+- **Cooking Time**: The preparation time
+- **Ingredients**: The ingredients of the recipe
 
-**Beispiel**:
+**Example**:
 
-Gib in der GUI die folgenden Informationen ein:
+Enter the following information in the GUI:
 
 - **ID**: 1
 - **Name**: "Spaghetti Bolognese"
-- **Cuisine**: "Italienisch"
-- **Category**: "Hauptgericht"
-- **Instructions**: "Zwiebel anbraten, Hackfleisch hinzufügen, Tomaten und Gewürze dazugeben. Mit Spaghetti servieren."
+- **Cuisine**: "Italian"
+- **Category**: "Main Course"
+- **Instructions**: "Sauté onion, add ground beef, then add tomatoes and spices. Serve with spaghetti."
 - **Nutrition**: 400 (in kcal)
-- **Cooking Time**: "30 Minuten"
-- **Ingredients**: "500g Rinderhack, 1 Zwiebel, 1 Dose Tomaten, 200g Spaghetti"
+- **Cooking Time**: "30 minutes"
+- **Ingredients**: "500g ground beef, 1 onion, 1 can of tomatoes, 200g spaghetti"
 
-**Screenshot des Formulars**:
+**Screenshot of the form:**
 
 ![Rezept hinzufügen Form](images/screenshot8.png)
 
 ---
 
-### ❌🗑️ Rezept löschen
+### ❌🗑️ Delete a Recipe
 
-Um ein Rezept zu löschen, gib die **ID** des Rezeptes im Formular unten ein und klicke auf **"Delete Recipe"**.
+To delete a recipe, enter the **ID** of the recipe in the form below and click on **"Delete Recipe"**.
 
-**Beispiel: Das Rezept mit der ID 1 wird gelöscht.**
+**Example: The recipe with ID 1 will be deleted.**
 
 ![Rezept löschen Form](images/screenshot5.png)
 
 ---
 
-### 🔄✏️ Aktualisieren eines Rezepts
+### 🔄✏️ Update a Recipe
 
-Um ein bestehendes Rezept zu aktualisieren, gib die ID des Rezepts im Formular an, fülle die gewünschten Felder aus und klicke auf **"Update Recipe"**. 
+To update an existing recipe, enter the recipe's ID in the form, fill in the desired fields, and click on **"Update Recipe"**.
 
-**Beispiel: Die Küche des Rezept mit der ID 1 wird geändert zu "Italienisch"**
+**Example: The cuisine of the recipe with ID 1 will be changed to "Italian."**
 
 ![Rezept aktualisieren Form](images/screenshot6.png)
 
 ---
 
-### 🔍📂 Filtern von Rezepten
+### 🔍📂 Filter a Recipe
 
-Um Rezepte zu filtern, kannst du nach Kriterien suchen, wie z.B. **Name**, **Küche** oder **Kategorie**. Fülle dazu das gewünschte Feld unten im Formular aus und klicke auf **"Filter Recipes"**.
+To filter recipes, you can search by criteria such as Name, Cuisine, or Category. Simply fill in the desired field below in the form and click on **"Filter Recipes"**.
 
-**Beispiel: Alle Rezepte aus der italienischen Küche werden gefiltert.**
+**Example: All recipes from the Italian cuisine will be filtered.**
 
 ![Rezept filtern Form](images/screenshot7.png)
 
 ---
 
-### 📜📤 Alle Rezepte laden
+### 📜📤 Load All Recipes
 
-Um alle Rezepte anzuzeigen, klicke auf **"Load Recipes"**. Alle gespeicherten Rezepte werden in der Liste angezeigt.
-
----
-
-### 🗑️🧹 Alle Rezepte löschen
-
-Um alle Rezepte auf einmal zu löschen, klicke auf **"Delete all Recipes"**. Achte darauf, dass dieser Vorgang nicht rückgängig gemacht werden kann!
+To view all recipes, click on **"Load Recipes"**. All saved recipes will be displayed in the list.
 
 ---
 
-## 👥 Autoren
+### 🗑️🧹 Delete All Recipes
 
-Dieses Projekt wird von folgenden Teammitgliedern betreut:  
+To delete all recipes at once, click on **"Delete all Recipes"**. Please note that this action cannot be undone!
+
+---
+
+### 🚧🔨 Shop Function (Under Development)
+The shop is currently under development. Please check back later for updates.
+
+---
+
+### 🛠️⚙️ Balance Function (Under Development)
+The balance functionality is still in progress and will be available in a future release.
+
+---
+
+## 👥 Authors
+
+This project is managed by the following team members:  
 
 [@EmirKayaagil](https://github.com/EmirKayaagil) • [@SirBooom](https://github.com/SirBooom) • [@SmallYhorm](https://github.com/SmallYhorm)  
 
 
-## 🔧 Mitwirken
-**Beiträge von der Community sind willkommen!**  
-Wenn du mithelfen möchtest, folge diesen Schritten:
+## 🔧 Contribute
+**Community contributions are welcome**  
+If you would like to help, follow these steps:
 
-1. Forke das Repository
-2. Erstelle einen neuen Branch (feature/neue-funktion)
-3. Mache deine Änderungen und committe sie
-4. Erstelle einen Pull Request (PR)
+1. Fork the repository
+2. Create a new branch (feature/new-feature)
+3. Make your changes and commit them
+4. Create a Pull Request (PR)
 
 
-Hast du eine Idee oder Verbesserungsvorschläge?
+Do you have an idea or suggestions for improvement?
 
-Erstelle ein Issue mit einer kurzen Beschreibung deines Vorschlags.
-Diskutiere mit dem Team oder anderen Beitragenden.
+Create an issue with a brief description of your suggestion. Discuss it with the team or other contributors.
 
-📢 Wir freuen uns auf deine Hilfe!
+📢 We look forward to your help!
 
-## ❓ Hilfe & Support
+## ❓ Help & Support
 
-Falls du Probleme hast oder Fragen aufkommen, gibt es mehrere Möglichkeiten, Unterstützung zu bekommen:
+If you encounter any issues or have questions, there are several ways to get support:
 
-📜 README & Dokumentation: Schau zuerst in diese README, ob deine Frage bereits beantwortet wurde.
+📜 README & Documentation: Check the README first to see if your question has already been answered.
 
-🐞 GitHub Issues: Falls du einen Bug gefunden hast, erstelle bitte ein Issue.
+🐞 GitHub Issues: If you find a bug, please create an issue.
 
-🚀 Wir helfen gerne weiter!
+🚀 We’re happy to assist!
 
 
 
