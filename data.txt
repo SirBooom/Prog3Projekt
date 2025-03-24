@@ -1,0 +1,4 @@
+#User Data
+#Sat Mar 22 20:02:38 CET 2025
+balance=2000
+cooldownTime=1742578820129
