@@ -25,7 +25,7 @@ The clear and user-friendly interface allows users the:
 
 ### 📌 Requirements
 - Java 23+ (Recommended OpenJDK 23)
-- Apache Maven
+- Apache Maven (Recommended 3.9.9)
 - [H2 Database](https://www.h2database.com/) (Recommended 2.3.232)
 - Mockito (Recommended 5.15.2)
 - JUnit (Recommended 5.10.0)
