@@ -1,133 +1,3 @@
-/*
-import Recipe.RecipeModel;
-import database.RecipeDatabase;
-import org.jooq.Result;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.jooq.Record;
-
-import java.sql.SQLException;
-import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
-
-public class RecipeModelTest {
-    private RecipeDatabase recipeDatabaseMock;
-    private RecipeModel recipeModel;
-
-    @BeforeEach
-    public void setup(){
-        recipeDatabaseMock = mock(RecipeDatabase.class);
-        recipeModel = new RecipeModel();
-    }
-
-    @Test
-    public void testReloadRecipes(){
-        Result<Record> dummyResult = mock(Result.class);
-        when(recipeDatabaseMock.fetchAllRecipes()).thenReturn(dummyResult);
-        Result<Record> result = recipeModel.reloadRecipes();
-        verify(recipeDatabaseMock, times(1)).fetchAllRecipes();
-        assertEquals(dummyResult, result, "Das Ergebnis sollte dem Dummy-Ergebnis entsprechen.");
-    }
-
-    @Test
-    public void testAddRecipe() {
-        Map<String, String> recipeData = Map.of(
-                "id", "1",
-                "name", "Test Recipe",
-                "cuisine", "Italian",
-                "category", "Main Course",
-                "instructions", "Cook the pasta",
-                "nutrition", "300",
-                "cookingTime", "30",
-                "ingredient", "Pasta"
-        );
-
-        Result<Record> dummyResult = mock(Result.class);
-        when(recipeDatabaseMock.insertRecipe(
-                1, "Test Recipe", "Italian", "Main Course", "Cook the pasta", 300, "30", "Pasta"
-        )).thenReturn(dummyResult);
-
-        Result<Record> result = recipeModel.addRecipe(recipeData);
-
-        verify(recipeDatabaseMock, times(1)).insertRecipe(1, "Test Recipe", "Italian", "Main Course", "Cook the pasta", 300, "30", "Pasta");
-        assertEquals(dummyResult, result, "Das Ergebnis sollte dem Dummy-Ergebnis entsprechen.");
-    }
-
-    @Test
-    public void testDeleteRecipe() {
-        String recipeId = "1";
-        Result<Record> dummyResult = mock(Result.class);
-        when(recipeDatabaseMock.deleteRecipe(1)).thenReturn(dummyResult);
-
-        Result<Record> result = recipeModel.deleteRecipe(recipeId);
-
-        verify(recipeDatabaseMock, times(1)).deleteRecipe(1);
-        assertEquals(dummyResult, result, "Das Ergebnis sollte dem Dummy-Ergebnis entsprechen.");
-    }
-
-    @Test
-    public void testDeleteAllRecipes() {
-        Result<Record> dummyResult = mock(Result.class);
-        when(recipeDatabaseMock.deleteAllRecipes()).thenReturn(dummyResult);
-
-        Result<Record> result = recipeModel.deleteAllRecipes();
-
-        verify(recipeDatabaseMock, times(1)).deleteAllRecipes();
-        assertEquals(dummyResult, result, "Das Ergebnis sollte dem Dummy-Ergebnis entsprechen.");
-    }
-
-    @Test
-    public void testUpdateRecipe() throws SQLException {
-        Map<String, String> recipeData = Map.of(
-                "id", "1",
-                "name", "Updated Recipe",
-                "cuisine", "Italian",
-                "category", "Main Course",
-                "instructions", "Updated instructions",
-                "nutrition", "350",
-                "cookingTime", "45",
-                "ingredient", "Updated ingredient"
-        );
-
-        Result<Record> dummyResult = mock(Result.class);
-        when(recipeDatabaseMock.updateRecipe(
-                1, "Updated Recipe", "Italian", "Main Course", "Updated instructions", 350, "45", "Updated ingredient"
-        )).thenReturn(dummyResult);
-
-        Result<Record> result = recipeModel.updateRecipe(recipeData);
-
-        verify(recipeDatabaseMock, times(1)).updateRecipe(1, "Updated Recipe", "Italian", "Main Course", "Updated instructions", 350, "45", "Updated ingredient");
-        assertEquals(dummyResult, result, "Das Ergebnis sollte dem Dummy-Ergebnis entsprechen.");
-    }
-
-    @Test
-    public void testFilterRecipes() {
-        Map<String, String> filterCriteria = Map.of(
-                "id", "1",
-                "name", "Test Recipe",
-                "cuisine", "Italian",
-                "category", "Main Course",
-                "instructions", "Cook the pasta",
-                "nutrition", "300",
-                "cookingTime", "30",
-                "ingredient", "Pasta"
-        );
-
-        Result<Record> dummyResult = mock(Result.class);
-        when(recipeDatabaseMock.filterRecipes(
-                1, "Test Recipe", "Italian", "Main Course", "Cook the pasta", 300, "30", "Pasta"
-        )).thenReturn(dummyResult);
-
-        Result<Record> result = recipeModel.filterRecipes(filterCriteria);
-
-        verify(recipeDatabaseMock, times(1)).filterRecipes(1, "Test Recipe", "Italian", "Main Course", "Cook the pasta", 300, "30", "Pasta");
-        assertEquals(dummyResult, result, "Das Ergebnis sollte dem Dummy-Ergebnis entsprechen.");
-    }
-}
-*/
-
 import Recipe.RecipeModel;
 import org.jooq.DSLContext;
 import org.jooq.Result;
@@ -154,7 +24,7 @@ public class RecipeModelTest {
 
     @BeforeAll
     void setUpAll() throws SQLException {
-        context = createDSLContext(); // From the RecipeDatabaseTest example
+        context = createDSLContext();
         context.createTable(RECIPE).columns(RECIPE.ID, RECIPE.NAME, RECIPE.CUISINE, RECIPE.CATEGORY, RECIPE.INSTRUCTIONS, RECIPE.NUTRITION, RECIPE.COOKINGTIME, RECIPE.INGREDIENT).execute();
         model = new RecipeModel(context);
         DefaultTableModel tableModel = new DefaultTableModel();
@@ -206,14 +76,14 @@ public class RecipeModelTest {
 
     @Test
     void testAddRecipe_existingID() {
-        model.addRecipe(RecipeDataHelper.fullRecipe3()); // Add a recipe with ID 1
-        assertThrows(RuntimeException.class, () -> model.addRecipe(RecipeDataHelper.existingID())); // Attempt to add a duplicate
+        model.addRecipe(RecipeDataHelper.fullRecipe3());
+        assertThrows(RuntimeException.class, () -> model.addRecipe(RecipeDataHelper.existingID()));
     }
 
     @Test
     void testAddRecipe_existingName() {
-        model.addRecipe(RecipeDataHelper.fullRecipe1()); // Add a recipe with ID 1
-        assertThrows(RuntimeException.class, () -> model.addRecipe(RecipeDataHelper.existingName())); // Attempt to add a duplicate
+        model.addRecipe(RecipeDataHelper.fullRecipe1());
+        assertThrows(RuntimeException.class, () -> model.addRecipe(RecipeDataHelper.existingName()));
     }
 
     ////////////////////////////////////////// -- Delete RECIPE -- //////////////////////////////////////////
@@ -228,7 +98,7 @@ public class RecipeModelTest {
 
     @Test
     void testDeleteRecipe() {
-        model.addRecipe(Map.of("id", "1", "name", "Test")); // Add a recipe first
+        model.addRecipe(Map.of("id", "1", "name", "Test"));
 
         Result<Record> beforeDelete = model.reloadRecipes();
         assertEquals(1,beforeDelete.size());
@@ -290,7 +160,6 @@ public class RecipeModelTest {
         model.addRecipe(RecipeDataHelper.fullRecipe3());
 
 
-        //different filter combinations
         assertEquals(2, model.filterRecipes(Map.of("cuisine", "American")).size());
         assertEquals(1, model.filterRecipes(Map.of("category", "Main Course")).size());
         assertEquals(1, model.filterRecipes(Map.of("name", "Grilled Cheese Sandwich")).size());
@@ -312,7 +181,7 @@ public class RecipeModelTest {
 
     private DSLContext createDSLContext() throws SQLException {
         Connection connection = DriverManager.getConnection("jdbc:h2:mem:testdb");
-        return DSL.using(connection, SQLDialect.H2); //Replace with your dialect
+        return DSL.using(connection, SQLDialect.H2);
     }
 
 

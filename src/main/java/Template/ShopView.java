@@ -30,7 +30,7 @@ public class ShopView extends View {
 
     private JButton buyButton;
 
-    private JTextField idField, amountField;
+    private JTextField idField = new JTextField(), amountField = new JTextField();
 
     public ShopView() {
 
@@ -94,9 +94,9 @@ public class ShopView extends View {
         JPanel panel = new JPanel(new GridLayout(2, 2, 10, 10)); // 2 rows, 2 columns, 10px gap
 
         JLabel idLabel = new JLabel("Item ID:");
-        idField = new JTextField();
+
         JLabel amountLabel = new JLabel("Desired Quantity:");
-        amountField = new JTextField();
+
 
         panel.add(idLabel);
         panel.add(idField);
@@ -128,10 +128,11 @@ public class ShopView extends View {
 
     public Map<String, String> getFormData() {
         Map<String, String> formData = new HashMap<>();
-        formData.put("Item ID", idField.getText());
-        formData.put("Desired Quantity", amountField.getText());
+        formData.put("Item ID", idField.getText() != null ? idField.getText() : "");
+        formData.put("Desired Quantity", amountField.getText() != null ? amountField.getText() : "");
         return formData;
     }
+
 
     ///////////////////////////////////// --- View Methods --- /////////////////////////////////////
 

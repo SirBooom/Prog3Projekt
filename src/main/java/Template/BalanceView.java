@@ -120,5 +120,11 @@ public class BalanceView extends View {
         balanceLabel.setText("<html>Your Current Balance: " + newBalance + "   EUR </html>");
     }
 
+    public JLabel getBalanceLabel() {
+        return balanceLabel;
+    }
 
+    public JLabel getBonusLabel() {
+        return bonusLabel;
+    }
 }
