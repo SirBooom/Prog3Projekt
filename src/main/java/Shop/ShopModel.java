@@ -17,7 +17,7 @@ public class ShopModel {
         try {
             shopDatabase = new ShopDatabase(context);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException("Error initializing ShopModel: " + e.getMessage(), e);
         }
         this.tableModel = null;
     }
@@ -27,8 +27,7 @@ public class ShopModel {
         try {
             return shopDatabase.showItems();
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
+            throw new RuntimeException("Error reloading shop items: " + ex.getMessage(), ex);
         }
     }
 
@@ -37,10 +36,9 @@ public class ShopModel {
             return shopDatabase.buyItem(
                     parseIntegerOrNull(data.get("Item ID")),
                     parseIntegerOrNull(data.get("Desired Quantity"))
-                    );
+            );
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
+            throw new RuntimeException("Error buying item: " + ex.getMessage(), ex);
         }
     }
 
