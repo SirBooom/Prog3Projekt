@@ -53,7 +53,7 @@ rezeptverwaltungsdb.db
 
   
 ```sh
-   mvn exec:java -Dexec.mainClass="Skeleton"
+   mvn exec:java -D"exec.mainClass"="Skeleton"
 ```
 
 
